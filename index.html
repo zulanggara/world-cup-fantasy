@@ -275,10 +275,17 @@ async function loadPlayers() {
 function renderHeroStats() {
   const topPerformer = players.slice().sort((a, b) => b.totalPoints - a.totalPoints)[0];
   const playingCount = players.filter((p) => p.status === 'playing').length;
+  const topForm = players.slice().sort((a, b) => b.form - a.form)[0];
+  const topAvg = players.slice().sort((a, b) => b.avgPoints - a.avgPoints)[0];
+  const topSelected = players.slice().sort((a, b) => b.percentSelected - a.percentSelected)[0];
+
   document.getElementById('heroStats').innerHTML = `
     <div class="hero-stat"><div class="label">${I18N.t('index.statTotalPlayers')}</div><div class="value">${players.length}</div></div>
     <div class="hero-stat"><div class="label">${I18N.t('index.statPlaying')}</div><div class="value">${playingCount}</div></div>
     <div class="hero-stat"><div class="label">${I18N.t('index.statTopPoints')}</div><div class="value">${topPerformer ? topPerformer.totalPoints : 0} pts <small>${topPerformer ? escapeHtml(topPerformer.name) : ''}</small></div></div>
+    <div class="hero-stat"><div class="label">${I18N.t('index.statTopForm')}</div><div class="value">${topForm ? topForm.form : 0} <small>${topForm ? escapeHtml(topForm.name) : ''}</small></div></div>
+    <div class="hero-stat"><div class="label">${I18N.t('index.statTopAvg')}</div><div class="value">${topAvg ? Number(topAvg.avgPoints).toFixed(1) : 0} <small>${topAvg ? escapeHtml(topAvg.name) : ''}</small></div></div>
+    <div class="hero-stat"><div class="label">${I18N.t('index.statTopSelected')}</div><div class="value">${topSelected ? Number(topSelected.percentSelected).toFixed(1) : 0}% <small>${topSelected ? escapeHtml(topSelected.name) : ''}</small></div></div>
   `;
 }
 

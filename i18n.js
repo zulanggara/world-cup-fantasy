@@ -48,6 +48,9 @@ window.I18N = (function () {
       statTotalPlayers: { en: 'Total Players', id: 'Total Pemain' },
       statPlaying: { en: 'Playing Status', id: 'Status Playing' },
       statTopPoints: { en: 'Top Points', id: 'Poin Tertinggi' },
+      statTopForm: { en: 'Highest Form', id: 'Form Terbesar' },
+      statTopAvg: { en: 'Highest Avg Points', id: 'Avg Poin Terbesar' },
+      statTopSelected: { en: 'Most Selected', id: 'Paling Banyak Dipilih' },
     },
     bestxi: {
       kicker: { en: 'Head-to-Head', id: 'Head-to-Head' },
