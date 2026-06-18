@@ -1152,8 +1152,8 @@
       },
       {
         "id": 27,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 87,
         "extraMinutes": 0,
         "venueName": "Bc Place",
         "venueCity": "Vancouver",
@@ -1161,7 +1161,7 @@
         "venueCityTranslationKey": null,
         "venueId": 8,
         "date": "2026-06-18T23:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 9,
         "awaySquadId": 36,
@@ -1169,11 +1169,37 @@
         "awaySquadName": "Qatar",
         "homeSquadAbbr": "CAN",
         "awaySquadAbbr": "QAT",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
+        "homeScore": 5,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 227,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 226,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 226,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 241,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 942,
+            "assistId": null,
+            "isOwnGoal": true
+          }
+        ],
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
       },
       {
