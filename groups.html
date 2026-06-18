@@ -101,6 +101,7 @@
   .bracket-final-col { justify-content: center; }
   .bracket-final-col .bracket-match-box { border-color: var(--accent); }
   .bracket-third-note { margin-top: 10px; font-size: 11.5px; color: var(--text-dim); }
+  .bracket-time-note { font-size: 11px; color: var(--text-dim); margin-bottom: 14px; opacity: .8; }
 
   table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
   table.fixtures th { text-align: left; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--panel2); }
@@ -153,6 +154,7 @@
       <span><span class="swatch" style="background:var(--accent);"></span> <span data-i18n="groups.legendConfirmed">Tim pasti (klasemen final / hasil resmi)</span></span>
       <span><span class="swatch" style="background:var(--accent2);"></span> <span data-i18n="groups.legendLive">Posisi saat ini (klasemen belum final, bisa berubah)</span></span>
     </div>
+    <div class="bracket-time-note" data-i18n="groups.bracketTimeNote">Jam pada bagan ini sesuai sumber data asli (zona waktu venue/penyelenggara), belum dikonversi ke WIB.</div>
     <div class="bracket-scroll">
       <div class="bracket-tree" id="bracketTree"></div>
     </div>
@@ -457,14 +459,16 @@ function buildKnockoutTree(standings, bestThirds) {
 
 function matchVenueLabel(dateStr, stadiumId) {
   if (!dateStr) return '';
-  const [datePart] = dateStr.split(' ');
+  const [datePart, timePart] = dateStr.split(' ');
   const [mm, dd, yyyy] = datePart.split('/').map(Number);
   if (!mm || !dd || !yyyy) return '';
   const d = new Date(yyyy, mm - 1, dd);
   const locale = (window.I18N && I18N.getLang() === 'id') ? 'id-ID' : 'en-US';
   const dateLabel = d.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
+  const timeLabel = timePart ? `, ${timePart}` : '';
   const venue = stadiums[stadiumId];
-  return venue ? `${dateLabel} – ${venue.city}` : dateLabel;
+  const placeLabel = venue ? ` – ${venue.city} (${venue.name})` : '';
+  return `${dateLabel}${timeLabel}${placeLabel}`;
 }
 
 function bracketTeamHtml(side) {

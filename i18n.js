@@ -95,6 +95,7 @@ window.I18N = (function () {
       legendConfirmed: { en: 'Confirmed team (final standings / official result)', id: 'Tim pasti (klasemen final / hasil resmi)' },
       legendLive: { en: 'Current position (standings not final yet, may change)', id: 'Posisi saat ini (klasemen belum final, bisa berubah)' },
       thirdPlaceTitle: { en: 'Third Place Play-off', id: 'Perebutan Juara 3' },
+      bracketTimeNote: { en: 'Kickoff times shown are as published by the source (venue/organizer timezone), not yet converted to WIB.', id: 'Jam pada bagan ini sesuai sumber data asli (zona waktu venue/penyelenggara), belum dikonversi ke WIB.' },
       fixturesTitle: { en: 'Upcoming Fixtures (Group Stage)', id: 'Jadwal Pertandingan Mendatang (Fase Grup)' },
       legendDirect: { en: 'Direct qualifier (1st/2nd place)', id: 'Lolos langsung (juara/runner-up)' },
       legendThird: { en: '3rd place — qualification candidate', id: 'Peringkat 3 — kandidat lolos' },
