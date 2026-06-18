@@ -204,7 +204,27 @@ npx vercel deploy   # dari folder fifa-fantasy/, ikuti prompt
 # atau hubungkan repo ke Vercel dashboard, biarkan "Framework Preset" = Other / Static
 ```
 
-Catatan: jalankan `node scraper.js --with-stats` dulu **sebelum deploy** supaya folder `data/` terisi (Vercel hanya menyajikan file statis, tidak menjalankan scraper saat build/runtime). Untuk refresh data berkala, jalankan scraper secara lokal lalu re-deploy, atau setup scraper sebagai cron job terpisah (di luar Vercel, karena scraper butuh Playwright/browser yang tidak girang di environment serverless Vercel).
+Catatan: jalankan `node scraper.js --with-stats` dulu **sebelum deploy** supaya folder `data/` terisi (Vercel hanya menyajikan file statis, tidak menjalankan scraper saat build/runtime).
+
+### Refresh data otomatis (GitHub Actions, bukan Vercel Cron)
+
+Data **tidak** di-refresh otomatis oleh Vercel — Vercel cuma serve file statis dari repo, tidak menjalankan scraper. Untuk update otomatis, dipakai **GitHub Actions** ([.github/workflows/scrape.yml](fifa-fantasy/.github/workflows/scrape.yml)) karena scraper butuh Playwright + Chromium penuh (untuk bypass Akamai), yang tidak cocok dijalankan di Vercel Serverless Function (limit ukuran ~50MB, timeout pendek, filesystem tidak permanen).
+
+Cara kerja:
+1. GitHub Actions jalan di VM Ubuntu penuh (bukan serverless), install Playwright Chromium, lalu jalankan `node scraper.js --with-stats` — proses yang sama seperti manual.
+2. Kalau ada perubahan di folder `data/`, otomatis `git commit` + `git push` pakai token bawaan GitHub (`GITHUB_TOKEN`, tidak perlu setup secret tambahan).
+3. Push baru itu otomatis trigger Vercel redeploy (karena sudah terhubung git integration) — jadi situs live ikut ter-update tanpa kamu commit manual.
+
+Jadwal: **08.00, 12.00, 18.00, 22.00 WIB** setiap hari (dikonversi ke UTC di file workflow karena GitHub Actions cron selalu pakai UTC: `01:00`, `05:00`, `11:00`, `15:00` UTC).
+
+Cara cek/pakai:
+- Lihat histori jalan & status tiap run di tab **Actions** repo GitHub kamu.
+- Bisa trigger manual kapan saja lewat tab Actions → pilih workflow "Scheduled FIFA Fantasy Data Scrape" → **Run workflow** (berguna buat testing tanpa nunggu jadwal).
+
+**Keterbatasan yang perlu disadari**:
+- Jadwal GitHub Actions itu **best-effort**, bisa telat beberapa menit kalau runner sedang sibuk — jangan andalkan presisi ke detik.
+- Runner GitHub Actions pakai IP datacenter (Azure), yang kadang lebih rawan terdeteksi/diblokir Akamai Bot Manager dibanding IP rumahan biasa. Kalau run otomatis sering gagal di langkah scraper (cek log di tab Actions), kemungkinan Akamai mulai memblokir IP range runner — solusinya scraping manual dari komputer sendiri tetap jadi fallback yang lebih reliable.
+- `--headful` (mode fallback kalau Akamai blokir headless) **tidak bisa dipakai** di GitHub Actions karena runner tidak punya display — workflow ini cuma jalan mode headless biasa.
 
 ## Catatan
 
