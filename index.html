@@ -1,16 +1,50 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FIFA Fantasy 2026 Player Database & Stats | World Cup Fantasy Newsroom</title>
+<meta name="description" content="Browse the complete FIFA World Cup 2026 Fantasy player database: live prices, points, form, and per-round scoring breakdowns for every player and national team." />
+<meta name="keywords" content="FIFA World Cup 2026, World Cup fantasy, FIFA Fantasy 2026, World Cup 2026 players, fantasy football World Cup, World Cup squad builder, World Cup standings 2026" />
+<link rel="canonical" href="https://example.com/index.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="FIFA Fantasy 2026 Player Database & Stats" />
+<meta property="og:description" content="Live prices, points, and scoring breakdowns for every World Cup 2026 Fantasy player and team." />
+<meta property="og:url" content="https://example.com/index.html" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="FIFA Fantasy 2026 Player Database & Stats" />
+<meta name="twitter:description" content="Live prices, points, and scoring breakdowns for every World Cup 2026 Fantasy player and team." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
-<title>FIFA Fantasy Viewer</title>
 <style>
   .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
   h1 { font-size: 20px; margin: 0 0 16px; display: flex; align-items: center; gap: 12px; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 28px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, var(--pitch-line) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero-kicker { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .hero h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0 0 18px; max-width: 640px; }
+  .hero-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-stat { background: rgba(0,0,0,0.18); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; min-width: 130px; }
+  :root[data-theme="light"] .hero-stat { background: rgba(255,255,255,0.5); }
+  .hero-stat .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); }
+  .hero-stat .value { font-family: 'JetBrains Mono', monospace; font-size: 19px; font-weight: 700; color: var(--accent); }
+  .hero-stat .value small { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+
   .toolbar {
     display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
     margin-bottom: 14px;
@@ -49,11 +83,13 @@
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
   }
-  tbody tr.player-row { cursor: pointer; }
   tbody tr.player-row:hover { background: var(--row-hover); }
-  tbody tr.player-row:nth-child(4n+1) { background: var(--row-alt); }
-  tbody tr.player-row:nth-child(4n+1):hover { background: var(--row-hover); }
+  tbody tr.player-row:nth-child(odd) { background: var(--row-alt); }
+  tbody tr.player-row:nth-child(odd):hover { background: var(--row-hover); }
   .num { font-variant-numeric: tabular-nums; text-align: right; }
+  .name-cell { cursor: pointer; }
+  .team-cell { cursor: pointer; color: var(--accent2); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .team-cell:hover { text-decoration: underline; }
   .badge {
     display: inline-block;
     padding: 2px 8px;
@@ -72,43 +108,7 @@
   .dot.transferred { background: var(--text-dim); }
   .dot.other { background: var(--accent); }
   .name-cell .pid { color: var(--text-dim); font-size: 11px; margin-left: 6px; }
-  tr.detail-row td {
-    background: var(--panel2);
-    cursor: default;
-    padding: 0;
-  }
-  .detail-inner { padding: 16px 18px; }
-  .round-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-  }
-  .round-head {
-    display: flex; align-items: baseline; justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  .round-head .title { font-size: 13px; color: var(--text-dim); }
-  .round-head .points { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); }
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 6px;
-  }
-  .stat-item {
-    display: flex; justify-content: space-between; gap: 8px;
-    font-size: 12px;
-    background: var(--panel2);
-    border-radius: 6px;
-    padding: 5px 8px;
-  }
-  .stat-item .v { font-variant-numeric: tabular-nums; font-weight: 600; }
   .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
-  .loading-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
-  .calc-head { font-size: 12px; color: var(--text-dim); margin: 10px 0 6px; text-transform: uppercase; letter-spacing: .03em; }
-  .calc-grid .stat-item { background: transparent; border: 1px solid var(--border); }
-  .calc-diff { font-size: 12px; color: var(--text-dim); margin-top: 8px; }
   .pagination {
     display: flex; align-items: center; justify-content: center; gap: 12px;
     margin-top: 14px; flex-wrap: wrap;
@@ -129,29 +129,36 @@
 <body>
 <div class="wrap">
   <div class="page-header">
-    <h1>FIFA Fantasy Viewer</h1>
+    <nav class="top-nav">
+      <a href="index.html" class="nav-tab active" data-i18n="nav.players">Daftar Pemain</a>
+      <a href="best-xi.html" class="nav-tab" data-i18n="nav.compare">Compare Tim</a>
+      <a href="best15-overall.html" class="nav-tab" data-i18n="nav.best15overall">Best 15 Keseluruhan</a>
+      <a href="best15-next-round.html" class="nav-tab" data-i18n="nav.nextround">Prediksi Ronde Depan</a>
+      <a href="best15-research.html" class="nav-tab" data-i18n="nav.research">Best 15 (Riset)</a>
+      <a href="groups.html" class="nav-tab" data-i18n="nav.groups">Klasemen & Jadwal</a>
+      <a href="my-squad.html" class="nav-tab" data-i18n="nav.mysquad">Susun Skuad</a>
+    </nav>
     <button class="toggle" id="themeToggle">☀ / ☾</button>
   </div>
-  <nav class="top-nav">
-    <a href="index.html" class="nav-tab active">Daftar Pemain</a>
-    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
-    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
-    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
-    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
-    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
-    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
-  </nav>
+
+  <div class="hero">
+    <span class="hero-kicker" data-i18n="index.kicker">Live · Player Intel</span>
+    <h1 data-i18n="index.heroTitle">FIFA Fantasy Newsroom</h1>
+    <p data-i18n="index.heroSubtitle">Database lengkap pemain Piala Dunia 2026 — harga, status, dan poin fantasy, ter-update dari hasil scrape resmi. Klik nama untuk lihat breakdown poin per ronde, klik kode tim untuk lihat hasil pertandingan & roster.</p>
+    <div class="hero-stats" id="heroStats"></div>
+  </div>
+
   <div class="toolbar">
-    <input type="text" id="search" placeholder="Cari nama pemain..." />
+    <input type="text" id="search" placeholder="Cari nama pemain..." data-i18n-placeholder="common.searchPlaceholder" />
     <select id="filterPos">
-      <option value="">Semua Posisi</option>
+      <option value="" data-i18n="common.allPositions">Semua Posisi</option>
       <option value="GK">GK</option>
       <option value="DEF">DEF</option>
       <option value="MID">MID</option>
       <option value="FWD">FWD</option>
     </select>
     <select id="filterStatus">
-      <option value="">Semua Status</option>
+      <option value="" data-i18n="common.allStatus">Semua Status</option>
     </select>
     <span class="spacer"></span>
     <span class="count" id="count"></span>
@@ -159,14 +166,15 @@
   <table>
     <thead>
       <tr>
-        <th data-key="name">Nama</th>
-        <th data-key="position">Posisi</th>
-        <th data-key="status">Status</th>
-        <th data-key="price" class="num">Price</th>
-        <th data-key="totalPoints" class="num">Total Pts</th>
-        <th data-key="form" class="num">Form</th>
-        <th data-key="avgPoints" class="num">Avg Pts</th>
-        <th data-key="percentSelected" class="num">% Selected</th>
+        <th data-key="name" data-i18n="common.colName">Nama</th>
+        <th data-key="squadAbbr" data-i18n="common.colTeam">Tim</th>
+        <th data-key="position" data-i18n="common.colPosition">Posisi</th>
+        <th data-key="status" data-i18n="common.colStatus">Status</th>
+        <th data-key="price" class="num" data-i18n="common.colPrice">Price</th>
+        <th data-key="totalPoints" class="num" data-i18n="common.colTotalPts">Total Pts</th>
+        <th data-key="form" class="num" data-i18n="common.colForm">Form</th>
+        <th data-key="avgPoints" class="num" data-i18n="common.colAvgPts">Avg Pts</th>
+        <th data-key="percentSelected" class="num" data-i18n="common.colPctSelected">% Selected</th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -184,67 +192,18 @@
   </div>
 </div>
 
+<script src="i18n.js"></script>
+<script src="flags.js"></script>
+<script src="brand.js"></script>
+<script src="detail-modal.js"></script>
+<script src="footer.js"></script>
 <script>
-const STAT_LABELS = {
-  SXI: 'Starting XI', MP: 'Minutes Played', AS: 'Assists', YC: 'Yellow Card',
-  RC: 'Red Card', OG: 'Own Goal', PW: 'Penalty Won', PC: 'Penalty Conceded',
-  CS: 'Clean Sheet', GS: 'Goals Scored', GC: 'Goals Conceded', PS: 'Penalty Saved',
-  T: 'Tackles', CC: 'Chances Created', ST: 'Shots on Target', FK: 'Free Kicks',
-  S: 'Saves', SB: 'Substitute',
-};
-
-// Resmi sesuai "How to Score" FIFA Fantasy. GS/CS bobot per posisi; sisanya berlaku untuk semua posisi.
-const GOAL_POINTS = { GK: 9, DEF: 7, MID: 6, FWD: 5 };
-const CLEAN_SHEET_POINTS = { GK: 5, DEF: 5, MID: 1, FWD: 0 };
-
-function calcOfficialPoints(position, s) {
-  const MP = s?.MP ?? 0, AS = s?.AS ?? 0, YC = s?.YC ?? 0, RC = s?.RC ?? 0, OG = s?.OG ?? 0,
-        PW = s?.PW ?? 0, PC = s?.PC ?? 0, CS = s?.CS ?? 0, GS = s?.GS ?? 0, GC = s?.GC ?? 0,
-        PS = s?.PS ?? 0, T = s?.T ?? 0, CC = s?.CC ?? 0, ST = s?.ST ?? 0, FK = s?.FK ?? 0, S = s?.S ?? 0;
-
-  const breakdown = [];
-  let total = 0;
-  function add(label, value) {
-    if (value) { total += value; breakdown.push({ label, value }); }
-  }
-
-  if (MP > 0) add('Appearance (≤60 min)', 1);
-  if (MP >= 60) add('Appearance (60+ min)', 1);
-  add('Assist', AS * 3);
-  add('Yellow Card', YC * -1);
-  add('Red Card', RC * -2);
-  add('Own Goal', OG * -2);
-  add('Winning a Penalty', PW * 2);
-  add('Conceding a Penalty', PC * -1);
-  add('Goal from Direct Free-Kick (bonus)', FK * 1);
-  add('Goal Scored', GS * (GOAL_POINTS[position] ?? 0));
-  add('Clean Sheet', CS * (CLEAN_SHEET_POINTS[position] ?? 0));
-
-  if (position === 'GK' || position === 'DEF') {
-    add('Goals Conceded (each beyond 1st)', GC > 0 ? -(GC - 1) : 0);
-  }
-  if (position === 'GK') {
-    add('Penalty Save', PS * 3);
-    add('Saves Bonus (every 3)', Math.floor(S / 3) * 1);
-  }
-  if (position === 'MID') {
-    add('Tackles Bonus (every 3)', Math.floor(T / 3) * 1);
-    add('Chances Created Bonus (every 2)', Math.floor(CC / 2) * 1);
-  }
-  if (position === 'FWD') {
-    add('Shots on Target Bonus (every 2)', Math.floor(ST / 2) * 1);
-  }
-
-  return { total, breakdown };
-}
-
 let players = [];
+let squads = [];
 let sortKey = 'totalPoints';
 let sortDir = 'desc';
 let currentPage = 1;
 let pageSize = 50;
-const statsCache = new Map();
-const expanded = new Set();
 
 const root = document.documentElement;
 const tbody = document.getElementById('tbody');
@@ -252,7 +211,6 @@ const searchEl = document.getElementById('search');
 const filterPosEl = document.getElementById('filterPos');
 const filterStatusEl = document.getElementById('filterStatus');
 const countEl = document.getElementById('count');
-const themeToggle = document.getElementById('themeToggle');
 const pagePrevEl = document.getElementById('pagePrev');
 const pageNextEl = document.getElementById('pageNext');
 const pageInfoEl = document.getElementById('pageInfo');
@@ -263,14 +221,23 @@ function setTheme(t) {
   localStorage.setItem('fifa-fantasy-theme', t);
 }
 setTheme(localStorage.getItem('fifa-fantasy-theme') || 'dark');
-themeToggle.addEventListener('click', () => {
+document.getElementById('themeToggle').addEventListener('click', () => {
   setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function squadAbbr(squadId) {
+  return squads.find((s) => s.id === squadId)?.abbr ?? '?';
+}
 
 function flatten(p) {
   return {
     id: p?.id,
     name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
+    squadId: p?.squadId ?? null,
     position: p?.position ?? '—',
     status: p?.status ?? 'unknown',
     price: p?.price ?? 0,
@@ -278,22 +245,36 @@ function flatten(p) {
     form: p?.stats?.form ?? 0,
     avgPoints: p?.stats?.avgPoints ?? 0,
     percentSelected: p?.percentSelected ?? 0,
-    raw: p,
   };
 }
 
 async function loadPlayers() {
   try {
-    const res = await fetch('data/players.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    players = (Array.isArray(json) ? json : []).map(flatten);
+    const [playersRes, squadsRes] = await Promise.all([
+      fetch('data/players.json'),
+      fetch('data/squads.json'),
+    ]);
+    if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
+    const json = await playersRes.json();
+    squads = squadsRes.ok ? await squadsRes.json() : [];
+    players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="8" class="empty-msg">Gagal memuat data/players.json: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server, bukan file://.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="empty-msg">Gagal memuat data/players.json: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server, bukan file://.</td></tr>`;
     return;
   }
   populateStatusFilter();
+  renderHeroStats();
   render();
+}
+
+function renderHeroStats() {
+  const topPerformer = players.slice().sort((a, b) => b.totalPoints - a.totalPoints)[0];
+  const playingCount = players.filter((p) => p.status === 'playing').length;
+  document.getElementById('heroStats').innerHTML = `
+    <div class="hero-stat"><div class="label">${I18N.t('index.statTotalPlayers')}</div><div class="value">${players.length}</div></div>
+    <div class="hero-stat"><div class="label">${I18N.t('index.statPlaying')}</div><div class="value">${playingCount}</div></div>
+    <div class="hero-stat"><div class="label">${I18N.t('index.statTopPoints')}</div><div class="value">${topPerformer ? topPerformer.totalPoints : 0} pts <small>${topPerformer ? escapeHtml(topPerformer.name) : ''}</small></div></div>
+  `;
 }
 
 function populateStatusFilter() {
@@ -304,10 +285,6 @@ function populateStatusFilter() {
     opt.textContent = s;
     filterStatusEl.appendChild(opt);
   }
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 function statusDotClass(status) {
@@ -340,7 +317,9 @@ function getFiltered() {
 
 function render() {
   const list = getFiltered();
-  countEl.textContent = `${list.length} dari ${players.length} pemain`;
+  countEl.textContent = I18N.getLang() === 'id'
+    ? `${list.length} dari ${players.length} pemain`
+    : `${list.length} of ${players.length} players`;
 
   document.querySelectorAll('thead th').forEach((th) => {
     const key = th.dataset.key;
@@ -365,7 +344,8 @@ function render() {
     tr.className = 'player-row';
     tr.dataset.id = p.id;
     tr.innerHTML = `
-      <td class="name-cell">${escapeHtml(p.name)}<span class="pid">#${p.id}</span></td>
+      <td class="name-cell" onclick="DetailModal.openPlayer(${p.id})">${escapeHtml(p.name)}<span class="pid">#${p.id}</span></td>
+      <td class="team-cell" onclick="DetailModal.openTeam(${p.squadId})">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.squadAbbr)}</td>
       <td><span class="badge ${escapeHtml(p.position)}">${escapeHtml(p.position)}</span></td>
       <td><span class="dot ${statusDotClass(p.status)}"></span>${escapeHtml(p.status)}</td>
       <td class="num">${Number(p.price).toFixed(1)}</td>
@@ -374,94 +354,8 @@ function render() {
       <td class="num">${Number(p.avgPoints).toFixed(1)}</td>
       <td class="num">${Number(p.percentSelected).toFixed(1)}%</td>
     `;
-    tr.addEventListener('click', () => toggleExpand(p.id, tr));
     tbody.appendChild(tr);
-
-    if (expanded.has(p.id)) {
-      const detailTr = buildDetailRow(p.id);
-      tbody.appendChild(detailTr);
-      renderDetail(p.id, detailTr);
-    }
   }
-}
-
-function buildDetailRow(id) {
-  const tr = document.createElement('tr');
-  tr.className = 'detail-row';
-  tr.dataset.detailFor = id;
-  const td = document.createElement('td');
-  td.colSpan = 8;
-  td.innerHTML = '<div class="detail-inner loading-msg">Memuat stats...</div>';
-  tr.appendChild(td);
-  return tr;
-}
-
-async function toggleExpand(id, tr) {
-  if (expanded.has(id)) {
-    expanded.delete(id);
-  } else {
-    expanded.add(id);
-  }
-  render();
-}
-
-async function renderDetail(id, tr) {
-  const td = tr.querySelector('td');
-  const player = players.find((p) => p.id === id);
-  const position = player?.position ?? 'MID';
-  let rounds = statsCache.get(id);
-  if (!rounds) {
-    try {
-      const res = await fetch(`data/stats/${id}.json`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      rounds = await res.json();
-      if (!Array.isArray(rounds)) rounds = [];
-      statsCache.set(id, rounds);
-    } catch (e) {
-      td.innerHTML = `<div class="detail-inner empty-msg">Gagal memuat stats: ${escapeHtml(String(e.message || e))}</div>`;
-      return;
-    }
-  }
-
-  if (!rounds.length) {
-    td.innerHTML = `<div class="detail-inner empty-msg">Belum ada data pertandingan.</div>`;
-    return;
-  }
-
-  const cards = rounds.map((r) => {
-    const statsObj = r?.stats ?? {};
-    const officialPoints = r?.points ?? 0;
-    const statItems = Object.keys(STAT_LABELS).map((code) => {
-      const val = statsObj[code] ?? 0;
-      return `<div class="stat-item"><span>${STAT_LABELS[code]} (${code})</span><span class="v">${val}</span></div>`;
-    }).join('');
-
-    const calc = calcOfficialPoints(position, statsObj);
-    const diff = officialPoints - calc.total;
-    const calcItems = calc.breakdown.map((b) => (
-      `<div class="stat-item"><span>${escapeHtml(b.label)}</span><span class="v">${b.value > 0 ? '+' : ''}${b.value}</span></div>`
-    )).join('') || '<div class="empty-msg">Tidak ada poin dari rumus ini.</div>';
-
-    let diffNote = '';
-    if (diff !== 0) {
-      diffNote = `<div class="calc-diff">Selisih dari poin resmi: ${diff > 0 ? '+' : ''}${diff} pts (kemungkinan dari scouting bonus +2 yang bergantung %selected saat pertandingan berlangsung, bukan %selected saat ini, atau kondisi lain yang tidak tertangkap rumus di atas).</div>`;
-    }
-
-    return `
-      <div class="round-card">
-        <div class="round-head">
-          <span class="title">Round ${r?.roundId ?? '?'} · Turnamen ${r?.tournamentId ?? '?'}</span>
-          <span class="points">${officialPoints} pts</span>
-        </div>
-        <div class="stat-grid">${statItems}</div>
-        <div class="calc-head">Breakdown perhitungan (rumus resmi "How to Score")</div>
-        <div class="stat-grid calc-grid">${calcItems}</div>
-        ${diffNote}
-      </div>
-    `;
-  }).join('');
-
-  td.innerHTML = `<div class="detail-inner">${cards}</div>`;
 }
 
 document.querySelectorAll('thead th').forEach((th) => {
@@ -487,6 +381,11 @@ pageNextEl.addEventListener('click', () => { currentPage += 1; render(); });
 pageSizeEl.addEventListener('change', () => {
   pageSize = Number(pageSizeEl.value);
   currentPage = 1;
+  render();
+});
+
+document.addEventListener('i18n:change', () => {
+  renderHeroStats();
   render();
 });
 

@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Compare World Cup 2026 Fantasy Teams | Best 15 Head-to-Head</title>
+<meta name="description" content="Compare any two World Cup 2026 nations' Best 15 fantasy squads side by side, with budget breakdown and a full team-by-team points ranking." />
+<meta name="keywords" content="World Cup 2026 fantasy compare, FIFA Fantasy team comparison, World Cup squad ranking, fantasy football World Cup 2026" />
+<link rel="canonical" href="https://example.com/best-xi.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Compare World Cup 2026 Fantasy Teams" />
+<meta property="og:description" content="Head-to-head Best 15 fantasy squad comparison for any two World Cup 2026 nations." />
+<meta property="og:url" content="https://example.com/best-xi.html" />
+<meta name="twitter:card" content="summary" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
-<title>FIFA Fantasy — Prediksi Best 15</title>
 <style>
-  .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px 60px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
   h1 { font-size: 20px; margin: 0 0 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 28px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, var(--pitch-line) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero-kicker { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .hero h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0; max-width: 640px; }
+
   .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
   .toolbar select { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
   .spacer { flex: 1; }
@@ -65,18 +91,23 @@
 <body>
 <div class="wrap">
   <div class="page-header">
-    <h1>Compare Best 15 Antar Tim</h1>
+    <nav class="top-nav">
+      <a href="index.html" class="nav-tab" data-i18n="nav.players">Daftar Pemain</a>
+      <a href="best-xi.html" class="nav-tab active" data-i18n="nav.compare">Compare Tim</a>
+      <a href="best15-overall.html" class="nav-tab" data-i18n="nav.best15overall">Best 15 Keseluruhan</a>
+      <a href="best15-next-round.html" class="nav-tab" data-i18n="nav.nextround">Prediksi Ronde Depan</a>
+      <a href="best15-research.html" class="nav-tab" data-i18n="nav.research">Best 15 (Riset)</a>
+      <a href="groups.html" class="nav-tab" data-i18n="nav.groups">Klasemen & Jadwal</a>
+      <a href="my-squad.html" class="nav-tab" data-i18n="nav.mysquad">Susun Skuad</a>
+    </nav>
     <button class="toggle" id="themeToggle">☀ / ☾</button>
   </div>
-  <nav class="top-nav">
-    <a href="index.html" class="nav-tab">Daftar Pemain</a>
-    <a href="best-xi.html" class="nav-tab active">Compare Tim</a>
-    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
-    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
-    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
-    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
-    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
-  </nav>
+
+  <div class="hero">
+    <span class="hero-kicker" data-i18n="bestxi.kicker">Head-to-Head</span>
+    <h1 data-i18n="bestxi.heroTitle">Matchday Showdown</h1>
+    <p data-i18n="bestxi.heroSubtitle">Bandingkan Best 15 dua negara berdasarkan akumulasi poin fantasy. Klik nama tim atau pemain untuk lihat detail hasil pertandingan & breakdown poin.</p>
+  </div>
 
   <div class="disclaimer">
     Halaman ini menyusun 15 pemain terbaik per tim berdasarkan akumulasi poin pemain (data lokal hasil scrape), bukan prediksi hasil pertandingan resmi FIFA.
@@ -84,8 +115,8 @@
   </div>
 
   <div class="toolbar">
-    <label>Tim A: <select id="teamA"></select></label>
-    <label>Tim B: <select id="teamB"></select></label>
+    <label><span data-i18n="bestxi.teamA">Tim A</span>: <select id="teamA"></select></label>
+    <label><span data-i18n="bestxi.teamB">Tim B</span>: <select id="teamB"></select></label>
   </div>
 
   <div class="variant-tabs" id="variantTabs"></div>
@@ -93,16 +124,21 @@
   <div class="matchup" id="matchup"></div>
   <div class="verdict" id="verdict"></div>
 
-  <h2 class="section-title">Ranking Best 15 Semua Tim/Negara (varian "Dalam Budget")</h2>
+  <h2 class="section-title" data-i18n="bestxi.rankingTitle">Ranking Best 15 Semua Tim/Negara (varian "Dalam Budget")</h2>
   <table class="rank-table">
     <thead>
-      <tr><th>#</th><th>Tim</th><th class="num">Harga</th><th class="num">Poin Best 15</th></tr>
+      <tr><th data-i18n="bestxi.colRank">#</th><th data-i18n="common.colTeam">Tim</th><th class="num" data-i18n="bestxi.colPrice">Harga</th><th class="num" data-i18n="bestxi.colBest15Pts">Poin Best 15</th></tr>
     </thead>
     <tbody id="rankBody"></tbody>
   </table>
 </div>
 
 <script src="squad-builder.js"></script>
+<script src="i18n.js"></script>
+<script src="flags.js"></script>
+<script src="brand.js"></script>
+<script src="detail-modal.js"></script>
+<script src="footer.js"></script>
 <script>
 const FORMATION = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
 const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
@@ -173,6 +209,7 @@ function renderRanking() {
       return {
         id,
         name: squadName(id),
+        abbr: squads.find((x) => x.id === id)?.abbr,
         totalPoints: SquadBuilder.totalMetric(variant.starters, 'totalPoints'),
         totalPrice: SquadBuilder.totalPrice(variant.starters),
       };
@@ -180,9 +217,9 @@ function renderRanking() {
     .sort((a, b) => b.totalPoints - a.totalPoints);
 
   const rows = ranking.map((r, i) => `
-    <tr>
+    <tr onclick="DetailModal.openTeam(${r.id})" style="cursor:pointer;">
       <td>${i + 1}</td>
-      <td>${escapeHtml(r.name)}</td>
+      <td>${FLAGS.flagFor(r.abbr)} ${escapeHtml(r.name)}</td>
       <td class="num">$${r.totalPrice.toFixed(1)}</td>
       <td class="num">${r.totalPoints}</td>
     </tr>
@@ -233,7 +270,7 @@ function renderTeamPanel(squadId, variantKey) {
 
   const rows = POS_ORDER.map((pos) => {
     const chips = starters.filter((p) => p.position === pos).map((p) => `
-      <div class="player-chip">
+      <div class="player-chip" onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">
         <div class="pname">${escapeHtml(p.name)}</div>
         <div class="ppos">${p.position}</div>
         <div class="pprice">$${Number(p.price).toFixed(1)}</div>
@@ -247,7 +284,7 @@ function renderTeamPanel(squadId, variantKey) {
     .sort((a, b) => b.totalPoints - a.totalPoints)
     .slice(0, 12)
     .map((p) => `
-      <tr>
+      <tr onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">
         <td>${escapeHtml(p.name)}</td>
         <td>${p.position}</td>
         <td class="num">$${Number(p.price).toFixed(1)}</td>
@@ -258,7 +295,7 @@ function renderTeamPanel(squadId, variantKey) {
   return `
     <div class="team-panel">
       <div class="team-head">
-        <span class="tname">${escapeHtml(name)}</span>
+        <span class="tname" onclick="DetailModal.openTeam(${squadId})" style="cursor:pointer;">${FLAGS.flagFor(squads.find((x) => x.id === squadId)?.abbr)} ${escapeHtml(name)}</span>
         <span>
           <span class="ttotal">${totalPoints} pts</span>
           <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
@@ -319,6 +356,8 @@ function render() {
   }
   document.getElementById('verdict').innerHTML = verdict;
 }
+
+document.addEventListener('i18n:change', () => { renderRanking(); render(); });
 
 loadData();
 </script>

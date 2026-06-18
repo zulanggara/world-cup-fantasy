@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>World Cup 2026 Fantasy Best 15 Research | Data-Driven Picks</title>
+<meta name="description" content="The most accurate FIFA World Cup 2026 Fantasy Best 15 projection, built from real match results and auto-detected upcoming fixtures." />
+<meta name="keywords" content="World Cup 2026 fantasy research, FIFA Fantasy data analysis, World Cup fantasy best picks, fantasy football data driven" />
+<link rel="canonical" href="https://example.com/best15-research.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="World Cup 2026 Fantasy Best 15 Research" />
+<meta property="og:description" content="Data-driven Best 15 projection from real World Cup 2026 match results." />
+<meta property="og:url" content="https://example.com/best15-research.html" />
+<meta name="twitter:card" content="summary" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
-<title>FIFA Fantasy — Best 15 (Riset)</title>
 <style>
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
   h1 { font-size: 20px; margin: 0; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 28px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, var(--pitch-line) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero-kicker { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .hero h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0; max-width: 640px; }
+
   .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
   .disclaimer b { color: var(--text); }
   .gap-note { background: var(--panel2); border: 1px dashed var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
@@ -51,21 +77,26 @@
 <body>
 <div class="wrap">
   <div class="page-header">
-    <h1>Best 15 (Riset)</h1>
+    <nav class="top-nav">
+      <a href="index.html" class="nav-tab" data-i18n="nav.players">Daftar Pemain</a>
+      <a href="best-xi.html" class="nav-tab" data-i18n="nav.compare">Compare Tim</a>
+      <a href="best15-overall.html" class="nav-tab" data-i18n="nav.best15overall">Best 15 Keseluruhan</a>
+      <a href="best15-next-round.html" class="nav-tab" data-i18n="nav.nextround">Prediksi Ronde Depan</a>
+      <a href="best15-research.html" class="nav-tab active" data-i18n="nav.research">Best 15 (Riset)</a>
+      <a href="groups.html" class="nav-tab" data-i18n="nav.groups">Klasemen & Jadwal</a>
+      <a href="my-squad.html" class="nav-tab" data-i18n="nav.mysquad">Susun Skuad</a>
+    </nav>
     <button class="toggle" id="themeToggle">☀ / ☾</button>
   </div>
-  <nav class="top-nav">
-    <a href="index.html" class="nav-tab">Daftar Pemain</a>
-    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
-    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
-    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
-    <a href="best15-research.html" class="nav-tab active">Best 15 (Riset)</a>
-    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
-    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
-  </nav>
+
+  <div class="hero">
+    <span class="hero-kicker" data-i18n="research.kicker">Deep Dive</span>
+    <h1 data-i18n="research.heroTitle">Best 15 — Data Riset</h1>
+    <p data-i18n="research.heroSubtitle">Proyeksi paling akurat: kekuatan tim dari hasil pertandingan nyata + lawan ronde depan terdeteksi otomatis dari jadwal resmi FIFA.</p>
+  </div>
 
   <div class="disclaimer">
-    Versi paling akurat sejauh ini: kekuatan tim dihitung dari <b>hasil pertandingan nyata turnamen ini</b> (gol dicetak/kebobolan rata-rata dari <code>data/matches.json</code>, worldcup26.ir), bukan dari odds pasar sebelum turnamen mulai. Lawan ronde depan untuk tiap tim juga <b>otomatis terdeteksi</b> dari jadwal nyata (pertandingan grup berikutnya yang belum selesai) — tidak perlu pilih matchday manual.
+    Versi paling akurat sejauh ini: kekuatan tim dihitung dari <b>hasil pertandingan nyata turnamen ini</b> (gol dicetak/kebobolan rata-rata dari <code>data/rounds.json</code>, jadwal resmi FIFA), bukan dari odds pasar sebelum turnamen mulai. Lawan ronde depan untuk tiap tim juga <b>otomatis terdeteksi</b> dari jadwal nyata (pertandingan grup berikutnya yang belum selesai, waktu kickoff dalam WIB) — tidak perlu pilih matchday manual.
     Proyeksi poin = <code>avgPoints</code> historis pemain × faktor kekuatan lawan (GK/DEF naik kalau lawan jarang cetak gol, MID/FWD naik kalau lawan sering kebobolan), dibatasi 0.5×–1.8×. Berlaku maksimal 3 pemain per negara.
   </div>
 
@@ -77,6 +108,11 @@
 </div>
 
 <script src="squad-builder.js"></script>
+<script src="i18n.js"></script>
+<script src="flags.js"></script>
+<script src="brand.js"></script>
+<script src="detail-modal.js"></script>
+<script src="footer.js"></script>
 <script>
 const FORMATION = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
 const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
@@ -85,8 +121,7 @@ const MAX_PER_SQUAD = 3;
 
 let players = [];
 let squads = [];
-let matches = [];
-let nameMap = {};
+let tournaments = [];
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -125,11 +160,10 @@ function squadAbbr(squadId) {
 async function loadData() {
   const panelEl = document.getElementById('panel');
   try {
-    const [playersRes, squadsRes, matchesRes, mapRes] = await Promise.all([
+    const [playersRes, squadsRes, roundsRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
-      fetch('data/matches.json'),
-      fetch('data/team_name_map.json'),
+      fetch('data/rounds.json'),
     ]);
     if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
     players = ((await playersRes.json()) ?? []).map(flatten);
@@ -137,13 +171,9 @@ async function loadData() {
     squads = squadsRes.ok ? (await squadsRes.json()) : [];
     if (!Array.isArray(squads)) squads = [];
 
-    if (!matchesRes.ok) throw new Error(`matches.json HTTP ${matchesRes.status} — jalankan "node scraper.js" dulu`);
-    const matchesJson = await matchesRes.json();
-    matches = matchesJson?.games ?? [];
-
-    if (mapRes.ok) {
-      nameMap = (await mapRes.json())?.map ?? {};
-    }
+    if (!roundsRes.ok) throw new Error(`rounds.json HTTP ${roundsRes.status} — jalankan "node scraper.js" dulu`);
+    const roundsJson = await roundsRes.json();
+    tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
   } catch (e) {
     panelEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}.</div>`;
     return;
@@ -153,27 +183,19 @@ async function loadData() {
 }
 
 function buildTeamStrength() {
-  const groupMatches = matches.filter((m) => m.type === 'group');
   const stats = {};
-
-  for (const m of groupMatches) {
-    if (String(m.finished).toUpperCase() !== 'TRUE') continue;
-    const hAbbr = nameMap[m.home_team_name_en];
-    const aAbbr = nameMap[m.away_team_name_en];
-    const hScore = Number(m.home_score);
-    const aScore = Number(m.away_score);
-    if (hAbbr) {
-      stats[hAbbr] = stats[hAbbr] || { played: 0, GF: 0, GA: 0 };
-      stats[hAbbr].played += 1; stats[hAbbr].GF += hScore; stats[hAbbr].GA += aScore;
-    }
-    if (aAbbr) {
-      stats[aAbbr] = stats[aAbbr] || { played: 0, GF: 0, GA: 0 };
-      stats[aAbbr].played += 1; stats[aAbbr].GF += aScore; stats[aAbbr].GA += hScore;
-    }
+  for (const t of tournaments) {
+    if (t.status !== 'complete') continue;
+    const hId = t.homeSquadId, aId = t.awaySquadId;
+    const hScore = t.homeScore, aScore = t.awayScore;
+    if (hScore == null || aScore == null) continue;
+    stats[hId] = stats[hId] || { played: 0, GF: 0, GA: 0 };
+    stats[hId].played += 1; stats[hId].GF += hScore; stats[hId].GA += aScore;
+    stats[aId] = stats[aId] || { played: 0, GF: 0, GA: 0 };
+    stats[aId].played += 1; stats[aId].GF += aScore; stats[aId].GA += hScore;
   }
-
-  for (const abbr of Object.keys(stats)) {
-    const s = stats[abbr];
+  for (const id of Object.keys(stats)) {
+    const s = stats[id];
     s.avgGF = s.played ? s.GF / s.played : null;
     s.avgGA = s.played ? s.GA / s.played : null;
   }
@@ -181,16 +203,15 @@ function buildTeamStrength() {
 }
 
 function buildNextOpponent() {
-  const groupMatches = matches
-    .filter((m) => m.type === 'group' && String(m.finished).toUpperCase() !== 'TRUE')
-    .sort((a, b) => new Date(a.local_date) - new Date(b.local_date));
+  const upcoming = tournaments
+    .filter((t) => t.status !== 'complete')
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const next = {};
-  for (const m of groupMatches) {
-    const hAbbr = nameMap[m.home_team_name_en];
-    const aAbbr = nameMap[m.away_team_name_en];
-    if (hAbbr && !next[hAbbr]) next[hAbbr] = { opponent: aAbbr, venue: 'H', matchday: m.matchday, date: m.local_date };
-    if (aAbbr && !next[aAbbr]) next[aAbbr] = { opponent: hAbbr, venue: 'A', matchday: m.matchday, date: m.local_date };
+  for (const t of upcoming) {
+    const hId = t.homeSquadId, aId = t.awaySquadId;
+    if (hId != null && !next[hId]) next[hId] = { opponentId: aId, opponent: t.awaySquadAbbr, venue: 'H', date: t.date };
+    if (aId != null && !next[aId]) next[aId] = { opponentId: hId, opponent: t.homeSquadAbbr, venue: 'A', date: t.date };
   }
   return next;
 }
@@ -212,8 +233,8 @@ function computeProjections() {
 
   const scored = players.map((p) => {
     const abbr = squadAbbr(p.squadId);
-    const next = abbr ? nextOpponent[abbr] : null;
-    const oppStrength = next?.opponent ? teamStrength[next.opponent] : null;
+    const next = p.squadId != null ? nextOpponent[p.squadId] : null;
+    const oppStrength = next?.opponentId != null ? teamStrength[next.opponentId] : null;
 
     let multiplier = 1;
     if (!next) noOpponentCount += 1;
@@ -266,12 +287,12 @@ function renderVariant(variant) {
   const rows = POS_ORDER.map((pos) => {
     const chips = starters.filter((p) => p.position === pos).map((p) => {
       const nextLabel = p.next
-        ? `vs ${escapeHtml(p.next.opponent ?? '?')} (${p.next.venue}) · MD${escapeHtml(p.next.matchday ?? '?')}`
+        ? `vs ${escapeHtml(p.next.opponent ?? '?')} (${p.next.venue}) · ${DetailModal.formatWIB(p.next.date, { day: 'numeric', month: 'short' })}`
         : 'lawan belum terdeteksi';
       return `
         <div class="player-chip">
-          <div class="pname">${escapeHtml(p.name)}</div>
-          <div class="psquad">${escapeHtml(p.abbr ?? '?')} · ${p.position}</div>
+          <div class="pname" onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">${escapeHtml(p.name)}</div>
+          <div class="psquad"><span onclick="DetailModal.openTeam(${p.squadId})" style="cursor:pointer; text-decoration:underline;">${FLAGS.flagFor(p.abbr)} ${escapeHtml(p.abbr ?? '?')}</span> · ${p.position}</div>
           <div class="pnext">${nextLabel}</div>
           <div class="pprice">$${Number(p.price).toFixed(1)}</div>
           <div class="pproj">~${p.projectedPoints} pts</div>
@@ -285,7 +306,7 @@ function renderVariant(variant) {
     .sort((a, b) => b.projectedPoints - a.projectedPoints)
     .slice(0, 20)
     .map((p) => `
-      <tr>
+      <tr onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">
         <td>${escapeHtml(p.name)}</td>
         <td>${escapeHtml(p.abbr ?? '?')}</td>
         <td>${p.position}</td>
@@ -316,6 +337,8 @@ function renderVariant(variant) {
     </div>
   `;
 }
+
+document.addEventListener('i18n:change', render);
 
 loadData();
 </script>

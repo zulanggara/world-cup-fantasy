@@ -1,71 +1,164 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>World Cup 2026 Group Standings & Fixtures | Round of 32 Bracket</title>
+<meta name="description" content="Live FIFA World Cup 2026 group standings, third-place qualifier rankings, a real-time Round-of-32 bracket projection, and upcoming fixtures in your local time." />
+<meta name="keywords" content="World Cup 2026 standings, World Cup 2026 group tables, World Cup 2026 fixtures, Round of 32 bracket, World Cup 2026 schedule WIB" />
+<link rel="canonical" href="https://example.com/groups.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="World Cup 2026 Group Standings & Fixtures" />
+<meta property="og:description" content="Live group standings, qualifier rankings, and Round-of-32 bracket projection for the FIFA World Cup 2026." />
+<meta property="og:url" content="https://example.com/groups.html" />
+<meta name="twitter:card" content="summary" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
-<title>FIFA Fantasy — Klasemen & Jadwal</title>
 <style>
   .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
   h1 { font-size: 20px; margin: 0; }
-  h2.section-title { font-size: 15px; margin: 28px 0 12px; }
-  .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
+  h2.section-title { font-size: 18px; margin: 0 0 16px; font-weight: 800; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 28px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, var(--pitch-line) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero-kicker { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .hero h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0; max-width: 680px; }
+
+  .section-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .section-tab { padding: 9px 16px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); cursor: pointer; font-family: 'JetBrains Mono', monospace; }
+  .section-tab:hover { color: var(--text); }
+  .section-tab.active { background: var(--accent); color: #14180a; border-color: var(--accent); font-weight: 700; }
+  .section-pane { display: none; }
+  .section-pane.active { display: block; }
+
+  .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 12px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.6; }
   .disclaimer b { color: var(--text); }
 
-  .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .group-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .group-card h3 { margin: 0; padding: 10px 12px; font-size: 13px; background: var(--panel2); border-bottom: 1px solid var(--border); }
-  table.standing { width: 100%; border-collapse: collapse; font-size: 12px; }
-  table.standing th { text-align: left; color: var(--text-dim); padding: 6px 8px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .group-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .group-card h3 { margin: 0; padding: 12px 14px; font-size: 14px; background: var(--panel2); border-bottom: 1px solid var(--border); font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; }
+  table.standing { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.standing th { text-align: left; color: var(--text-dim); padding: 8px 10px; border-bottom: 1px solid var(--border); font-weight: 600; }
   table.standing th.num, table.standing td.num { text-align: right; }
-  table.standing td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  table.standing td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; }
+  table.standing td.team-name { font-family: 'Bricolage Grotesque', sans-serif; cursor: pointer; }
+  table.standing td.team-name:hover { color: var(--accent2); text-decoration: underline; }
   table.standing tr:last-child td { border-bottom: none; }
+  table.standing tr:hover td { background: var(--row-hover); }
   table.standing tr.qualify td:first-child { border-left: 3px solid var(--accent); }
+  table.standing tr.third-best td:first-child { border-left: 3px solid var(--accent2); }
+
+  .legend { display: flex; gap: 16px; margin: 14px 0 4px; font-size: 11.5px; color: var(--text-dim); flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  table.thirds { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; margin-bottom: 24px; }
+  table.thirds th { text-align: left; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 9px 12px; border-bottom: 1px solid var(--border); background: var(--panel2); }
+  table.thirds td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  table.thirds td.num { text-align: right; font-family: 'JetBrains Mono', monospace; }
+  table.thirds td.team-name { cursor: pointer; }
+  table.thirds td.team-name:hover { color: var(--accent2); text-decoration: underline; }
+  table.thirds tr.qualify td { background: rgba(255,183,3,0.08); }
+
+  .bracket-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .bracket-match { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .bracket-match .bdate { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: 6px; font-size: 13px; }
+  .bracket-team.resolved { background: var(--panel2); font-weight: 600; cursor: pointer; }
+  .bracket-team.resolved:hover { background: var(--row-hover); }
+  .bracket-team.tbd { color: var(--text-dim); font-style: italic; font-size: 12px; }
+  .bracket-vs { text-align: center; font-size: 10px; color: var(--text-dim); padding: 2px 0; }
 
   table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
-  table.fixtures th { text-align: left; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 9px 12px; border-bottom: 1px solid var(--border); background: var(--panel2); }
-  table.fixtures td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  table.fixtures th { text-align: left; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--panel2); }
+  table.fixtures td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
   table.fixtures tr:hover td { background: var(--row-hover); }
+  table.fixtures td.team-link { cursor: pointer; }
+  table.fixtures td.team-link:hover { color: var(--accent2); text-decoration: underline; }
   .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="page-header">
-    <h1>Klasemen & Jadwal</h1>
+    <nav class="top-nav">
+      <a href="index.html" class="nav-tab" data-i18n="nav.players">Daftar Pemain</a>
+      <a href="best-xi.html" class="nav-tab" data-i18n="nav.compare">Compare Tim</a>
+      <a href="best15-overall.html" class="nav-tab" data-i18n="nav.best15overall">Best 15 Keseluruhan</a>
+      <a href="best15-next-round.html" class="nav-tab" data-i18n="nav.nextround">Prediksi Ronde Depan</a>
+      <a href="best15-research.html" class="nav-tab" data-i18n="nav.research">Best 15 (Riset)</a>
+      <a href="groups.html" class="nav-tab active" data-i18n="nav.groups">Klasemen & Jadwal</a>
+      <a href="my-squad.html" class="nav-tab" data-i18n="nav.mysquad">Susun Skuad</a>
+    </nav>
     <button class="toggle" id="themeToggle">☀ / ☾</button>
   </div>
-  <nav class="top-nav">
-    <a href="index.html" class="nav-tab">Daftar Pemain</a>
-    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
-    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
-    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
-    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
-    <a href="groups.html" class="nav-tab active">Klasemen & Jadwal</a>
-    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
-  </nav>
 
-  <div class="disclaimer">
-    Data hasil & jadwal dari <b>worldcup26.ir/get/games</b> (bukan situs resmi FIFA, jadi bisa berbeda atau ada salah ketik nama pencetak gol/skor di sumbernya — silakan koreksi datanya kalau ketemu yang aneh).
-    Urutan klasemen <b>belum memperhitungkan head-to-head</b> antar tim dengan poin sama — hanya Poin → Selisih Gol → Gol Memasukkan. Untuk aturan resmi FIFA (head-to-head, fair play, dst.) cek sumber resmi.
+  <div class="hero">
+    <span class="hero-kicker" data-i18n="groups.kicker">Group Stage Live</span>
+    <h1 data-i18n="groups.heroTitle">Klasemen & Jadwal</h1>
+    <p data-i18n="groups.heroSubtitle">Klasemen 12 grup, proyeksi babak 32 besar real-time, dan jadwal mendatang — semua jam dalam WIB. Klik kode tim untuk lihat hasil pertandingan & roster.</p>
   </div>
 
-  <h2 class="section-title">Klasemen Per Grup</h2>
-  <div class="groups-grid" id="groupsGrid"></div>
+  <div class="disclaimer">
+    Klasemen & jadwal grup dari <b>data resmi FIFA</b> (<code>play.fifa.com/json/fantasy/rounds.json</code>). Urutan <b>belum memperhitungkan head-to-head</b> antar tim dengan poin sama — hanya Poin → Selisih Gol → Gol Memasukkan.
+    Proyeksi babak 32 besar dihitung otomatis dari klasemen <b>saat ini</b> (juara & runner-up tiap grup + 8 tim peringkat-3 terbaik, sesuai format Piala Dunia 2026) — <b>akan berubah</b> seiring pertandingan berjalan, baru final setelah fase grup selesai.
+  </div>
 
-  <h2 class="section-title">Jadwal Ronde Berikutnya (Fase Grup)</h2>
-  <table class="fixtures">
-    <thead><tr><th>Tanggal</th><th>Grup</th><th>MD</th><th>Pertandingan</th></tr></thead>
-    <tbody id="fixturesBody"></tbody>
-  </table>
+  <div class="section-tabs" id="sectionTabs"></div>
+
+  <div class="section-pane active" id="pane-standings">
+    <div class="groups-grid" id="groupsGrid"></div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--accent);"></span> <span data-i18n="groups.legendDirect">Lolos langsung (juara/runner-up)</span></span>
+      <span><span class="swatch" style="background:var(--accent2);"></span> <span data-i18n="groups.legendThird">Peringkat 3 — kandidat lolos</span></span>
+    </div>
+  </div>
+
+  <div class="section-pane" id="pane-thirds">
+    <h2 class="section-title" data-i18n="groups.thirdsTitle">Ranking Peringkat 3 (8 Terbaik Lolos)</h2>
+    <table class="thirds">
+      <thead><tr><th>#</th><th data-i18n="common.colTeam">Tim</th><th>Grup</th><th class="num">P</th><th class="num">GD</th><th class="num">GF</th><th class="num">Pts</th></tr></thead>
+      <tbody id="thirdsBody"></tbody>
+    </table>
+  </div>
+
+  <div class="section-pane" id="pane-bracket">
+    <h2 class="section-title" data-i18n="groups.bracketTitle">Proyeksi Babak 32 Besar</h2>
+    <div class="bracket-grid" id="bracketGrid"></div>
+  </div>
+
+  <div class="section-pane" id="pane-fixtures">
+    <h2 class="section-title" data-i18n="groups.fixturesTitle">Jadwal Pertandingan Mendatang (Fase Grup)</h2>
+    <table class="fixtures">
+      <thead><tr><th data-i18n="groups.colDateTimeWIB">Tanggal & Waktu (WIB)</th><th data-i18n="groups.colFixture">Pertandingan</th></tr></thead>
+      <tbody id="fixturesBody"></tbody>
+    </table>
+  </div>
 </div>
 
+<script src="i18n.js"></script>
+<script src="flags.js"></script>
+<script src="brand.js"></script>
+<script src="detail-modal.js"></script>
+<script src="footer.js"></script>
 <script>
-let matches = [];
-let nameMap = {};
+let tournaments = [];
+let squads = [];
+let matchesGames = [];
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -81,78 +174,104 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function abbrFor(name) {
-  return nameMap[name] ?? name;
+function squadById(id) {
+  return squads.find((s) => s.id === id);
+}
+
+const SECTIONS = [
+  { key: 'standings', i18nKey: 'groups.tabStandings', label: 'Klasemen' },
+  { key: 'thirds', i18nKey: 'groups.tabThirds', label: 'Ranking Peringkat 3' },
+  { key: 'bracket', i18nKey: 'groups.tabBracket', label: 'Proyeksi 32 Besar' },
+  { key: 'fixtures', i18nKey: 'groups.tabFixtures', label: 'Jadwal Mendatang' },
+];
+let currentSection = 'standings';
+
+function renderTabs() {
+  document.getElementById('sectionTabs').innerHTML = SECTIONS.map((s) => `
+    <button class="section-tab ${s.key === currentSection ? 'active' : ''}" data-key="${s.key}">${escapeHtml(I18N.t(s.i18nKey, s.label))}</button>
+  `).join('');
+  document.querySelectorAll('.section-tab').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      currentSection = btn.dataset.key;
+      renderTabs();
+      document.querySelectorAll('.section-pane').forEach((p) => p.classList.remove('active'));
+      document.getElementById('pane-' + currentSection).classList.add('active');
+    });
+  });
 }
 
 async function loadData() {
   const gridEl = document.getElementById('groupsGrid');
   try {
-    const [matchesRes, mapRes] = await Promise.all([
+    const [roundsRes, squadsRes, matchesRes] = await Promise.all([
+      fetch('data/rounds.json'),
+      fetch('data/squads.json'),
       fetch('data/matches.json'),
-      fetch('data/team_name_map.json'),
     ]);
-    if (!matchesRes.ok) throw new Error(`matches.json HTTP ${matchesRes.status}`);
-    const matchesJson = await matchesRes.json();
-    matches = matchesJson?.games ?? [];
+    if (!roundsRes.ok) throw new Error(`rounds.json HTTP ${roundsRes.status}`);
+    const roundsJson = await roundsRes.json();
+    tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
 
-    if (mapRes.ok) {
-      const mapJson = await mapRes.json();
-      nameMap = mapJson?.map ?? {};
+    squads = squadsRes.ok ? (await squadsRes.json()) : [];
+    if (!Array.isArray(squads)) squads = [];
+
+    if (matchesRes.ok) {
+      const matchesJson = await matchesRes.json();
+      matchesGames = matchesJson?.games ?? [];
     }
   } catch (e) {
-    gridEl.innerHTML = `<div class="empty-msg">Gagal memuat data/matches.json: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu supaya data/matches.json terbuat, lalu pastikan diakses via http server.</div>`;
+    gridEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu, lalu akses via http server.</div>`;
     return;
   }
 
-  renderStandings();
+  renderTabs();
+  const standings = buildStandings();
+  renderStandings(standings);
+  const bestThirds = computeBestThirds(standings);
+  renderThirds(standings, bestThirds);
+  renderBracket(standings, bestThirds);
   renderFixtures();
 }
 
-function renderStandings() {
-  const groupMatches = matches.filter((m) => m.type === 'group');
+function buildStandings() {
   const groups = {};
-
-  for (const m of groupMatches) {
-    const g = m.group;
-    if (!groups[g]) groups[g] = {};
-    for (const side of ['home', 'away']) {
-      const name = m[`${side}_team_name_en`];
-      if (!name) continue;
-      if (!groups[g][name]) {
-        groups[g][name] = { name, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0 };
-      }
-    }
+  for (const s of squads) {
+    const g = (s.group ?? '?').toLowerCase();
+    groups[g] = groups[g] || {};
+    groups[g][s.id] = { squadId: s.id, name: s.name, abbr: s.abbr, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0 };
   }
 
-  for (const m of groupMatches) {
-    if (String(m.finished).toUpperCase() !== 'TRUE') continue;
-    const g = m.group;
-    const hName = m.home_team_name_en;
-    const aName = m.away_team_name_en;
-    const hScore = Number(m.home_score);
-    const aScore = Number(m.away_score);
-    if (!groups[g] || !groups[g][hName] || !groups[g][aName]) continue;
-
-    const h = groups[g][hName];
-    const a = groups[g][aName];
+  for (const t of tournaments) {
+    if (t.status !== 'complete' || t.homeScore == null || t.awayScore == null) continue;
+    const hSquad = squadById(t.homeSquadId), aSquad = squadById(t.awaySquadId);
+    if (!hSquad || !aSquad) continue;
+    const g = (hSquad.group ?? '?').toLowerCase();
+    const h = groups[g]?.[t.homeSquadId], a = groups[g]?.[t.awaySquadId];
+    if (!h || !a) continue;
     h.P += 1; a.P += 1;
-    h.GF += hScore; h.GA += aScore;
-    a.GF += aScore; a.GA += hScore;
-    if (hScore > aScore) { h.W += 1; a.L += 1; }
-    else if (hScore < aScore) { a.W += 1; h.L += 1; }
+    h.GF += t.homeScore; h.GA += t.awayScore;
+    a.GF += t.awayScore; a.GA += t.homeScore;
+    if (t.homeScore > t.awayScore) { h.W += 1; a.L += 1; }
+    else if (t.homeScore < t.awayScore) { a.W += 1; h.L += 1; }
     else { h.D += 1; a.D += 1; }
   }
 
-  const sortedGroupKeys = Object.keys(groups).sort();
-  const gridEl = document.getElementById('groupsGrid');
-  gridEl.innerHTML = sortedGroupKeys.map((g) => {
+  const standings = {};
+  for (const g of Object.keys(groups)) {
     const teams = Object.values(groups[g]).map((t) => ({ ...t, GD: t.GF - t.GA, Pts: t.W * 3 + t.D }));
     teams.sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF);
+    standings[g] = teams;
+  }
+  return standings;
+}
 
+function renderStandings(standings) {
+  const sortedGroupKeys = Object.keys(standings).sort();
+  document.getElementById('groupsGrid').innerHTML = sortedGroupKeys.map((g) => {
+    const teams = standings[g];
     const rows = teams.map((t, i) => `
-      <tr class="${i < 2 ? 'qualify' : ''}">
-        <td>${escapeHtml(abbrFor(t.name))}</td>
+      <tr class="${i < 2 ? 'qualify' : i === 2 ? 'third-best' : ''}">
+        <td class="team-name" onclick="DetailModal.openTeam(${t.squadId})">${FLAGS.flagFor(t.abbr)} ${escapeHtml(t.abbr)}</td>
         <td class="num">${t.P}</td>
         <td class="num">${t.W}</td>
         <td class="num">${t.D}</td>
@@ -163,7 +282,6 @@ function renderStandings() {
         <td class="num">${t.Pts}</td>
       </tr>
     `).join('');
-
     return `
       <div class="group-card">
         <h3>Grup ${g.toUpperCase()}</h3>
@@ -176,22 +294,117 @@ function renderStandings() {
   }).join('');
 }
 
-function renderFixtures() {
-  const upcoming = matches
-    .filter((m) => m.type === 'group' && String(m.finished).toUpperCase() !== 'TRUE')
-    .sort((a, b) => new Date(a.local_date) - new Date(b.local_date));
+function computeBestThirds(standings) {
+  const thirds = Object.keys(standings)
+    .map((g) => ({ group: g, team: standings[g][2] }))
+    .filter((x) => x.team)
+    .map((x) => ({ ...x.team, group: x.group }));
+  thirds.sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF);
+  return thirds;
+}
 
-  const rows = upcoming.map((m) => `
-    <tr>
-      <td>${escapeHtml(m.local_date ?? '?')}</td>
-      <td>${escapeHtml((m.group ?? '?').toUpperCase())}</td>
-      <td>MD${escapeHtml(m.matchday ?? '?')}</td>
-      <td>${escapeHtml(abbrFor(m.home_team_name_en))} vs ${escapeHtml(abbrFor(m.away_team_name_en))}</td>
+function renderThirds(standings, bestThirds) {
+  const rows = bestThirds.map((t, i) => `
+    <tr class="${i < 8 ? 'qualify' : ''}" onclick="DetailModal.openTeam(${t.squadId})" style="cursor:pointer;">
+      <td>${i + 1}</td>
+      <td class="team-name">${FLAGS.flagFor(t.abbr)} ${escapeHtml(t.name)} (${escapeHtml(t.abbr)})</td>
+      <td>${t.group.toUpperCase()}</td>
+      <td class="num">${t.P}</td>
+      <td class="num">${t.GD > 0 ? '+' : ''}${t.GD}</td>
+      <td class="num">${t.GF}</td>
+      <td class="num">${t.Pts}</td>
     </tr>
   `).join('');
-
-  document.getElementById('fixturesBody').innerHTML = rows || '<tr><td colspan="4" class="empty-msg">Tidak ada jadwal mendatang.</td></tr>';
+  document.getElementById('thirdsBody').innerHTML = rows || '<tr><td colspan="7" class="empty-msg">Belum ada data peringkat 3.</td></tr>';
 }
+
+function resolveBracketSlot(label, standings, bestThirds) {
+  if (!label) return null;
+  let m = label.match(/^Winner Group ([A-L])$/i);
+  if (m) {
+    const g = m[1].toLowerCase();
+    const team = standings[g]?.[0];
+    return team && team.P === 3 ? team : { pending: true, text: `Juara Grup ${m[1].toUpperCase()}` };
+  }
+  m = label.match(/^Runner-up Group ([A-L])$/i);
+  if (m) {
+    const g = m[1].toLowerCase();
+    const team = standings[g]?.[1];
+    return team && team.P === 3 ? team : { pending: true, text: `Runner-up Grup ${m[1].toUpperCase()}` };
+  }
+  m = label.match(/^3rd Group ([A-L\/]+)$/i);
+  if (m) {
+    const letters = m[1].toUpperCase().split('/');
+    const allGroupsComplete = letters.every((l) => {
+      const g = l.toLowerCase();
+      return (standings[g] || []).every((t) => t.P === 3);
+    });
+    if (!allGroupsComplete) return { pending: true, text: `Peringkat-3 Grup ${letters.join('/')}` };
+    const found = bestThirds.slice(0, 8).find((t) => letters.includes(t.group.toUpperCase()));
+    return found || { pending: true, text: `Peringkat-3 Grup ${letters.join('/')} (belum pasti)` };
+  }
+  return { pending: true, text: label };
+}
+
+function renderBracket(standings, bestThirds) {
+  const r32 = matchesGames.filter((m) => m.type === 'r32');
+  if (!r32.length) {
+    document.getElementById('bracketGrid').innerHTML = '<div class="empty-msg">Data bracket babak 32 besar tidak tersedia.</div>';
+    return;
+  }
+
+  const html = r32.map((m) => {
+    const home = resolveBracketSlot(m.home_team_label, standings, bestThirds);
+    const away = resolveBracketSlot(m.away_team_label, standings, bestThirds);
+    const renderSide = (side) => {
+      if (!side) return '<div class="bracket-team tbd">TBD</div>';
+      if (side.pending) return `<div class="bracket-team tbd">${escapeHtml(side.text)}</div>`;
+      return `<div class="bracket-team resolved" onclick="DetailModal.openTeam(${side.squadId})">${FLAGS.flagFor(side.abbr)} ${escapeHtml(side.abbr)} <span style="color:var(--text-dim); font-weight:400;">${escapeHtml(side.name)}</span></div>`;
+    };
+    return `
+      <div class="bracket-match">
+        <div class="bdate">${escapeHtml(m.local_date ?? '?')} <span style="opacity:.7;">(jadwal venue, belum dikonversi WIB — tim belum pasti)</span></div>
+        ${renderSide(home)}
+        <div class="bracket-vs">vs</div>
+        ${renderSide(away)}
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('bracketGrid').innerHTML = html;
+}
+
+function renderFixtures() {
+  const upcoming = tournaments
+    .filter((t) => t.status !== 'complete')
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const rows = upcoming.map((t) => {
+    const wib = DetailModal.formatWIB(t.date, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    return `
+      <tr>
+        <td>${escapeHtml(wib)}</td>
+        <td>
+          <span class="team-link" onclick="DetailModal.openTeam(${t.homeSquadId})">${FLAGS.flagFor(t.homeSquadAbbr)} ${escapeHtml(t.homeSquadAbbr ?? '?')}</span>
+          vs
+          <span class="team-link" onclick="DetailModal.openTeam(${t.awaySquadId})">${FLAGS.flagFor(t.awaySquadAbbr)} ${escapeHtml(t.awaySquadAbbr ?? '?')}</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('fixturesBody').innerHTML = rows || '<tr><td colspan="2" class="empty-msg">Tidak ada jadwal mendatang.</td></tr>';
+}
+
+document.addEventListener('i18n:change', () => {
+  renderTabs();
+  const standings = buildStandings();
+  renderStandings(standings);
+  const bestThirds = computeBestThirds(standings);
+  renderThirds(standings, bestThirds);
+  renderBracket(standings, bestThirds);
+  renderFixtures();
+});
 
 loadData();
 </script>

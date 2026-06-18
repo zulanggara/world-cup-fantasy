@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>World Cup 2026 Fantasy Next Round Projection | Best 15 Forecast</title>
+<meta name="description" content="Forecast the best FIFA World Cup 2026 Fantasy squad for the next round using player form and fixture difficulty, with budget-aware variants." />
+<meta name="keywords" content="World Cup fantasy next round, FIFA Fantasy forecast, World Cup 2026 fantasy tips, fantasy football fixture projection" />
+<link rel="canonical" href="https://example.com/best15-next-round.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="World Cup 2026 Fantasy Next Round Projection" />
+<meta property="og:description" content="Forecast the best FIFA World Cup 2026 Fantasy squad for the next round based on form and fixtures." />
+<meta property="og:url" content="https://example.com/best15-next-round.html" />
+<meta name="twitter:card" content="summary" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
-<title>FIFA Fantasy — Prediksi Best 15 Ronde Depan</title>
 <style>
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
   h1 { font-size: 20px; margin: 0; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 28px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, var(--pitch-line) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero-kicker { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .hero h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0; max-width: 640px; }
+
   .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
   .toolbar select { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
   .spacer { flex: 1; }
@@ -53,18 +79,23 @@
 <body>
 <div class="wrap">
   <div class="page-header">
-    <h1>Prediksi Best 15 Ronde Depan</h1>
+    <nav class="top-nav">
+      <a href="index.html" class="nav-tab" data-i18n="nav.players">Daftar Pemain</a>
+      <a href="best-xi.html" class="nav-tab" data-i18n="nav.compare">Compare Tim</a>
+      <a href="best15-overall.html" class="nav-tab" data-i18n="nav.best15overall">Best 15 Keseluruhan</a>
+      <a href="best15-next-round.html" class="nav-tab active" data-i18n="nav.nextround">Prediksi Ronde Depan</a>
+      <a href="best15-research.html" class="nav-tab" data-i18n="nav.research">Best 15 (Riset)</a>
+      <a href="groups.html" class="nav-tab" data-i18n="nav.groups">Klasemen & Jadwal</a>
+      <a href="my-squad.html" class="nav-tab" data-i18n="nav.mysquad">Susun Skuad</a>
+    </nav>
     <button class="toggle" id="themeToggle">☀ / ☾</button>
   </div>
-  <nav class="top-nav">
-    <a href="index.html" class="nav-tab">Daftar Pemain</a>
-    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
-    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
-    <a href="best15-next-round.html" class="nav-tab active">Prediksi Ronde Depan</a>
-    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
-    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
-    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
-  </nav>
+
+  <div class="hero">
+    <span class="hero-kicker" data-i18n="nextround.kicker">Forecast</span>
+    <h1 data-i18n="nextround.heroTitle">Next Round Projection</h1>
+    <p data-i18n="nextround.heroSubtitle">Proyeksi Best 15 ronde depan berdasarkan form pemain + indeks fixture. Klik nama pemain atau kode negara untuk lihat detail.</p>
+  </div>
 
   <div class="disclaimer">
     <b>Pemilihan 15 pemain</b> pakai skor indeks 0–100: 60% form pemain terkini (field <code>form</code>/<code>avgPoints</code> dari FIFA) + 40% indeks fixture ronde depan (Clean Sheet % untuk GK/DEF, Projected Goals tim untuk MID/FWD — dari grafik proyeksi pasar SBOBET/Betfair via FPLJoe.com, input manual statis per 27.05.26, <b>tidak live</b>).
@@ -90,6 +121,11 @@
 </div>
 
 <script src="squad-builder.js"></script>
+<script src="i18n.js"></script>
+<script src="flags.js"></script>
+<script src="brand.js"></script>
+<script src="detail-modal.js"></script>
+<script src="footer.js"></script>
 <script>
 const FORMATION = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
 const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
@@ -250,8 +286,8 @@ function renderVariant(variant) {
   const rows = POS_ORDER.map((pos) => {
     const chips = starters.filter((p) => p.position === pos).map((p) => `
       <div class="player-chip">
-        <div class="pname">${escapeHtml(p.name)}</div>
-        <div class="psquad">${escapeHtml(squadAbbr(p.squadId) ?? '?')} · ${p.position}</div>
+        <div class="pname" onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">${escapeHtml(p.name)}</div>
+        <div class="psquad"><span onclick="DetailModal.openTeam(${p.squadId})" style="cursor:pointer; text-decoration:underline;">${FLAGS.flagFor(squadAbbr(p.squadId))} ${escapeHtml(squadAbbr(p.squadId) ?? '?')}</span> · ${p.position}</div>
         <div class="pprice">$${Number(p.price).toFixed(1)} · Skor ${p.score}</div>
         <div class="pproj">~${p.projectedPoints} pts (estimasi)</div>
       </div>
@@ -263,7 +299,7 @@ function renderVariant(variant) {
     .sort((a, b) => b.score - a.score)
     .slice(0, 20)
     .map((p) => `
-      <tr>
+      <tr onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">
         <td>${escapeHtml(p.name)}</td>
         <td>${escapeHtml(squadAbbr(p.squadId) ?? '?')}</td>
         <td>${p.position}</td>
@@ -294,6 +330,8 @@ function renderVariant(variant) {
     </div>
   `;
 }
+
+document.addEventListener('i18n:change', render);
 
 loadData();
 </script>

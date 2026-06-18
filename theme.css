@@ -1,38 +1,40 @@
-/* Stadium Night — shared design system for all fifa-fantasy pages.
+/* "Global Pitch" — shared design system for all fifa-fantasy pages, derived
+   from DESIGN.md (Deep Navy/Charcoal base, Gold primary, Vibrant Green
+   secondary, Montserrat headlines + Inter body + JetBrains Mono data).
    Loaded via <link> before each page's own <style> block, so component
    CSS that already references var(--accent), var(--pitch), etc. picks up
    this palette automatically without per-page edits. */
 
 :root[data-theme="dark"] {
-  --bg: #0a0f0a;
-  --bg-grid: rgba(255, 183, 3, 0.05);
-  --panel: #121a10;
-  --panel2: #182013;
-  --border: #25341f;
-  --text: #edf2e8;
-  --text-dim: #8da27f;
-  --accent: #ffb703;
-  --accent2: #2ec4b6;
-  --row-hover: #1b2617;
-  --row-alt: #0d130a;
-  --pitch: #0f2e15;
-  --pitch-line: rgba(255, 183, 3, 0.3);
+  --bg: #0b0c0e;
+  --bg-grid: rgba(233, 196, 0, 0.045);
+  --panel: #16171a;
+  --panel2: #1e2023;
+  --border: #2c2e33;
+  --text: #f1f2f4;
+  --text-dim: #9a9da6;
+  --accent: #e9c400;
+  --accent2: #00e639;
+  --row-hover: #1e2125;
+  --row-alt: #121316;
+  --pitch: #0d2613;
+  --pitch-line: rgba(233, 196, 0, 0.25);
 }
 
 :root[data-theme="light"] {
-  --bg: #f3f6ee;
-  --bg-grid: rgba(217, 126, 0, 0.06);
+  --bg: #f5f5f3;
+  --bg-grid: rgba(159, 127, 0, 0.05);
   --panel: #ffffff;
-  --panel2: #edf2e6;
-  --border: #d7e0cd;
-  --text: #16200e;
-  --text-dim: #5c6f51;
-  --accent: #d97e00;
-  --accent2: #0f8a7e;
-  --row-hover: #eef2e6;
-  --row-alt: #f8faf4;
+  --panel2: #eef0ef;
+  --border: #d8dadd;
+  --text: #15171a;
+  --text-dim: #5a5d63;
+  --accent: #b38600;
+  --accent2: #0a8a2e;
+  --row-hover: #eef0ef;
+  --row-alt: #fafafa;
   --pitch: #d9ecd0;
-  --pitch-line: rgba(217, 126, 0, 0.35);
+  --pitch-line: rgba(179, 134, 0, 0.3);
 }
 
 * { box-sizing: border-box; }
@@ -41,7 +43,7 @@ html { color-scheme: dark light; }
 
 body {
   margin: 0;
-  font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-optical-sizing: auto;
   background-color: var(--bg);
   background-image:
@@ -52,17 +54,18 @@ body {
   color: var(--text);
 }
 
-h1, h2, h3, .tname, .section-title, .bench-title, .formation-label {
-  font-family: 'Bricolage Grotesque', sans-serif;
+h1, h2, h3, .tname, .section-title, .bench-title, .formation-label, .brand-logo {
+  font-family: 'Montserrat', sans-serif;
 }
 
 h1 {
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
 }
 
 h2.section-title, h3.sub-title {
-  font-weight: 700;
+  font-weight: 800;
 }
 
 /* Numbers, prices, scores, and codey bits get the mono treatment */
@@ -85,7 +88,7 @@ table.fixtures td, .ttotal, .total-pts, .points, td.num {
 .nav-tab:hover { background: var(--row-hover); color: var(--text); }
 .nav-tab.active {
   background: var(--accent);
-  color: #14180a;
+  color: #1a1500;
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -94,7 +97,7 @@ table.fixtures td, .ttotal, .total-pts, .points, td.num {
 
 a { color: var(--accent2); }
 a.nav-tab, a.nav-tab:visited { color: var(--text-dim); }
-a.nav-tab.active, a.nav-tab.active:visited { color: #14180a; }
+a.nav-tab.active, a.nav-tab.active:visited { color: #1a1500; }
 
 button.toggle {
   background: var(--panel); border: 1px solid var(--border); color: var(--text);
@@ -104,6 +107,21 @@ button.toggle {
 }
 button.toggle:hover { background: var(--row-hover); }
 button.toggle:active { transform: scale(0.96); }
+
+/* ---- brand header (logo) ---- */
+.brand-row { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.brand-logo {
+  font-weight: 900; font-style: italic; font-size: 20px; line-height: 1.1;
+  color: var(--accent); text-decoration: none; letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* ---- player/team initial avatars (no licensed photos available — see README) ---- */
+.avatar-circle {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-family: 'Montserrat', sans-serif; font-weight: 800;
+  color: #0b0c0e; flex-shrink: 0;
+}
 
 /* One well-orchestrated load animation: top-level blocks rise + fade in,
    staggered. Applied generically to direct children of .wrap so every

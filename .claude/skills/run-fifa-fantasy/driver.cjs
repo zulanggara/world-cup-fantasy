@@ -87,10 +87,10 @@ const PAGES = [
       await page.fill('#search', 'Messi');
       await page.waitForTimeout(300);
       const rowsAfter = await page.locator('tbody tr.player-row').count();
-      await page.locator('tbody tr.player-row').first().click();
-      await page.waitForTimeout(800);
-      const detailVisible = await page.locator('tr.detail-row .detail-inner').count();
-      return { rowsBefore, rowsAfterSearch: rowsAfter, detailExpanded: detailVisible > 0 };
+      await page.locator('tbody tr.player-row .name-cell').first().click();
+      await page.waitForTimeout(600);
+      const modalOpen = await page.locator('.dm-overlay.open').count();
+      return { rowsBefore, rowsAfterSearch: rowsAfter, playerModalOpened: modalOpen > 0 };
     },
   },
   {
@@ -142,18 +142,21 @@ const PAGES = [
     async interact(page) {
       await page.waitForSelector('.group-card', { timeout: 10000 });
       const groupCards = await page.locator('.group-card').count();
-      const fixtureRows = await page.locator('#fixturesBody tr').count();
-      return { groupCards, fixtureRows };
+      await page.click('.section-tab[data-key="bracket"]');
+      await page.waitForTimeout(300);
+      const bracketMatches = await page.locator('.bracket-match').count();
+      return { groupCards, bracketMatches };
     },
   },
   {
-    path: 'copilot.html',
-    name: 'copilot',
+    path: 'my-squad.html',
+    name: 'my-squad',
     async interact(page) {
-      await page.waitForSelector('#stageLimitsBody tr', { timeout: 10000 });
-      const stageRows = await page.locator('#stageLimitsBody tr').count();
-      const current = await page.locator('#stageLimitsBody tr.current').textContent();
-      return { stageRows, currentStage: current?.trim().replace(/\s+/g, ' ') };
+      await page.waitForSelector('#playerTbody tr', { timeout: 10000 });
+      await page.locator('#playerTbody .add-btn:not(.added):not([disabled])').first().click();
+      await page.waitForTimeout(400);
+      const slotCount = await page.locator('#slotCount').textContent();
+      return { slotCountAfterAdd: slotCount?.trim() };
     },
   },
 ];

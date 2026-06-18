@@ -87,10 +87,11 @@ window.SquadBuilder = (function () {
     }));
     const value = selectByMetric(valuePlayers, '_value', formation, posOrder, maxPerSquad);
 
+    const tt = (key, fallback) => (window.I18N ? window.I18N.t(key, fallback) : fallback);
     return [
-      { key: 'premium', label: 'Skor Tertinggi', starters: premium.starters, bench: premium.bench },
-      { key: 'budget', label: 'Dalam Budget', starters: budgetFit.starters, bench: budgetFit.bench, fitted: budgetFit.fitted },
-      { key: 'value', label: 'Hemat (Value)', starters: value.starters, bench: value.bench },
+      { key: 'premium', label: tt('common.variantPremium', 'Skor Tertinggi'), starters: premium.starters, bench: premium.bench },
+      { key: 'budget', label: tt('common.variantBudget', 'Dalam Budget'), starters: budgetFit.starters, bench: budgetFit.bench, fitted: budgetFit.fitted },
+      { key: 'value', label: tt('common.variantValue', 'Hemat (Value)'), starters: value.starters, bench: value.bench },
     ];
   }
 

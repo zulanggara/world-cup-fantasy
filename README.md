@@ -30,7 +30,8 @@ Output:
 - `data/stats/{id}.json` — stats per ronde untuk pemain `{id}` (hanya dibuat kalau `--with-stats` dipakai)
 - `data/squads.json` — daftar 48 negara
 - `data/matches.json` — jadwal & hasil pertandingan Piala Dunia 2026 (selalu di-fetch setiap `node scraper.js` dijalankan, dari `worldcup26.ir/get/games`, request HTTPS langsung tanpa browser karena situsnya tidak diproteksi Akamai)
-- `data/rounds.json` — fixture & hasil **resmi FIFA** (`play.fifa.com/json/fantasy/rounds.json`), selalu di-fetch juga. `homeSquadId`/`awaySquadId` di sini langsung cocok dengan `squads.json` (tidak perlu name-mapping seperti `matches.json`/worldcup26.ir).
+- `data/rounds.json` — fixture & hasil **resmi FIFA** (`play.fifa.com/json/fantasy/rounds.json`), selalu di-fetch juga. `homeSquadId`/`awaySquadId` di sini langsung cocok dengan `squads.json` (tidak perlu name-mapping seperti `matches.json`/worldcup26.ir), dan tanggalnya ISO 8601 dengan offset yang benar — jadi bisa dikonversi akurat ke WIB.
+- `data/sync_meta.json` — ditulis di akhir setiap `node scraper.js` jalan: `{ lastSync, playersCount, withStats }`. Dipakai `footer.js` untuk menampilkan "terakhir disinkronkan" di tiap halaman.
 
 ### Cara kerja scraper (Akamai)
 
@@ -60,7 +61,19 @@ npx serve .
 # buka http://localhost:3000 (atau port yang ditampilkan di terminal)
 ```
 
-Ada 7 halaman, dihubungkan lewat tab navigasi konsisten (`Daftar Pemain` / `Compare Tim` / `Best 15 Keseluruhan` / `Prediksi Ronde Depan` / `Best 15 (Riset)` / `Klasemen & Jadwal` / `Aturan & Copilot`) di bagian atas tiap halaman, dengan tab aktif ditandai warna accent.
+Ada 7 halaman, dihubungkan lewat tab navigasi konsisten (`Daftar Pemain` / `Compare Tim` / `Best 15 Keseluruhan` / `Prediksi Ronde Depan` / `Best 15 (Riset)` / `Klasemen & Jadwal` / `Susun Skuad`) di bagian atas tiap halaman, dengan tab aktif ditandai warna accent. Tema visual "Stadium Night" (font Bricolage Grotesque + JetBrains Mono, palet hijau-amber) didefinisikan satu kali di [theme.css](fifa-fantasy/theme.css) dan dipakai bersama lewat `<link>` di semua halaman.
+
+### Detail pemain & tim (klik untuk lihat) — `detail-modal.js`
+Shared module (`<script src="detail-modal.js">`) dipakai di semua halaman. Klik nama pemain di mana pun (tabel, chip Best 15, slot skuad) membuka **modal overlay**:
+- **Modal pemain**: breakdown poin per ronde (stat mentah + breakdown rumus resmi "How to Score", sama seperti yang dulu ada inline di `index.html`) **plus** konteks hasil pertandingan ronde itu (lawan, skor, home/away) — didapat dari join `stats/{id}.json` (field `tournamentId`) ke `data/rounds.json`.
+- **Modal tim**: hasil & jadwal pertandingan tim itu (termasuk pencetak gol, dari `homeGoalScorersAssists`/`awayGoalScorersAssists` di `rounds.json`) + roster lengkap diurutkan `totalPoints` tertinggi ke terendah, tiap nama pemain di roster bisa diklik lagi untuk lihat modal pemain.
+- Modal bisa ditutup lewat tombol ✕, klik di luar kartu, atau tombol Esc.
+
+### Last sync footer — `footer.js`
+Shared module (`<script src="footer.js">`) dipasang di semua halaman, membaca `data/sync_meta.json` dan menampilkan footer "Data terakhir disinkronkan: `<tanggal WIB>` (`<X menit/jam lalu>`)" dengan indikator titik warna (hijau <2 jam, amber 2–6 jam, merah >6 jam) supaya jelas kalau data sudah basi dan perlu `node scraper.js` ulang.
+
+### Halaman Susun Skuad (`my-squad.html`)
+Draft manual: cari & filter pemain di tabel kiri, klik "+ Tambah" untuk masukkan ke skuad di panel kanan. Validasi otomatis menolak penambahan kalau melanggar aturan FIFA Fantasy (komposisi 2 GK–5 DEF–5 MID–3 FWD, budget 100, maksimal 3 pemain/negara) dengan pesan singkat kenapa ditolak. Budget bar, total poin, dan rata-rata poin per pemain ter-update live. Susunan skuad disimpan di `localStorage` (`fifa-fantasy-my-squad`) jadi tetap ada walau browser ditutup/refresh. Klik nama pemain di slot untuk lihat detail atau ✕ untuk hapus.
 
 ### Budget squad (semua halaman Best 15)
 Setiap halaman yang menyusun Best 15 (`best-xi.html`, `best15-overall.html`, `best15-next-round.html`, `best15-research.html`) sekarang menampilkan **harga** (`price` dari `players.json`) di tiap pemain dan total harga squad, dibandingkan dengan budget standar FIFA Fantasy **100**. Logikanya ada di [squad-builder.js](fifa-fantasy/squad-builder.js) (dipakai bersama lewat `<script src="squad-builder.js">`, tidak didup­likasi per halaman) dan menghasilkan **3 varian** yang bisa dipilih lewat tab:
@@ -71,11 +84,12 @@ Setiap halaman yang menyusun Best 15 (`best-xi.html`, `best15-overall.html`, `be
 - Algoritma penukaran budget ini adalah **heuristik greedy**, bukan solver optimal sempurna (true combinatorial optimization) — cukup baik untuk kasus 15 slot + cap 3/negara, tapi bisa saja ada kombinasi lain yang sedikit lebih baik yang tidak ditemukan.
 
 Fitur viewer (`index.html`, vanilla JS, tanpa build step):
-- Search nama, filter posisi (GK/DEF/MID/FWD), filter status, sort klik header.
-- Klik baris pemain → expand detail stats per ronde (lazy-fetch `data/stats/{id}.json`, di-cache di memori).
+- Hero "FIFA Fantasy Newsroom" dengan ringkasan live (total pemain, jumlah status `playing`, poin tertinggi saat ini).
+- Search nama, filter posisi (GK/DEF/MID/FWD), filter status, sort klik header, kolom **Tim** (klik → modal tim).
+- Klik nama pemain → modal breakdown stats per ronde + konteks hasil pertandingan (lihat bagian `detail-modal.js` di atas) — menggantikan mekanisme expand-row inline yang dulu dipakai.
 - Dark mode default, toggle ke light mode.
-- Poin resmi per ronde (field `points`) ditampilkan sebagai angka utama. Di bawahnya ada **breakdown perhitungan sesuai rumus resmi "How to Score"** FIFA Fantasy (Appearance, Assist, Goal, Clean Sheet, Tackles/Chances Created/Shots on Target bonus, dst., dengan bobot berbeda per posisi GK/DEF/MID/FWD). Breakdown ini dihitung dari rumus resmi, bukan tebakan — tervalidasi cocok dengan field `points` di banyak kasus.
-  - Kalau ada selisih antara breakdown dan poin resmi, viewer menampilkan catatan selisih. Ini biasanya berasal dari **scouting bonus** (+2 jika pemain raih >4 pts dan dipilih <5% pemain saat pertandingan berlangsung) — bonus ini tidak bisa dihitung ulang secara pasti karena data `percentSelected` yang tersimpan adalah persentase saat scrape dijalankan, bukan snapshot historis saat pertandingan itu berlangsung.
+- Poin resmi per ronde (field `points`) ditampilkan sebagai angka utama di modal. Di bawahnya ada **breakdown perhitungan sesuai rumus resmi "How to Score"** FIFA Fantasy (Appearance, Assist, Goal, Clean Sheet, Tackles/Chances Created/Shots on Target bonus, dst., dengan bobot berbeda per posisi GK/DEF/MID/FWD). Breakdown ini dihitung dari rumus resmi, bukan tebakan — tervalidasi cocok dengan field `points` di banyak kasus.
+  - Kalau ada selisih antara breakdown dan poin resmi, modal menampilkan catatan selisih. Ini biasanya berasal dari **scouting bonus** (+2 jika pemain raih >4 pts dan dipilih <5% pemain saat pertandingan berlangsung) — bonus ini tidak bisa dihitung ulang secara pasti karena data `percentSelected` yang tersimpan adalah persentase saat scrape dijalankan, bukan snapshot historis saat pertandingan itu berlangsung.
 
 ### Halaman Compare Best 15 Antar Tim (`best-xi.html`)
 - Pilih dua tim (squad) dari dropdown (data dari `data/squads.json`), lalu halaman menyusun **Best 15 per tim** dengan komposisi heuristik 2 GK – 5 DEF – 5 MID – 3 FWD, diambil dari pemain dengan `totalPoints` tertinggi di posisi masing-masing.
@@ -101,8 +115,8 @@ Fitur viewer (`index.html`, vanilla JS, tanpa build step):
 
 ### Halaman Best 15 (Riset) (`best15-research.html`)
 Versi paling akurat sejauh ini, menggantikan asumsi statis dengan data nyata turnamen:
-- **Kekuatan tim** dihitung dari rata-rata gol dicetak/kebobolan di pertandingan grup yang **sudah selesai** (`data/matches.json`, sumber worldcup26.ir) — bukan odds pasar pra-turnamen.
-- **Lawan ronde depan terdeteksi otomatis** per tim dari jadwal nyata (pertandingan grup berikutnya yang belum selesai, diurutkan tanggal) — tidak perlu pilih matchday manual seperti di halaman Prediksi Ronde Depan.
+- **Kekuatan tim** dihitung dari rata-rata gol dicetak/kebobolan di pertandingan grup yang **sudah selesai**, sumber `data/rounds.json` (resmi FIFA, join langsung lewat `squadId` — sebelumnya pakai `data/matches.json`/worldcup26.ir + name-mapping, sudah dimigrasikan ke `rounds.json` karena lebih akurat) — bukan odds pasar pra-turnamen.
+- **Lawan ronde depan terdeteksi otomatis** per tim dari jadwal nyata (pertandingan grup berikutnya yang belum selesai di `rounds.json`, diurutkan tanggal, ditampilkan dalam WIB) — tidak perlu pilih matchday manual seperti di halaman Prediksi Ronde Depan.
 - Proyeksi poin = `avgPoints` historis × faktor kekuatan lawan (GK/DEF naik kalau lawan jarang cetak gol secara historis, MID/FWD naik kalau lawan sering kebobolan), dibatasi 0.5×–1.8×, dibanding rata-rata liga (bukan dibanding tim itu sendiri).
 - Tiap chip pemain menampilkan lawan berikutnya (mis. "vs ARG (A) · MD2") untuk transparansi.
 - Catatan keterbatasan data ditampilkan otomatis di halaman: pemain dari tim yang lawan berikutnya belum punya riwayat pertandingan (baru akan main pertama kali) dihitung netral (faktor ×1) — saat data ini diambil, ada 2 tim (Uzbekistan, Colombia) yang belum pernah bertanding, jadi 4 tim yang berhadapan dengan mereka (termasuk Portugal & DR Congo) kena efek ini.
@@ -110,32 +124,22 @@ Versi paling akurat sejauh ini, menggantikan asumsi statis dengan data nyata tur
 - **Belum ditangani** (kalau ada yang mau dibantu lengkapi): pencocokan nama pencetak gol (`home_scorers`/`away_scorers`) ke pemain individual — datanya ada di `data/matches.json` tapi belum dipakai karena format nama bisa beda dari `players.json` dan butuh validasi manual biar tidak salah cocok.
 
 ### Halaman Klasemen & Jadwal (`groups.html`)
-- **Klasemen 12 grup** (A–L) dihitung dari pertandingan grup yang sudah selesai di `data/matches.json`: P/W/D/L/GF/GA/GD/Pts, diurutkan Poin → Selisih Gol → Gol Memasukkan.
+Di-overhaul total: sumber data sekarang **`data/rounds.json`** (resmi FIFA, bukan lagi `matches.json`/worldcup26.ir untuk standings & jadwal — lebih akurat dan tidak butuh name-mapping), dengan 4 tab:
+- **Klasemen** — 12 grup (A–L), P/W/D/L/GF/GA/GD/Pts, diurutkan Poin → Selisih Gol → Gol Memasukkan. Highlight warna: amber = lolos langsung (peringkat 1–2), teal = peringkat 3 (kandidat lolos). Klik kode tim → modal tim.
   - **Belum memperhitungkan head-to-head** antar tim dengan poin sama (aturan resmi FIFA) — kalau butuh akurasi penuh untuk kasus 2-3 tim seri poin, perlu effort tambahan untuk mengecek hasil pertemuan langsung.
-- **Jadwal ronde berikutnya** (fase grup) — semua pertandingan yang belum selesai, diurutkan tanggal, dengan kode matchday.
-- Data sumber (worldcup26.ir, bukan API resmi FIFA) kadang punya salah ketik nama pencetak gol/skor — kalau ketemu yang aneh, kabari saja untuk dikoreksi.
-
-### Halaman Aturan Resmi & AI Copilot (`copilot.html`)
-Halaman ini mengintegrasikan isi repo [`fantasy-world-cup-skill`](https://github.com/manavm12/fantasy-world-cup-skill) (kalau sudah di-clone secara terpisah) ke app ini. Penting dipahami: **repo itu bukan library JS atau API web** — itu adalah *skill* untuk AI agent (instruksi `SKILL.md` + data lokal + CLI Tinyfish untuk riset live), jadi tidak bisa "ditombolkan" di halaman statis tanpa backend yang menjalankan LLM + CLI.
-
-Yang diintegrasikan secara nyata ke app ini:
-- **Aturan resmi lengkap** dari `references/game-rules.md` milik skill itu, dirender rapi: budget 100m, komposisi skuad 2-5-5-3 (sesuai yang sudah dipakai di app ini), **limit pemain per negara per babak** (Group Stage/R32: 3, R16: 4, QF: 5, SF: 6, Final: 8 — bukan selalu 3 seperti yang kita asumsikan sebelumnya untuk seluruh turnamen), aturan transfer per periode, booster, kapten, dan substitusi.
-- **`data/rounds.json`** — endpoint resmi FIFA (`play.fifa.com/json/fantasy/rounds.json`) yang juga dipakai skill itu untuk fixture, sekarang ikut di-fetch oleh `scraper.js` kita (lihat bagian Output di atas).
-- Halaman ini otomatis membaca `data/rounds.json` untuk mendeteksi babak turnamen saat ini (Group Stage) dan highlight limit pemain/negara yang berlaku.
-
-Yang **tidak** bisa dijalankan dari halaman ini (butuh agent, bukan browser): fitur chat seperti "help me build my team", "compare Lautaro Martinez vs Isak". Itu hanya bisa dipakai dengan bertanya langsung ke AI agent (Claude Code) di repo `fantasy-world-cup-skill` — panduan & contoh prompt-nya ada di halaman ini.
+- **Ranking Peringkat 3** — semua 12 tim peringkat-3 diurutkan Pts → GD → GF, 8 teratas ditandai "lolos" sesuai format resmi Piala Dunia 2026 (juara + runner-up tiap grup otomatis lolos ke 32 besar, ditambah 8 peringkat-3 terbaik — referensi: format yang dijelaskan di [Wikipedia: Piala Dunia FIFA 2026](https://id.wikipedia.org/wiki/Piala_Dunia_FIFA_2026)).
+- **Proyeksi 32 Besar** — 16 partai babak 32 besar dari `data/matches.json` (slot placeholder seperti "Winner Group A", "3rd Group A/B/C/D/F"), **diresolusi otomatis** ke nama tim asli berdasarkan klasemen real-time begitu grup terkait sudah selesai (3 pertandingan lengkap); kalau belum, ditampilkan placeholder seperti "Juara Grup A" (italic, belum pasti). **Ini proyeksi, bukan hasil resmi** — akan berubah sampai fase grup benar-benar selesai, dan posisi penempatan bisa direvisi kalau pola FIFA berbeda dari yang diasumsikan di sini.
+- **Jadwal Mendatang** — seluruh pertandingan fase grup yang belum dimainkan dari `rounds.json`, waktu kickoff dikonversi akurat ke **WIB** (pakai `Intl`/`toLocaleString` dengan `timeZone: 'Asia/Jakarta'`, bukan asumsi offset manual). Klik kode tim → modal tim.
+  - Catatan: jadwal **babak 32 besar** di tab "Proyeksi 32 Besar" sengaja **tidak** dikonversi ke WIB — `local_date` di `data/matches.json` untuk partai itu belum punya info zona waktu venue yang reliable (beda dari `rounds.json` yang sudah ISO 8601 lengkap dengan offset), jadi ditampilkan apa adanya dengan catatan "belum dikonversi" supaya tidak mengklaim akurasi palsu.
 
 ## Verifikasi yang sudah dilakukan
 
 - `node scraper.js --ids 1,9,682 --with-stats` berhasil jalan end-to-end: `data/players.json` (1488 pemain), `data/squads.json` (48 tim), `data/stats/682.json` & lainnya terisi data ronde nyata (lihat contoh di bawah).
-- Viewer diuji headless via Playwright: 1488 baris ter-render, search/filter/sort + pagination jalan, klik baris memunculkan detail ronde dengan breakdown rumus resmi, **tanpa error console**.
-- `best-xi.html` diuji headless: ranking 48 tim ter-render (urutan benar, tim teratas Germany 97 pts saat data scrape ini diambil), comparison panel 2 tim jalan, **tanpa error console**.
-- `best15-overall.html` diuji headless: 15 chip pemain ter-render lintas tim, total poin terhitung benar (204 pts pada data scrape ini), **tanpa error console**.
 - Breakdown rumus tervalidasi terhadap data nyata: pemain DEF dengan `points=0` (MP=90, GC=3) cocok persis (Appearance +1+1, GC penalty -2 = 0); pemain MID dengan `points=11` (GS=1, T=3) menghasilkan breakdown 9 pts + selisih +2 yang teridentifikasi sebagai scouting bonus.
-- Halaman `best-xi.html` diuji headless: 48 squad muncul di dropdown, verdict perbandingan muncul, **tanpa error console**.
-- `best15-next-round.html` diuji headless: 15 chip ter-render, 0 pemain tanpa data proyeksi (semua 48 squad cocok dengan `team_projections.json`), skor berubah saat dropdown matchday diganti (MD2→MD1 mengubah skor sampel dari 82.1 ke 80.9 di test ini), **tanpa error console**.
-- Navigasi: ke-7 halaman diuji headless, masing-masing menampilkan 7 tab dengan tab aktif yang benar sesuai halaman, **tanpa error console** di seluruh halaman.
-- `copilot.html` diuji headless: status panel berhasil baca `data/rounds.json` (8 ronde, 3 ronde fase grup, 1 selesai), mendeteksi babak "Group Stage" dengan limit 3 pemain/negara, **tanpa error console**.
+- Skill agen `run-fifa-fantasy` (lihat [.claude/skills/run-fifa-fantasy/SKILL.md](fifa-fantasy/.claude/skills/run-fifa-fantasy/SKILL.md)) dipakai untuk smoke-test otomatis ke semua 7 halaman tiap kali ada perubahan — `node .claude/skills/run-fifa-fantasy/driver.cjs smoke` membuka tiap halaman dengan Playwright, jalankan 1 interaksi nyata, screenshot, dan cek console error.
+- Hasil smoke-test terakhir (`allOk: true`, ke-7 halaman): `index.html` (search "Messi" + klik nama → modal pemain terbuka), `best-xi.html` (ganti varian budget → badge `$71.7 / 100`), `best15-overall.html` (15 chip, badge `$84.9 / 100`), `best15-next-round.html` (ganti MD → 15 chip tetap valid), `best15-research.html` (15 chip, gap-note "semua pemain terpetakan"), `groups.html` (12 group card, 16 partai bracket), `my-squad.html` (tambah pemain → slot `1/15`) — semua **tanpa error console**.
+- `groups.html` diuji manual: klasemen 12 grup dari `rounds.json` (cross-check Grup A: MEX 3pt/+2 GD, KOR 3pt/+1 GD, sesuai hasil nyata MD1), ranking peringkat-3 12 baris, bracket 32 besar 16 partai dengan label terresolusi/placeholder yang benar (mis. "Runner-up Grup A vs Runner-up Grup B" tetap placeholder karena grup belum selesai), jadwal mendatang 48 baris dengan WIB yang tervalidasi manual (`17:00+01:00` → `23:00 WIB`, selisih 6 jam dari UTC+1 ditambah 7 jam WIB offset = cocok), modal tim terbuka dari klik klasemen, footer last-sync tampil benar.
+- Modal pemain/tim (`detail-modal.js`) diuji di 7 halaman: klik nama pemain di tabel/chip/slot skuad semuanya berhasil membuka modal dengan judul yang benar, tanpa error console di satu pun.
 
 Contoh `data/stats/682.json`:
 ```json
@@ -152,6 +156,55 @@ Contoh `data/stats/682.json`:
   }
 ]
 ```
+
+## SEO & Bahasa (EN/ID)
+
+### Bahasa (i18n)
+
+Semua halaman sekarang punya **pemilih bahasa EN/ID** (pill switcher kecil di pojok kanan atas, sebelah tombol dark/light), default **English**, tersimpan di `localStorage` (`fifa-fantasy-lang`) jadi konsisten di semua halaman begitu user pindah bahasa sekali.
+
+- Logic & dictionary di [i18n.js](fifa-fantasy/i18n.js) — shared module yang dipasang via `<script src="i18n.js">` di semua halaman, dengan dua cara translate:
+  - **Statis**: tag HTML dengan `data-i18n="key"` (teks), `data-i18n-placeholder="key"` (placeholder input), otomatis di-translate saat halaman load atau bahasa diganti.
+  - **Dinamis**: konten yang di-generate JS (mis. tab varian budget, hero stats, tab label klasemen) panggil `I18N.t('key', fallback)` langsung di kode render, lalu tiap halaman listen ke event `i18n:change` untuk re-render saat bahasa diganti.
+- **Cakupan**: navigasi, judul/subjudul hero, header tabel, label tombol (+Tambah/✓Di skuad/Hapus), filter & placeholder, judul section, footer last-sync, dan judul/label utama modal pemain & tim — semuanya diterjemahkan.
+- **Belum diterjemahkan** (keterbatasan yang disengaja karena scope): label stat mentah di modal pemain (`Starting XI`, `Minutes Played`, dst — kode resmi FIFA scoring, lazim tetap Inggris bahkan di komunitas ID), breakdown rumus poin resmi ("Appearance", "Assist", dst.), dan sejumlah kalimat disclaimer panjang yang detail/teknis di tiap halaman Best 15 — ini tetap dalam Bahasa Indonesia apa pun pilihan bahasa, karena menerjemahkan ulang seluruh paragraf teknis itu di luar scope sesi ini. Kabari kalau perlu dilengkapi.
+
+### SEO
+
+Tiap halaman punya `<title>` & `<meta name="description">` unik berbahasa Inggris (karena default bahasa adalah EN), plus `meta keywords`, Open Graph (`og:title/description/url/type`), Twitter Card, dan `<link rel="canonical">`. Kata kunci difokuskan ke istilah World Cup 2026 + fantasy football (mis. "World Cup 2026 fantasy", "FIFA Fantasy 2026", "World Cup squad builder", "World Cup 2026 standings").
+
+`robots.txt` dan `sitemap.xml` sudah dibuat di root — **ganti `https://example.com` dengan domain asli kamu** di kedua file itu plus tag `canonical`/`og:url` di tiap halaman (cari-ganti `example.com`) sebelum deploy.
+
+### Cara muncul di pencarian Google (langkah lanjutan, di luar kode)
+
+1. **Deploy ke domain publik** (Vercel/Netlify/GitHub Pages/dst.) — Google tidak bisa index `localhost`.
+2. **Update domain** — ganti `https://example.com` di `robots.txt`, `sitemap.xml`, dan tag `canonical`/`og:url` di ke-7 file HTML dengan domain asli.
+3. Daftar di **[Google Search Console](https://search.google.com/search-console)** (gratis), verifikasi kepemilikan domain (lewat DNS TXT record atau upload file HTML yang disediakan Search Console).
+4. Di Search Console, submit `sitemap.xml` (menu **Sitemaps** → masukkan `https://domainkamu.com/sitemap.xml`).
+5. Pakai **URL Inspection** tool di Search Console untuk minta Google crawl `index.html` lebih cepat ("Request Indexing").
+6. Indexing biasanya butuh beberapa hari–minggu. Untuk pantau performa pencarian (klik, impresi, kata kunci yang membawa traffic), cek tab **Performance** di Search Console secara berkala.
+7. Opsional: submit juga ke [Bing Webmaster Tools](https://www.bing.com/webmasters) dengan cara serupa.
+
+## Desain "Global Pitch" & Aset
+
+Tema visual mengikuti `DESIGN.md` (token warna/tipografi yang diberikan): base navy/charcoal gelap, aksen **gold** (primary) + **vibrant green** (secondary), font **Montserrat** (judul/headline), **Inter** (body), **JetBrains Mono** (data/angka, tidak berubah dari sebelumnya). Semua didefinisikan satu kali di [theme.css](fifa-fantasy/theme.css) sehingga otomatis konsisten di semua halaman.
+
+- **Logo brand** ("World Cup 2026 Fantasy Stats") — diinjeksi via [brand.js](fifa-fantasy/brand.js) di atas nav setiap halaman.
+- **Bendera negara** — [flags.js](fifa-fantasy/flags.js), pakai **emoji bendera Unicode** (bukan file gambar) sehingga tidak perlu hosting aset terpisah dan tetap ringan untuk static hosting seperti Vercel. Inggris & Skotlandia pakai emoji bendera subdivisi resmi (`🏴󠁧󠁢󠁥󠁮󠁧󠁿` / `🏴󠁧󠁢󠁳󠁣󠁴󠁿`) — bisa tidak tampil di font/OS yang belum mendukung sequence ini, fallback otomatis ke kode 3-huruf saja.
+- **Foto pemain** — **tidak ada foto asli** (tidak punya lisensi/sumber resmi untuk foto pemain Piala Dunia 2026). Sebagai pengganti, modal & roster menampilkan **avatar inisial** (lingkaran warna deterministik dari nama pemain + 1-2 huruf inisial) lewat helper di `detail-modal.js`. Kalau nanti ada sumber foto resmi yang legal dipakai, helper `avatarHtml()` bisa diganti jadi `<img>` tanpa mengubah pemanggilnya.
+- Tombol "Login"/"Join League" yang ada di desain referensi **sudah dihapus** sesuai permintaan — saat ini app tidak punya sistem akun/liga, jadi tombol itu tidak relevan.
+- **Tidak dibuat**: bagan bracket multi-tahap (Babak 32 Besar → 16 Besar → Perempat Final → Semifinal → Final) seperti di salah satu referensi gambar, karena tahap setelah Babak 32 Besar **belum bisa diproyeksikan** dari data nyata (siapa lawan di 16 Besar baru diketahui setelah hasil 32 Besar ada) — menampilkannya akan berarti mengarang skor/matchup palsu. Halaman "Proyeksi 32 Besar" yang sudah ada tetap satu-satunya bagan resmi yang didukung data.
+
+### Kompatibilitas Vercel
+
+App ini 100% file statis (HTML/CSS/JS + JSON di `data/`) tanpa server-side rendering atau API route, jadi bisa langsung di-deploy ke Vercel tanpa konfigurasi khusus:
+
+```bash
+npx vercel deploy   # dari folder fifa-fantasy/, ikuti prompt
+# atau hubungkan repo ke Vercel dashboard, biarkan "Framework Preset" = Other / Static
+```
+
+Catatan: jalankan `node scraper.js --with-stats` dulu **sebelum deploy** supaya folder `data/` terisi (Vercel hanya menyajikan file statis, tidak menjalankan scraper saat build/runtime). Untuk refresh data berkala, jalankan scraper secara lokal lalu re-deploy, atau setup scraper sebagai cron job terpisah (di luar Vercel, karena scraper butuh Playwright/browser yang tidak girang di environment serverless Vercel).
 
 ## Catatan
 

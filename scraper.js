@@ -308,6 +308,15 @@ async function main() {
   }
 
   await browser.close();
+
+  const syncMeta = {
+    lastSync: new Date().toISOString(),
+    playersCount: players ? players.length : null,
+    withStats: !!args.withStats,
+  };
+  fs.writeFileSync(path.join(DATA_DIR, 'sync_meta.json'), JSON.stringify(syncMeta, null, 2));
+  log(`[sync_meta] saved lastSync=${syncMeta.lastSync}`);
+
   log('[done] scrape complete.');
 }
 
