@@ -236,7 +236,7 @@ async function loadData() {
     players = ((await playersRes.json()) ?? []).map(flatten);
     squads = squadsRes.ok ? (await squadsRes.json()) : [];
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}</td></tr>`;
     return;
   }
   loadSquadFromStorage();
@@ -337,7 +337,7 @@ function renderPlayerTable() {
     `;
   }).join('');
 
-  document.getElementById('playerTbody').innerHTML = rows || '<tr><td colspan="6" class="empty-msg">Tidak ada pemain cocok.</td></tr>';
+  document.getElementById('playerTbody').innerHTML = rows || `<tr><td colspan="6" class="empty-msg">${I18N.t('common.noMatchingPlayers')}</td></tr>`;
 }
 
 function renderSquadPanel() {

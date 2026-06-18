@@ -44,6 +44,18 @@ window.I18N = (function () {
       minutesShort: { en: 'min', id: 'menit' },
       hoursShort: { en: 'hr', id: 'jam' },
       daysShort: { en: 'days', id: 'hari' },
+      errLoadData: { en: 'Failed to load data:', id: 'Gagal memuat data:' },
+      errRunScraperHint: { en: 'Run "node scraper.js" first, then access via an http server.', id: 'Jalankan "node scraper.js" dulu, lalu akses via http server.' },
+      errHttpServerHint: { en: 'Make sure it is served via an http server, not file://.', id: 'Pastikan dijalankan via http server, bukan file://.' },
+      noTeamData: { en: 'No team data.', id: 'Tidak ada data tim.' },
+      noPlayers: { en: 'No players.', id: 'Tidak ada pemain.' },
+      noBenchPlayers: { en: 'No bench players.', id: 'Tidak ada pemain cadangan.' },
+      noData: { en: 'No data.', id: 'Tidak ada data.' },
+      noMatchingPlayers: { en: 'No matching players.', id: 'Tidak ada pemain cocok.' },
+      noThirdPlaceData: { en: 'No third-place data yet.', id: 'Belum ada data peringkat 3.' },
+      noUpcomingFixtures: { en: 'No upcoming fixtures.', id: 'Tidak ada jadwal mendatang.' },
+      perPageOption: { en: '{n} / page', id: '{n} / halaman' },
+      pageInfo: { en: 'Page {cur} / {total}', id: 'Halaman {cur} / {total}' },
     },
     index: {
       kicker: { en: 'Live · Tournament Dashboard', id: 'Live · Dashboard Turnamen' },
@@ -106,21 +118,41 @@ window.I18N = (function () {
       colRank: { en: '#', id: '#' },
       colPrice: { en: 'Price', id: 'Harga' },
       colBest15Pts: { en: 'Best 15 Points', id: 'Poin Best 15' },
+      disclaimer: {
+        en: 'This page builds each team\'s best 15 players from accumulated fantasy points (local scrape data), not an official FIFA match prediction. The 2 GK – 5 DEF – 5 MID – 3 FWD split is purely a heuristic for comparison; players with a status other than "playing" are still shown as-is from the source data.',
+        id: 'Halaman ini menyusun 15 pemain terbaik per tim berdasarkan akumulasi poin pemain (data lokal hasil scrape), bukan prediksi hasil pertandingan resmi FIFA. Komposisi 2 GK – 5 DEF – 5 MID – 3 FWD murni heuristik untuk perbandingan; pemain dengan status selain "playing" tetap ditampilkan apa adanya dari data sumber.',
+      },
     },
     overall: {
       kicker: { en: 'Power Rankings', id: 'Power Rankings' },
       heroTitle: { en: 'Best 15 of the Tournament', id: 'Best 15 of the Tournament' },
       heroSubtitle: { en: 'The 15 best players across every nation by accumulated points. Click a player or country code for details.', id: '15 pemain terbaik lintas semua negara berdasarkan akumulasi poin. Klik nama pemain atau kode negara untuk lihat detail.' },
+      disclaimer: {
+        en: '15 players with the highest accumulated points from <b>across every team/nation</b> (not per squad), built with a 2 GK – 5 DEF – 5 MID – 3 FWD split, capped at <b>max 3 players per nation</b> (FIFA Fantasy group-stage rule). This is purely a cross-tournament top-performer combination from local scrape data, not an official FIFA prediction or line-up. FIFA Fantasy squad budget is <b>100</b> — 3 variants: <b>Top Score</b> (ignores budget, for reference), <b>In Budget</b> (best score that still fits ≤100, via cheapest-player swaps), and <b>Value Pick</b> (points-per-price efficiency, usually well under budget).',
+        id: '15 pemain dengan akumulasi poin tertinggi dari <b>seluruh tim/negara</b> (bukan per squad), disusun dengan komposisi 2 GK – 5 DEF – 5 MID – 3 FWD, dengan batas <b>maksimal 3 pemain per negara</b> (aturan FIFA Fantasy di babak grup). Ini murni gabungan top performer lintas turnamen berdasarkan data lokal hasil scrape, bukan prediksi atau line-up resmi FIFA. Budget squad FIFA Fantasy <b>100</b> — ada 3 varian: <b>Skor Tertinggi</b> (abaikan budget, buat referensi), <b>Dalam Budget</b> (skor terbaik yang masih ≤100, lewat penukaran pemain termurah), dan <b>Hemat (Value)</b> (efisiensi poin per harga, biasanya jauh di bawah budget).',
+      },
     },
     nextround: {
       kicker: { en: 'Forecast', id: 'Forecast' },
       heroTitle: { en: 'Next Round Projection', id: 'Next Round Projection' },
       heroSubtitle: { en: 'Best 15 projection for the next round based on player form + fixture index. Click a player or country code for details.', id: 'Proyeksi Best 15 ronde depan berdasarkan form pemain + indeks fixture. Klik nama pemain atau kode negara untuk lihat detail.' },
+      disclaimer: {
+        en: '<b>The 15-player pick</b> uses a 0–100 index score: 60% current player form (FIFA\'s <code>form</code>/<code>avgPoints</code> fields) + 40% next-round fixture index (Clean Sheet % for GK/DEF, Projected Goals for MID/FWD — from SBOBET/Betfair market projection charts via FPLJoe.com, static manual input as of 27.05.26, <b>not live</b>). <b>The "pts" number per player</b> is a <b>projected fantasy point estimate</b> (not an official score): the player\'s historical average points (<code>avgPoints</code>) multiplied by a fixture factor (up if the team is projected above the 48-team average for that matchday, down if below, capped 0.5×–1.8×). Pick a matchday that team hasn\'t played yet from the dropdown. Capped at <b>max 3 players per nation</b> (FIFA Fantasy group-stage rule). This is neither an official FIFA prediction nor a line-up guarantee.',
+        id: '<b>Pemilihan 15 pemain</b> pakai skor indeks 0–100: 60% form pemain terkini (field <code>form</code>/<code>avgPoints</code> dari FIFA) + 40% indeks fixture ronde depan (Clean Sheet % untuk GK/DEF, Projected Goals tim untuk MID/FWD — dari grafik proyeksi pasar SBOBET/Betfair via FPLJoe.com, input manual statis per 27.05.26, <b>tidak live</b>). <b>Angka "pts" di tiap pemain</b> adalah <b>proyeksi poin fantasy</b> (estimasi, bukan poin resmi): rata-rata poin historis pemain (<code>avgPoints</code>) dikalikan faktor fixture (naik kalau tim diproyeksikan di atas rata-rata 48 tim untuk matchday itu, turun kalau di bawah rata-rata, dibatasi 0.5×–1.8×). Pilih matchday yang belum dimainkan tim tersebut di dropdown. Berlaku batas <b>maksimal 3 pemain per negara</b> (aturan FIFA Fantasy di babak grup). Ini bukan prediksi resmi FIFA maupun garansi line-up.',
+      },
     },
     research: {
       kicker: { en: 'Deep Dive', id: 'Deep Dive' },
       heroTitle: { en: 'Best 15 — Research Data', id: 'Best 15 — Data Riset' },
       heroSubtitle: { en: 'The most accurate projection: team strength from real match results + next opponent auto-detected from the official FIFA schedule.', id: 'Proyeksi paling akurat: kekuatan tim dari hasil pertandingan nyata + lawan ronde depan terdeteksi otomatis dari jadwal resmi FIFA.' },
+      disclaimer: {
+        en: 'The most accurate version so far: team strength is computed from <b>this tournament\'s real match results</b> (average goals scored/conceded from <code>data/rounds.json</code>, the official FIFA schedule), not pre-tournament market odds. Each team\'s next opponent is also <b>auto-detected</b> from the real schedule (next unplayed group match, kickoff time in WIB) — no manual matchday selection needed. Projected points = player\'s historical <code>avgPoints</code> × opponent strength factor (GK/DEF up if the opponent rarely scores, MID/FWD up if the opponent concedes often), capped 0.5×–1.8×. Capped at max 3 players per nation.',
+        id: 'Versi paling akurat sejauh ini: kekuatan tim dihitung dari <b>hasil pertandingan nyata turnamen ini</b> (gol dicetak/kebobolan rata-rata dari <code>data/rounds.json</code>, jadwal resmi FIFA), bukan dari odds pasar sebelum turnamen mulai. Lawan ronde depan untuk tiap tim juga <b>otomatis terdeteksi</b> dari jadwal nyata (pertandingan grup berikutnya yang belum selesai, waktu kickoff dalam WIB) — tidak perlu pilih matchday manual. Proyeksi poin = <code>avgPoints</code> historis pemain × faktor kekuatan lawan (GK/DEF naik kalau lawan jarang cetak gol, MID/FWD naik kalau lawan sering kebobolan), dibatasi 0.5×–1.8×. Berlaku maksimal 3 pemain per negara.',
+      },
+      gapNoOpponent: { en: '{n} players from teams with no detected next group match (group stage may already be over, or team data mismatch) — counted as neutral (×1 factor).', id: '{n} pemain dari tim tanpa pertandingan grup berikutnya yang terdeteksi (mungkin sudah selesai fase grup atau data tim tidak cocok) — dihitung netral (faktor ×1).' },
+      gapNoTeamData: { en: '{n} players whose next opponent has no match-result history yet (×1 factor).', id: '{n} pemain dengan lawan berikutnya yang belum punya riwayat hasil pertandingan (faktor ×1).' },
+      gapNotePrefix: { en: 'Data note: ', id: 'Catatan data: ' },
+      gapNoteAllMapped: { en: 'All players were successfully mapped to their next opponent with match-result history.', id: 'Semua pemain berhasil dipetakan ke lawan berikutnya dengan data riwayat pertandingan.' },
     },
     groups: {
       kicker: { en: 'Group Stage Live', id: 'Group Stage Live' },
@@ -141,6 +173,10 @@ window.I18N = (function () {
       legendThird: { en: '3rd place — qualification candidate', id: 'Peringkat 3 — kandidat lolos' },
       colDateTimeWIB: { en: 'Date & Time (WIB)', id: 'Tanggal & Waktu (WIB)' },
       colFixture: { en: 'Fixture', id: 'Pertandingan' },
+      disclaimer: {
+        en: 'Group standings & schedule from <b>official FIFA data</b> (<code>play.fifa.com/json/fantasy/rounds.json</code>). Ranking <b>does not yet account for head-to-head</b> among teams tied on points — only Points → Goal Difference → Goals For. The Round-of-32 projection is computed automatically from the <b>current</b> standings (group winners/runners-up + the 8 best 3rd-placed teams, per the 2026 World Cup format) — <b>will change</b> as matches are played, and is only final once the group stage ends.',
+        id: 'Klasemen & jadwal grup dari <b>data resmi FIFA</b> (<code>play.fifa.com/json/fantasy/rounds.json</code>). Urutan <b>belum memperhitungkan head-to-head</b> antar tim dengan poin sama — hanya Poin → Selisih Gol → Gol Memasukkan. Proyeksi babak 32 besar dihitung otomatis dari klasemen <b>saat ini</b> (juara & runner-up tiap grup + 8 tim peringkat-3 terbaik, sesuai format Piala Dunia 2026) — <b>akan berubah</b> seiring pertandingan berjalan, baru final setelah fase grup selesai.',
+      },
     },
     mysquad: {
       kicker: { en: 'Draft Room', id: 'Draft Room' },
@@ -208,15 +244,25 @@ window.I18N = (function () {
     updateSwitcherUI();
   }
 
-  function t(key, fallback) {
+  function t(key, fallback, params) {
     const entry = FLAT[key];
-    if (!entry) return fallback ?? key;
-    return entry[getLang()] ?? entry.en ?? fallback ?? key;
+    let str = entry ? (entry[getLang()] ?? entry.en ?? fallback ?? key) : (fallback ?? key);
+    if (params) {
+      for (const k of Object.keys(params)) {
+        str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), params[k]);
+      }
+    }
+    return str;
   }
 
   function applyStaticTranslations() {
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       el.textContent = t(el.getAttribute('data-i18n'));
+    });
+    // For blocks that need inline <b>/<code> formatting (e.g. methodology
+    // disclaimers) — dictionary value is trusted static HTML, not user input.
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+      el.innerHTML = t(el.getAttribute('data-i18n-html'));
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
       el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));

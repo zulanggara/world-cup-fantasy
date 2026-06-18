@@ -153,7 +153,7 @@ async function loadData() {
     aggregates = aggRes.ok ? await aggRes.json() : {};
     players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
   } catch (e) {
-    lbGrid.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu, lalu akses via http server.</div>`;
+    lbGrid.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
     return;
   }
   renderHeroStats();

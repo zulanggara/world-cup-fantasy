@@ -94,7 +94,7 @@
     <p data-i18n="nextround.heroSubtitle">Proyeksi Best 15 ronde depan berdasarkan form pemain + indeks fixture. Klik nama pemain atau kode negara untuk lihat detail.</p>
   </div>
 
-  <div class="disclaimer">
+  <div class="disclaimer" data-i18n-html="nextround.disclaimer">
     <b>Pemilihan 15 pemain</b> pakai skor indeks 0–100: 60% form pemain terkini (field <code>form</code>/<code>avgPoints</code> dari FIFA) + 40% indeks fixture ronde depan (Clean Sheet % untuk GK/DEF, Projected Goals tim untuk MID/FWD — dari grafik proyeksi pasar SBOBET/Betfair via FPLJoe.com, input manual statis per 27.05.26, <b>tidak live</b>).
     <b>Angka "pts" di tiap pemain</b> adalah <b>proyeksi poin fantasy</b> (estimasi, bukan poin resmi): rata-rata poin historis pemain (<code>avgPoints</code>) dikalikan faktor fixture (naik kalau tim diproyeksikan di atas rata-rata 48 tim untuk matchday itu, turun kalau di bawah rata-rata, dibatasi 0.5×–1.8×).
     Pilih matchday yang belum dimainkan tim tersebut di dropdown. Berlaku batas <b>maksimal 3 pemain per negara</b> (aturan FIFA Fantasy di babak grup). Ini bukan prediksi resmi FIFA maupun garansi line-up.
@@ -188,7 +188,7 @@ async function loadData() {
       teamProjections = {};
     }
   } catch (e) {
-    panelEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server dan data/players.json, data/squads.json, data/team_projections.json tersedia.</div>`;
+    panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json, data/squads.json, data/team_projections.json. ${I18N.t('common.errHttpServerHint')}</div>`;
     return;
   }
 
@@ -290,7 +290,7 @@ function renderVariant(variant) {
         <div class="pproj">~${p.projectedPoints} pts (estimasi)</div>
       </div>
     `).join('');
-    return `<div class="pitch-row">${chips || '<div class="empty-msg">Tidak ada pemain</div>'}</div>`;
+    return `<div class="pitch-row">${chips || `<div class="empty-msg">${I18N.t('common.noPlayers')}</div>`}</div>`;
   }).join('');
 
   const benchRows = bench
@@ -322,7 +322,7 @@ function renderVariant(variant) {
         <div class="bench-title">Kandidat lapis kedua (top cadangan per posisi)</div>
         <table class="bench">
           <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Harga</th><th>Skor</th><th>Proyeksi pts</th></tr></thead>
-          <tbody>${benchRows || '<tr><td colspan="6" class="empty-msg">Tidak ada data.</td></tr>'}</tbody>
+          <tbody>${benchRows || `<tr><td colspan="6" class="empty-msg">${I18N.t('common.noData')}</td></tr>`}</tbody>
         </table>
       </div>
     </div>

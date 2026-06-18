@@ -91,7 +91,7 @@
     <p data-i18n="overall.heroSubtitle">15 pemain terbaik lintas semua negara berdasarkan akumulasi poin. Klik nama pemain atau kode negara untuk lihat detail.</p>
   </div>
 
-  <div class="disclaimer">
+  <div class="disclaimer" data-i18n-html="overall.disclaimer">
     15 pemain dengan akumulasi poin tertinggi dari <b>seluruh tim/negara</b> (bukan per squad), disusun dengan komposisi 2 GK – 5 DEF – 5 MID – 3 FWD, dengan batas <b>maksimal 3 pemain per negara</b> (aturan FIFA Fantasy di babak grup).
     Ini murni gabungan top performer lintas turnamen berdasarkan data lokal hasil scrape, bukan prediksi atau line-up resmi FIFA.
     Budget squad FIFA Fantasy <b>100</b> — ada 3 varian: <b>Skor Tertinggi</b> (abaikan budget, buat referensi), <b>Dalam Budget</b> (skor terbaik yang masih ≤100, lewat penukaran pemain termurah), dan <b>Hemat (Value)</b> (efisiensi poin per harga, biasanya jauh di bawah budget).
@@ -166,7 +166,7 @@ async function loadData() {
       squads = [];
     }
   } catch (e) {
-    panelEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server dan data/players.json + data/squads.json tersedia.</div>`;
+    panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json + data/squads.json. ${I18N.t('common.errHttpServerHint')}</div>`;
     return;
   }
 
@@ -204,7 +204,7 @@ function renderVariant(variant) {
         <div class="ppts">${p.totalPoints}</div>
       </div>
     `).join('');
-    return `<div class="pitch-row">${chips || '<div class="empty-msg">Tidak ada pemain</div>'}</div>`;
+    return `<div class="pitch-row">${chips || `<div class="empty-msg">${I18N.t('common.noPlayers')}</div>`}</div>`;
   }).join('');
 
   const benchRows = bench
@@ -235,7 +235,7 @@ function renderVariant(variant) {
         <div class="bench-title">Honourable mentions (top cadangan per posisi)</div>
         <table class="bench">
           <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Harga</th><th>Total</th></tr></thead>
-          <tbody>${benchRows || '<tr><td colspan="5" class="empty-msg">Tidak ada data.</td></tr>'}</tbody>
+          <tbody>${benchRows || `<tr><td colspan="5" class="empty-msg">${I18N.t('common.noData')}</td></tr>`}</tbody>
         </table>
       </div>
     </div>

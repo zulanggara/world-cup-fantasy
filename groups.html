@@ -125,7 +125,7 @@
     <p data-i18n="groups.heroSubtitle">Klasemen 12 grup, proyeksi babak 32 besar real-time, dan jadwal mendatang — semua jam dalam WIB. Klik kode tim untuk lihat hasil pertandingan & roster.</p>
   </div>
 
-  <div class="disclaimer">
+  <div class="disclaimer" data-i18n-html="groups.disclaimer">
     Klasemen & jadwal grup dari <b>data resmi FIFA</b> (<code>play.fifa.com/json/fantasy/rounds.json</code>). Urutan <b>belum memperhitungkan head-to-head</b> antar tim dengan poin sama — hanya Poin → Selisih Gol → Gol Memasukkan.
     Proyeksi babak 32 besar dihitung otomatis dari klasemen <b>saat ini</b> (juara & runner-up tiap grup + 8 tim peringkat-3 terbaik, sesuai format Piala Dunia 2026) — <b>akan berubah</b> seiring pertandingan berjalan, baru final setelah fase grup selesai.
   </div>
@@ -246,7 +246,7 @@ async function loadData() {
       stadiums = await stadiumsRes.json();
     }
   } catch (e) {
-    gridEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu, lalu akses via http server.</div>`;
+    gridEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
     return;
   }
 
@@ -341,7 +341,7 @@ function renderThirds(standings, bestThirds) {
       <td class="num">${t.Pts}</td>
     </tr>
   `).join('');
-  document.getElementById('thirdsBody').innerHTML = rows || '<tr><td colspan="7" class="empty-msg">Belum ada data peringkat 3.</td></tr>';
+  document.getElementById('thirdsBody').innerHTML = rows || `<tr><td colspan="7" class="empty-msg">${I18N.t('common.noThirdPlaceData')}</td></tr>`;
 }
 
 // Strength score purely from real group-stage results (Pts -> GD -> GF),
@@ -572,7 +572,7 @@ function renderFixtures() {
     `;
   }).join('');
 
-  document.getElementById('fixturesBody').innerHTML = rows || '<tr><td colspan="2" class="empty-msg">Tidak ada jadwal mendatang.</td></tr>';
+  document.getElementById('fixturesBody').innerHTML = rows || `<tr><td colspan="2" class="empty-msg">${I18N.t('common.noUpcomingFixtures')}</td></tr>`;
 }
 
 document.addEventListener('i18n:change', () => {

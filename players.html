@@ -181,10 +181,10 @@
     <span class="page-info" id="pageInfo"></span>
     <button class="page-btn" id="pageNext">Next ›</button>
     <select id="pageSize">
-      <option value="25">25 / halaman</option>
-      <option value="50" selected>50 / halaman</option>
-      <option value="100">100 / halaman</option>
-      <option value="200">200 / halaman</option>
+      <option value="25" data-n="25">25 / page</option>
+      <option value="50" data-n="50" selected>50 / page</option>
+      <option value="100" data-n="100">100 / page</option>
+      <option value="200" data-n="200">200 / page</option>
     </select>
   </div>
 </div>
@@ -257,7 +257,7 @@ async function loadPlayers() {
     squads = squadsRes.ok ? await squadsRes.json() : [];
     players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="9" class="empty-msg">Gagal memuat data/players.json: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server, bukan file://.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="empty-msg">${I18N.t('common.errLoadData')} data/players.json: ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errHttpServerHint')}</td></tr>`;
     return;
   }
   populateStatusFilter();
@@ -339,7 +339,7 @@ function render() {
   const start = (currentPage - 1) * pageSize;
   const pageList = list.slice(start, start + pageSize);
 
-  pageInfoEl.textContent = `Halaman ${currentPage} / ${totalPages}`;
+  pageInfoEl.textContent = I18N.t('common.pageInfo', null, { cur: currentPage, total: totalPages });
   pagePrevEl.disabled = currentPage <= 1;
   pageNextEl.disabled = currentPage >= totalPages;
 
@@ -389,11 +389,19 @@ pageSizeEl.addEventListener('change', () => {
   render();
 });
 
+function localizePageSizeOptions() {
+  document.querySelectorAll('#pageSize option').forEach((opt) => {
+    opt.textContent = I18N.t('common.perPageOption', null, { n: opt.dataset.n });
+  });
+}
+
 document.addEventListener('i18n:change', () => {
   renderHeroStats();
   render();
+  localizePageSizeOptions();
 });
 
+localizePageSizeOptions();
 loadPlayers();
 </script>
 </body>

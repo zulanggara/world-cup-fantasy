@@ -173,7 +173,7 @@ async function loadData() {
     players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
     players.sort((a, b) => b.totalPoints - a.totalPoints);
   } catch (e) {
-    document.getElementById('pickerRow').innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}.</div>`;
+    document.getElementById('pickerRow').innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}.</div>`;
     return;
   }
   // Pre-fill the first two slots with the top 2 players by points so the

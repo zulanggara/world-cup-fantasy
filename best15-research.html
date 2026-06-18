@@ -92,7 +92,7 @@
     <p data-i18n="research.heroSubtitle">Proyeksi paling akurat: kekuatan tim dari hasil pertandingan nyata + lawan ronde depan terdeteksi otomatis dari jadwal resmi FIFA.</p>
   </div>
 
-  <div class="disclaimer">
+  <div class="disclaimer" data-i18n-html="research.disclaimer">
     Versi paling akurat sejauh ini: kekuatan tim dihitung dari <b>hasil pertandingan nyata turnamen ini</b> (gol dicetak/kebobolan rata-rata dari <code>data/rounds.json</code>, jadwal resmi FIFA), bukan dari odds pasar sebelum turnamen mulai. Lawan ronde depan untuk tiap tim juga <b>otomatis terdeteksi</b> dari jadwal nyata (pertandingan grup berikutnya yang belum selesai, waktu kickoff dalam WIB) — tidak perlu pilih matchday manual.
     Proyeksi poin = <code>avgPoints</code> historis pemain × faktor kekuatan lawan (GK/DEF naik kalau lawan jarang cetak gol, MID/FWD naik kalau lawan sering kebobolan), dibatasi 0.5×–1.8×. Berlaku maksimal 3 pemain per negara.
   </div>
@@ -173,7 +173,7 @@ async function loadData() {
     const roundsJson = await roundsRes.json();
     tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
   } catch (e) {
-    panelEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}.</div>`;
+    panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}.</div>`;
     return;
   }
 
@@ -257,11 +257,11 @@ function render() {
   const { scored, noOpponentCount, noTeamDataCount } = computeProjections();
 
   const gapMsgs = [];
-  if (noOpponentCount) gapMsgs.push(`${noOpponentCount} pemain dari tim tanpa pertandingan grup berikutnya yang terdeteksi (mungkin sudah selesai fase grup atau data tim tidak cocok) — dihitung netral (faktor ×1).`);
-  if (noTeamDataCount) gapMsgs.push(`${noTeamDataCount} pemain dengan lawan berikutnya yang belum punya riwayat hasil pertandingan (faktor ×1).`);
+  if (noOpponentCount) gapMsgs.push(I18N.t('research.gapNoOpponent', null, { n: noOpponentCount }));
+  if (noTeamDataCount) gapMsgs.push(I18N.t('research.gapNoTeamData', null, { n: noTeamDataCount }));
   document.getElementById('gapNote').textContent = gapMsgs.length
-    ? 'Catatan data: ' + gapMsgs.join(' ')
-    : 'Semua pemain berhasil dipetakan ke lawan berikutnya dengan data riwayat pertandingan.';
+    ? I18N.t('research.gapNotePrefix') + gapMsgs.join(' ')
+    : I18N.t('research.gapNoteAllMapped');
 
   const variants = SquadBuilder.buildVariants(scored, 'projectedPoints', FORMATION, POS_ORDER, MAX_PER_SQUAD);
 
@@ -297,7 +297,7 @@ function renderVariant(variant) {
         </div>
       `;
     }).join('');
-    return `<div class="pitch-row">${chips || '<div class="empty-msg">Tidak ada pemain</div>'}</div>`;
+    return `<div class="pitch-row">${chips || `<div class="empty-msg">${I18N.t('common.noPlayers')}</div>`}</div>`;
   }).join('');
 
   const benchRows = bench
@@ -329,7 +329,7 @@ function renderVariant(variant) {
         <div class="bench-title">Kandidat lapis kedua (top cadangan per posisi)</div>
         <table class="bench">
           <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Lawan depan</th><th>Harga</th><th>Proyeksi pts</th></tr></thead>
-          <tbody>${benchRows || '<tr><td colspan="6" class="empty-msg">Tidak ada data.</td></tr>'}</tbody>
+          <tbody>${benchRows || `<tr><td colspan="6" class="empty-msg">${I18N.t('common.noData')}</td></tr>`}</tbody>
         </table>
       </div>
     </div>

@@ -106,7 +106,7 @@
     <p data-i18n="bestxi.heroSubtitle">Bandingkan Best 15 dua negara berdasarkan akumulasi poin fantasy. Klik nama tim atau pemain untuk lihat detail hasil pertandingan & breakdown poin.</p>
   </div>
 
-  <div class="disclaimer">
+  <div class="disclaimer" data-i18n-html="bestxi.disclaimer">
     Halaman ini menyusun 15 pemain terbaik per tim berdasarkan akumulasi poin pemain (data lokal hasil scrape), bukan prediksi hasil pertandingan resmi FIFA.
     Komposisi 2 GK – 5 DEF – 5 MID – 3 FWD murni heuristik untuk perbandingan; pemain dengan status selain "playing" tetap ditampilkan apa adanya dari data sumber.
   </div>
@@ -190,7 +190,7 @@ async function loadData() {
       squads = [];
     }
   } catch (e) {
-    matchupEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server dan data/players.json + data/squads.json tersedia.</div>`;
+    matchupEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json + data/squads.json. ${I18N.t('common.errHttpServerHint')}</div>`;
     return;
   }
 
@@ -223,7 +223,7 @@ function renderRanking() {
     </tr>
   `).join('');
 
-  document.getElementById('rankBody').innerHTML = rows || '<tr><td colspan="4" class="empty-msg">Tidak ada data tim.</td></tr>';
+  document.getElementById('rankBody').innerHTML = rows || `<tr><td colspan="4" class="empty-msg">${I18N.t('common.noTeamData')}</td></tr>`;
 }
 
 function squadName(squadId) {
@@ -275,7 +275,7 @@ function renderTeamPanel(squadId, variantKey) {
         <div class="ppts">${p.totalPoints}</div>
       </div>
     `).join('');
-    return `<div class="pitch-row">${chips || '<div class="empty-msg">Tidak ada pemain</div>'}</div>`;
+    return `<div class="pitch-row">${chips || `<div class="empty-msg">${I18N.t('common.noPlayers')}</div>`}</div>`;
   }).join('');
 
   const benchRows = bench
@@ -305,7 +305,7 @@ function renderTeamPanel(squadId, variantKey) {
         <div class="bench-title">Bangku cadangan (sisanya di squad)</div>
         <table class="bench">
           <thead><tr><th>Nama</th><th>Pos</th><th>Harga</th><th>Total</th></tr></thead>
-          <tbody>${benchRows || '<tr><td colspan="4" class="empty-msg">Tidak ada pemain cadangan</td></tr>'}</tbody>
+          <tbody>${benchRows || `<tr><td colspan="4" class="empty-msg">${I18N.t('common.noBenchPlayers')}</td></tr>`}</tbody>
         </table>
       </div>
     </div>
