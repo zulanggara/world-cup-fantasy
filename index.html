@@ -4,18 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="google-site-verification" content="w7UVsL-EEp8JpqBuAqFGtzbYK8g6dE_1QhKyMvC2aTU" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FIFA Fantasy 2026 Player Database & Stats | World Cup Fantasy Newsroom</title>
-<meta name="description" content="Browse the complete FIFA World Cup 2026 Fantasy player database: live prices, points, form, and per-round scoring breakdowns for every player and national team." />
-<meta name="keywords" content="FIFA World Cup 2026, World Cup fantasy, FIFA Fantasy 2026, World Cup 2026 players, fantasy football World Cup, World Cup squad builder, World Cup standings 2026" />
+<title>FIFA Fantasy 2026 Dashboard | World Cup Fantasy Leaders</title>
+<meta name="description" content="Live FIFA World Cup 2026 Fantasy dashboard: top scorers, most points, best form, most clean sheets, tackles, key passes and shots — top 5 leaderboards updated from live scrape data." />
+<meta name="keywords" content="FIFA World Cup 2026, World Cup fantasy, FIFA Fantasy 2026 dashboard, World Cup 2026 top scorers, World Cup fantasy leaderboard" />
 <link rel="canonical" href="https://world-cup-fantasy-kappa.vercel.app/index.html" />
 <meta name="robots" content="index, follow" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="FIFA Fantasy 2026 Player Database & Stats" />
-<meta property="og:description" content="Live prices, points, and scoring breakdowns for every World Cup 2026 Fantasy player and team." />
+<meta property="og:title" content="FIFA Fantasy 2026 Dashboard" />
+<meta property="og:description" content="Top scorers, most points, best form, and defensive leaders for the FIFA World Cup 2026 Fantasy game." />
 <meta property="og:url" content="https://world-cup-fantasy-kappa.vercel.app/index.html" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="FIFA Fantasy 2026 Player Database & Stats" />
-<meta name="twitter:description" content="Live prices, points, and scoring breakdowns for every World Cup 2026 Fantasy player and team." />
+<meta name="twitter:title" content="FIFA Fantasy 2026 Dashboard" />
+<meta name="twitter:description" content="Top scorers, most points, best form, and defensive leaders for the FIFA World Cup 2026 Fantasy game." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -42,93 +42,33 @@
   .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
   @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
   .hero h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
-  .hero p { color: var(--text-dim); font-size: 14px; margin: 0 0 18px; max-width: 640px; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0 0 18px; max-width: 680px; }
   .hero-stats { display: flex; gap: 14px; flex-wrap: wrap; }
   .hero-stat { background: rgba(0,0,0,0.18); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; min-width: 130px; }
   :root[data-theme="light"] .hero-stat { background: rgba(255,255,255,0.5); }
   .hero-stat .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); }
   .hero-stat .value { font-family: 'JetBrains Mono', monospace; font-size: 19px; font-weight: 700; color: var(--accent); }
-  .hero-stat .value small { font-size: 11px; color: var(--text-dim); font-weight: 400; }
 
-  .toolbar {
-    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-    margin-bottom: 14px;
+  .lb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  .lb-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .lb-head { padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--panel2); font-size: 13px; font-weight: 800; font-family: 'Bricolage Grotesque', sans-serif; }
+  .lb-top1 {
+    display: flex; align-items: center; gap: 10px; padding: 14px;
+    cursor: pointer; border-bottom: 1px solid var(--border);
   }
-  .toolbar input[type="text"], .toolbar select {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-  .toolbar input[type="text"] { width: 220px; }
-  .spacer { flex: 1; }
-  .count { color: var(--text-dim); font-size: 13px; }
-  table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
-  thead th {
-    position: sticky; top: 0;
-    background: var(--panel2);
-    text-align: left;
-    padding: 10px 12px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    color: var(--text-dim);
-    cursor: pointer;
-    border-bottom: 1px solid var(--border);
-    user-select: none;
-    white-space: nowrap;
-  }
-  thead th:hover { color: var(--text); }
-  thead th .arrow { font-size: 10px; margin-left: 4px; opacity: .7; }
-  tbody td {
-    padding: 9px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  tbody tr.player-row:hover { background: var(--row-hover); }
-  tbody tr.player-row:nth-child(odd) { background: var(--row-alt); }
-  tbody tr.player-row:nth-child(odd):hover { background: var(--row-hover); }
-  .num { font-variant-numeric: tabular-nums; text-align: right; }
-  .name-cell { cursor: pointer; }
-  .team-cell { cursor: pointer; color: var(--accent2); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-  .team-cell:hover { text-decoration: underline; }
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #14161d;
-  }
-  .badge.GK { background: var(--accent); }
-  .badge.DEF { background: var(--accent2); color: #fff; }
-  .badge.MID { background: #6fcf67; }
-  .badge.FWD { background: #ef476f; color: #fff; }
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-  .dot.playing { background: #6fcf67; }
-  .dot.injured { background: #ef476f; }
-  .dot.transferred { background: var(--text-dim); }
-  .dot.other { background: var(--accent); }
-  .name-cell .pid { color: var(--text-dim); font-size: 11px; margin-left: 6px; }
+  .lb-top1:hover { background: var(--row-hover); }
+  .lb-top1 .lb-rank { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 900; color: var(--accent); width: 26px; text-align: center; flex-shrink: 0; }
+  .lb-top1 .lb-name { font-weight: 800; font-size: 14.5px; }
+  .lb-top1 .lb-team { font-size: 11.5px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .lb-top1 .lb-value { margin-left: auto; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent2); font-size: 16px; flex-shrink: 0; }
+  .lb-top1 .lb-value small { display: block; font-size: 9.5px; color: var(--text-dim); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; }
+  .lb-rest { padding: 4px 0; }
+  .lb-row { display: flex; align-items: center; gap: 8px; padding: 6px 14px; font-size: 12.5px; cursor: pointer; }
+  .lb-row:hover { background: var(--row-hover); }
+  .lb-row .lb-rank { width: 18px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+  .lb-row .lb-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-row .lb-value { font-family: 'JetBrains Mono', monospace; color: var(--text-dim); flex-shrink: 0; }
   .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
-  .pagination {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    margin-top: 14px; flex-wrap: wrap;
-  }
-  .pagination .page-btn {
-    background: var(--panel); border: 1px solid var(--border); color: var(--text);
-    border-radius: 8px; padding: 7px 14px; cursor: pointer; font-size: 13px;
-  }
-  .pagination .page-btn:hover:not(:disabled) { background: var(--row-hover); }
-  .pagination .page-btn:disabled { opacity: .4; cursor: default; }
-  .pagination .page-info { font-size: 13px; color: var(--text-dim); min-width: 110px; text-align: center; }
-  .pagination select {
-    background: var(--panel); border: 1px solid var(--border); color: var(--text);
-    border-radius: 8px; padding: 7px 10px; font-size: 13px;
-  }
 </style>
 </head>
 <body>
@@ -139,54 +79,13 @@
   </div>
 
   <div class="hero">
-    <span class="hero-kicker" data-i18n="index.kicker">Live · Player Intel</span>
-    <h1 data-i18n="index.heroTitle">FIFA Fantasy Newsroom</h1>
-    <p data-i18n="index.heroSubtitle">Database lengkap pemain Piala Dunia 2026 — harga, status, dan poin fantasy, ter-update dari hasil scrape resmi. Klik nama untuk lihat breakdown poin per ronde, klik kode tim untuk lihat hasil pertandingan & roster.</p>
+    <span class="hero-kicker" data-i18n="index.kicker">Live · Tournament Dashboard</span>
+    <h1 data-i18n="index.heroTitle">FIFA Fantasy Dashboard</h1>
+    <p data-i18n="index.heroSubtitle">Pemuncak statistik turnamen sekilas — poin, gol, dan statistik bertahan ter-update dari data scrape. Klik nama pemain atau tim untuk detail lengkap. Cari daftar lengkap pemain? Buka menu Pemain.</p>
     <div class="hero-stats" id="heroStats"></div>
   </div>
 
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="Cari nama pemain..." data-i18n-placeholder="common.searchPlaceholder" />
-    <select id="filterPos">
-      <option value="" data-i18n="common.allPositions">Semua Posisi</option>
-      <option value="GK">GK</option>
-      <option value="DEF">DEF</option>
-      <option value="MID">MID</option>
-      <option value="FWD">FWD</option>
-    </select>
-    <select id="filterStatus">
-      <option value="" data-i18n="common.allStatus">Semua Status</option>
-    </select>
-    <span class="spacer"></span>
-    <span class="count" id="count"></span>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th data-key="name" data-i18n="common.colName">Nama</th>
-        <th data-key="squadAbbr" data-i18n="common.colTeam">Tim</th>
-        <th data-key="position" data-i18n="common.colPosition">Posisi</th>
-        <th data-key="status" data-i18n="common.colStatus">Status</th>
-        <th data-key="price" class="num" data-i18n="common.colPrice">Price</th>
-        <th data-key="totalPoints" class="num" data-i18n="common.colTotalPts">Total Pts</th>
-        <th data-key="form" class="num" data-i18n="common.colForm">Form</th>
-        <th data-key="avgPoints" class="num" data-i18n="common.colAvgPts">Avg Pts</th>
-        <th data-key="percentSelected" class="num" data-i18n="common.colPctSelected">% Selected</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
-  <div class="pagination">
-    <button class="page-btn" id="pagePrev">‹ Prev</button>
-    <span class="page-info" id="pageInfo"></span>
-    <button class="page-btn" id="pageNext">Next ›</button>
-    <select id="pageSize">
-      <option value="25">25 / halaman</option>
-      <option value="50" selected>50 / halaman</option>
-      <option value="100">100 / halaman</option>
-      <option value="200">200 / halaman</option>
-    </select>
-  </div>
+  <div class="lb-grid" id="lbGrid"></div>
 </div>
 
 <script src="i18n.js"></script>
@@ -198,21 +97,9 @@
 <script>
 let players = [];
 let squads = [];
-let sortKey = 'totalPoints';
-let sortDir = 'desc';
-let currentPage = 1;
-let pageSize = 50;
+let aggregates = {};
 
 const root = document.documentElement;
-const tbody = document.getElementById('tbody');
-const searchEl = document.getElementById('search');
-const filterPosEl = document.getElementById('filterPos');
-const filterStatusEl = document.getElementById('filterStatus');
-const countEl = document.getElementById('count');
-const pagePrevEl = document.getElementById('pagePrev');
-const pageNextEl = document.getElementById('pageNext');
-const pageInfoEl = document.getElementById('pageInfo');
-const pageSizeEl = document.getElementById('pageSize');
 
 function setTheme(t) {
   root.setAttribute('data-theme', t);
@@ -232,169 +119,109 @@ function squadAbbr(squadId) {
 }
 
 function flatten(p) {
+  const agg = aggregates[p?.id] || {};
   return {
     id: p?.id,
     name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
     squadId: p?.squadId ?? null,
     position: p?.position ?? '—',
     status: p?.status ?? 'unknown',
-    price: p?.price ?? 0,
     totalPoints: p?.stats?.totalPoints ?? 0,
-    form: p?.stats?.form ?? 0,
-    avgPoints: p?.stats?.avgPoints ?? 0,
-    percentSelected: p?.percentSelected ?? 0,
+    form: Number(p?.stats?.form ?? 0),
+    avgPoints: Number(p?.stats?.avgPoints ?? 0),
+    percentSelected: Number(p?.percentSelected ?? 0),
+    goals: agg.GS ?? 0,
+    assists: agg.AS ?? 0,
+    cleanSheets: agg.CS ?? 0,
+    tackles: agg.T ?? 0,
+    keyPasses: agg.CC ?? 0,
+    shots: agg.ST ?? 0,
   };
 }
 
-async function loadPlayers() {
+async function loadData() {
+  const lbGrid = document.getElementById('lbGrid');
   try {
-    const [playersRes, squadsRes] = await Promise.all([
+    const [playersRes, squadsRes, aggRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
+      fetch('data/player_aggregates.json'),
     ]);
     if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
     const json = await playersRes.json();
     squads = squadsRes.ok ? await squadsRes.json() : [];
+    aggregates = aggRes.ok ? await aggRes.json() : {};
     players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="9" class="empty-msg">Gagal memuat data/players.json: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server, bukan file://.</td></tr>`;
+    lbGrid.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu, lalu akses via http server.</div>`;
     return;
   }
-  populateStatusFilter();
   renderHeroStats();
-  render();
+  renderLeaderboards();
 }
 
 function renderHeroStats() {
-  const topPerformer = players.slice().sort((a, b) => b.totalPoints - a.totalPoints)[0];
   const playingCount = players.filter((p) => p.status === 'playing').length;
-  const topForm = players.slice().sort((a, b) => b.form - a.form)[0];
-  const topAvg = players.slice().sort((a, b) => b.avgPoints - a.avgPoints)[0];
-  const topSelected = players.slice().sort((a, b) => b.percentSelected - a.percentSelected)[0];
-
   document.getElementById('heroStats').innerHTML = `
     <div class="hero-stat"><div class="label">${I18N.t('index.statTotalPlayers')}</div><div class="value">${players.length}</div></div>
     <div class="hero-stat"><div class="label">${I18N.t('index.statPlaying')}</div><div class="value">${playingCount}</div></div>
-    <div class="hero-stat"><div class="label">${I18N.t('index.statTopPoints')}</div><div class="value">${topPerformer ? topPerformer.totalPoints : 0} pts <small>${topPerformer ? escapeHtml(topPerformer.name) : ''}</small></div></div>
-    <div class="hero-stat"><div class="label">${I18N.t('index.statTopForm')}</div><div class="value">${topForm ? topForm.form : 0} <small>${topForm ? escapeHtml(topForm.name) : ''}</small></div></div>
-    <div class="hero-stat"><div class="label">${I18N.t('index.statTopAvg')}</div><div class="value">${topAvg ? Number(topAvg.avgPoints).toFixed(1) : 0} <small>${topAvg ? escapeHtml(topAvg.name) : ''}</small></div></div>
-    <div class="hero-stat"><div class="label">${I18N.t('index.statTopSelected')}</div><div class="value">${topSelected ? Number(topSelected.percentSelected).toFixed(1) : 0}% <small>${topSelected ? escapeHtml(topSelected.name) : ''}</small></div></div>
   `;
 }
 
-function populateStatusFilter() {
-  const statuses = Array.from(new Set(players.map((p) => p.status))).sort();
-  for (const s of statuses) {
-    const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = s;
-    filterStatusEl.appendChild(opt);
-  }
-}
+const LEADERBOARDS = [
+  { key: 'totalPoints', titleKey: 'index.lbTotalPoints', unitKey: 'index.unitPts', format: (v) => v },
+  { key: 'avgPoints', titleKey: 'index.lbAvgPoints', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
+  { key: 'form', titleKey: 'index.lbForm', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
+  { key: 'percentSelected', titleKey: 'index.lbSelected', unitKey: '', format: (v) => `${v.toFixed(1)}%` },
+  { key: 'goals', titleKey: 'index.lbGoals', unitKey: 'index.unitGoals', format: (v) => v },
+  { key: 'assists', titleKey: 'index.lbAssists', unitKey: 'index.unitAssists', format: (v) => v },
+  { key: 'cleanSheets', titleKey: 'index.lbCleanSheets', unitKey: 'index.unitCleanSheets', format: (v) => v },
+  { key: 'tackles', titleKey: 'index.lbTackles', unitKey: 'index.unitTackles', format: (v) => v },
+  { key: 'keyPasses', titleKey: 'index.lbKeyPasses', unitKey: 'index.unitKeyPasses', format: (v) => v },
+  { key: 'shots', titleKey: 'index.lbShots', unitKey: 'index.unitShots', format: (v) => v },
+];
 
-function statusDotClass(status) {
-  if (status === 'playing') return 'playing';
-  if (status === 'injured') return 'injured';
-  if (status === 'transferred') return 'transferred';
-  return 'other';
-}
-
-function getFiltered() {
-  const q = searchEl.value.trim().toLowerCase();
-  const pos = filterPosEl.value;
-  const status = filterStatusEl.value;
-  let list = players.filter((p) => {
-    if (q && !p.name.toLowerCase().includes(q)) return false;
-    if (pos && p.position !== pos) return false;
-    if (status && p.status !== status) return false;
-    return true;
-  });
-  list.sort((a, b) => {
-    let av = a[sortKey], bv = b[sortKey];
-    if (typeof av === 'string') av = av.toLowerCase();
-    if (typeof bv === 'string') bv = bv.toLowerCase();
-    if (av < bv) return sortDir === 'asc' ? -1 : 1;
-    if (av > bv) return sortDir === 'asc' ? 1 : -1;
-    return 0;
-  });
-  return list;
-}
-
-function render() {
-  const list = getFiltered();
-  countEl.textContent = I18N.getLang() === 'id'
-    ? `${list.length} dari ${players.length} pemain`
-    : `${list.length} of ${players.length} players`;
-
-  document.querySelectorAll('thead th').forEach((th) => {
-    const key = th.dataset.key;
-    let arrow = '';
-    if (key === sortKey) arrow = `<span class="arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>`;
-    th.innerHTML = th.textContent.replace(/\s*[▲▼]?$/, '').trim() + arrow;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
-  if (currentPage > totalPages) currentPage = totalPages;
-  if (currentPage < 1) currentPage = 1;
-  const start = (currentPage - 1) * pageSize;
-  const pageList = list.slice(start, start + pageSize);
-
-  pageInfoEl.textContent = `Halaman ${currentPage} / ${totalPages}`;
-  pagePrevEl.disabled = currentPage <= 1;
-  pageNextEl.disabled = currentPage >= totalPages;
-
-  tbody.innerHTML = '';
-  for (const p of pageList) {
-    const tr = document.createElement('tr');
-    tr.className = 'player-row';
-    tr.dataset.id = p.id;
-    tr.innerHTML = `
-      <td class="name-cell" onclick="DetailModal.openPlayer(${p.id})">${escapeHtml(p.name)}<span class="pid">#${p.id}</span></td>
-      <td class="team-cell" onclick="DetailModal.openTeam(${p.squadId})">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.squadAbbr)}</td>
-      <td><span class="badge ${escapeHtml(p.position)}">${escapeHtml(p.position)}</span></td>
-      <td><span class="dot ${statusDotClass(p.status)}"></span>${escapeHtml(p.status)}</td>
-      <td class="num">${Number(p.price).toFixed(1)}</td>
-      <td class="num">${p.totalPoints}</td>
-      <td class="num">${p.form}</td>
-      <td class="num">${Number(p.avgPoints).toFixed(1)}</td>
-      <td class="num">${Number(p.percentSelected).toFixed(1)}%</td>
-    `;
-    tbody.appendChild(tr);
-  }
-}
-
-document.querySelectorAll('thead th').forEach((th) => {
-  th.addEventListener('click', () => {
-    const key = th.dataset.key;
-    if (sortKey === key) {
-      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortKey = key;
-      sortDir = 'desc';
+function renderLeaderboards() {
+  const grid = document.getElementById('lbGrid');
+  grid.innerHTML = LEADERBOARDS.map((lb) => {
+    const sorted = players.slice().sort((a, b) => b[lb.key] - a[lb.key]);
+    const top5 = sorted.slice(0, 5);
+    const leader = top5[0];
+    if (!leader || leader[lb.key] <= 0) {
+      return `<div class="lb-card">
+        <div class="lb-head">${escapeHtml(I18N.t(lb.titleKey))}</div>
+        <div class="empty-msg" style="padding:14px;">${escapeHtml(I18N.t('index.noStatsYet'))}</div>
+      </div>`;
     }
-    currentPage = 1;
-    render();
-  });
-});
-
-searchEl.addEventListener('input', () => { currentPage = 1; render(); });
-filterPosEl.addEventListener('change', () => { currentPage = 1; render(); });
-filterStatusEl.addEventListener('change', () => { currentPage = 1; render(); });
-
-pagePrevEl.addEventListener('click', () => { currentPage -= 1; render(); });
-pageNextEl.addEventListener('click', () => { currentPage += 1; render(); });
-pageSizeEl.addEventListener('change', () => {
-  pageSize = Number(pageSizeEl.value);
-  currentPage = 1;
-  render();
-});
+    const unit = lb.unitKey ? escapeHtml(I18N.t(lb.unitKey)) : '';
+    const rest = top5.slice(1).map((p, i) => `
+      <div class="lb-row" onclick="DetailModal.openPlayer(${p.id})">
+        <span class="lb-rank">${i + 2}</span>
+        <span class="lb-name">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.name)}</span>
+        <span class="lb-value">${lb.format(leader ? p[lb.key] : 0)}</span>
+      </div>
+    `).join('');
+    return `<div class="lb-card">
+      <div class="lb-head">${escapeHtml(I18N.t(lb.titleKey))}</div>
+      <div class="lb-top1" onclick="DetailModal.openPlayer(${leader.id})">
+        <span class="lb-rank">1</span>
+        <div>
+          <div class="lb-name">${FLAGS.flagFor(leader.squadAbbr)} ${escapeHtml(leader.name)}</div>
+          <div class="lb-team">${escapeHtml(leader.squadAbbr)}</div>
+        </div>
+        <div class="lb-value">${lb.format(leader[lb.key])}<small>${unit}</small></div>
+      </div>
+      <div class="lb-rest">${rest}</div>
+    </div>`;
+  }).join('');
+}
 
 document.addEventListener('i18n:change', () => {
   renderHeroStats();
-  render();
+  renderLeaderboards();
 });
 
-loadPlayers();
+loadData();
 </script>
 </body>
 </html>
