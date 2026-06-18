@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://example.com/index.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/index.html</loc>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://example.com/best-xi.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/best-xi.html</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/best15-overall.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/best15-overall.html</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/best15-next-round.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/best15-next-round.html</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/best15-research.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/best15-research.html</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/groups.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/groups.html</loc>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://example.com/my-squad.html</loc>
+    <loc>https://world-cup-fantasy-kappa.vercel.app/my-squad.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
