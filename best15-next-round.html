@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<title>FIFA Fantasy — Prediksi Best 15 Ronde Depan</title>
+<style>
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 20px; margin: 0; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .toolbar select { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+  .spacer { flex: 1; }
+  .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
+  .disclaimer b { color: var(--text); }
+
+  .team-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .team-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .team-head .tname { font-size: 16px; font-weight: 700; }
+  .team-head .ttotal { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .formation-label { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; }
+
+  .pitch { background: var(--pitch); border: 2px solid var(--pitch-line); border-radius: 10px; padding: 14px 8px; display: flex; flex-direction: column; gap: 14px; }
+  .pitch-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .player-chip { background: rgba(0,0,0,0.35); border: 1px solid var(--pitch-line); border-radius: 8px; padding: 6px 10px; min-width: 120px; text-align: center; color: #fff; }
+  :root[data-theme="light"] .player-chip { background: rgba(255,255,255,0.7); color: var(--text); }
+  .player-chip .pname { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; margin: 0 auto; }
+  .player-chip .psquad { font-size: 10px; opacity: .8; }
+  .player-chip .pscore { font-size: 11px; opacity: .85; margin-top: 2px; }
+  .player-chip .pproj { font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--accent); margin-top: 1px; }
+
+  .bench-section { margin-top: 14px; }
+  .bench-title { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .03em; }
+  table.bench { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.bench th { text-align: left; color: var(--text-dim); padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  table.bench td { padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  table.bench td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+
+  .variant-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .variant-tab { padding: 7px 14px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); cursor: pointer; }
+  .variant-tab:hover { color: var(--text); }
+  .variant-tab.active { background: var(--accent); color: #14180a; border-color: var(--accent); font-weight: 700; }
+  .budget-badge { font-size: 12px; padding: 3px 9px; border-radius: 6px; font-variant-numeric: tabular-nums; margin-left: 8px; }
+  .budget-badge.ok { background: rgba(52,199,89,0.15); color: #34c759; }
+  .budget-badge.over { background: rgba(255,92,92,0.15); color: #ff5c5c; }
+  .player-chip .pprice { font-size: 11px; opacity: .85; margin-top: 1px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-header">
+    <h1>Prediksi Best 15 Ronde Depan</h1>
+    <button class="toggle" id="themeToggle">☀ / ☾</button>
+  </div>
+  <nav class="top-nav">
+    <a href="index.html" class="nav-tab">Daftar Pemain</a>
+    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
+    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
+    <a href="best15-next-round.html" class="nav-tab active">Prediksi Ronde Depan</a>
+    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
+    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
+    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
+  </nav>
+
+  <div class="disclaimer">
+    <b>Pemilihan 15 pemain</b> pakai skor indeks 0–100: 60% form pemain terkini (field <code>form</code>/<code>avgPoints</code> dari FIFA) + 40% indeks fixture ronde depan (Clean Sheet % untuk GK/DEF, Projected Goals tim untuk MID/FWD — dari grafik proyeksi pasar SBOBET/Betfair via FPLJoe.com, input manual statis per 27.05.26, <b>tidak live</b>).
+    <b>Angka "pts" di tiap pemain</b> adalah <b>proyeksi poin fantasy</b> (estimasi, bukan poin resmi): rata-rata poin historis pemain (<code>avgPoints</code>) dikalikan faktor fixture (naik kalau tim diproyeksikan di atas rata-rata 48 tim untuk matchday itu, turun kalau di bawah rata-rata, dibatasi 0.5×–1.8×).
+    Pilih matchday yang belum dimainkan tim tersebut di dropdown. Berlaku batas <b>maksimal 3 pemain per negara</b> (aturan FIFA Fantasy di babak grup). Ini bukan prediksi resmi FIFA maupun garansi line-up.
+  </div>
+
+  <div class="toolbar">
+    <label>Matchday proyeksi:
+      <select id="mdSelect">
+        <option value="0">MD1</option>
+        <option value="1" selected>MD2</option>
+        <option value="2">MD3</option>
+      </select>
+    </label>
+    <span class="spacer"></span>
+    <span class="empty-msg" id="unmatchedNote"></span>
+  </div>
+
+  <div class="variant-tabs" id="variantTabs"></div>
+
+  <div id="panel"></div>
+</div>
+
+<script src="squad-builder.js"></script>
+<script>
+const FORMATION = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
+const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
+let currentVariant = 'budget';
+
+let players = [];
+let squads = [];
+let teamProjections = {};
+const root = document.documentElement;
+
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('fifa-fantasy-theme', t);
+}
+setTheme(localStorage.getItem('fifa-fantasy-theme') || 'dark');
+document.getElementById('themeToggle').addEventListener('click', () => {
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function flatten(p) {
+  return {
+    id: p?.id,
+    name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
+    position: p?.position ?? '—',
+    status: p?.status ?? 'unknown',
+    squadId: p?.squadId ?? null,
+    totalPoints: p?.stats?.totalPoints ?? 0,
+    avgPoints: p?.stats?.avgPoints ?? 0,
+    form: p?.stats?.form ?? p?.stats?.avgPoints ?? 0,
+    price: p?.price ?? 0,
+  };
+}
+
+function squadAbbr(squadId) {
+  const s = squads.find((x) => x.id === squadId);
+  return s?.abbr ?? null;
+}
+
+async function loadData() {
+  const panelEl = document.getElementById('panel');
+  try {
+    const [playersRes, squadsRes, projRes] = await Promise.all([
+      fetch('data/players.json'),
+      fetch('data/squads.json'),
+      fetch('data/team_projections.json'),
+    ]);
+    if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
+    const playersJson = await playersRes.json();
+    players = (Array.isArray(playersJson) ? playersJson : []).map(flatten);
+
+    squads = squadsRes.ok ? (await squadsRes.json()) : [];
+    if (!Array.isArray(squads)) squads = [];
+
+    if (projRes.ok) {
+      const projJson = await projRes.json();
+      teamProjections = projJson?.teams ?? {};
+    } else {
+      teamProjections = {};
+    }
+  } catch (e) {
+    panelEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server dan data/players.json, data/squads.json, data/team_projections.json tersedia.</div>`;
+    return;
+  }
+
+  document.getElementById('mdSelect').addEventListener('change', render);
+  render();
+}
+
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
+}
+
+function leagueAverages(mdIndex) {
+  const teams = Object.values(teamProjections);
+  const avgGoals = teams.reduce((s, t) => s + (t.projectedGoals?.[mdIndex] ?? 0), 0) / (teams.length || 1);
+  const avgCS = teams.reduce((s, t) => s + (t.cleanSheetPct?.[mdIndex] ?? 0), 0) / (teams.length || 1);
+  return { avgGoals, avgCS };
+}
+
+function computeScores(mdIndex) {
+  const { avgGoals, avgCS } = leagueAverages(mdIndex);
+
+  const withFixture = players.map((p) => {
+    const abbr = squadAbbr(p.squadId);
+    const proj = abbr ? teamProjections[abbr] : null;
+    const goals = proj?.projectedGoals?.[mdIndex] ?? null;
+    const cs = proj?.cleanSheetPct?.[mdIndex] ?? null;
+
+    let fixtureIndex;
+    let multiplier = 1;
+    if (p.position === 'GK' || p.position === 'DEF') {
+      fixtureIndex = cs != null ? cs : null;
+      if (cs != null && avgCS > 0) multiplier = clamp(1 + 0.5 * ((cs - avgCS) / avgCS), 0.5, 1.8);
+    } else {
+      fixtureIndex = goals != null ? goals : null;
+      if (goals != null && avgGoals > 0) multiplier = clamp(1 + 0.5 * ((goals - avgGoals) / avgGoals), 0.5, 1.8);
+    }
+    const projectedPoints = Math.round(p.avgPoints * multiplier * 10) / 10;
+    return { ...p, fixtureIndex, hasFixtureData: fixtureIndex != null, projectedPoints };
+  });
+
+  for (const pos of POS_ORDER) {
+    const group = withFixture.filter((p) => p.position === pos);
+    const forms = group.map((p) => p.form);
+    const fixtures = group.filter((p) => p.hasFixtureData).map((p) => p.fixtureIndex);
+    const formMin = Math.min(...forms, 0);
+    const formMax = Math.max(...forms, 1);
+    const fixMin = fixtures.length ? Math.min(...fixtures) : 0;
+    const fixMax = fixtures.length ? Math.max(...fixtures) : 1;
+
+    for (const p of group) {
+      const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
+      const normFix = p.hasFixtureData
+        ? (fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50)
+        : 50;
+      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+    }
+  }
+
+  return withFixture;
+}
+
+const MAX_PER_SQUAD = 3;
+
+function render() {
+  const mdIndex = Number(document.getElementById('mdSelect').value);
+  const scored = computeScores(mdIndex);
+
+  const unmatchedCount = scored.filter((p) => !p.hasFixtureData).length;
+  document.getElementById('unmatchedNote').textContent = unmatchedCount
+    ? `${unmatchedCount} pemain tanpa data proyeksi tim (dihitung netral 50)`
+    : '';
+
+  const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER, MAX_PER_SQUAD);
+
+  document.getElementById('variantTabs').innerHTML = variants.map((v) => `
+    <button class="variant-tab ${v.key === currentVariant ? 'active' : ''}" data-key="${v.key}">${escapeHtml(v.label)}</button>
+  `).join('');
+  document.querySelectorAll('.variant-tab').forEach((btn) => {
+    btn.addEventListener('click', () => { currentVariant = btn.dataset.key; render(); });
+  });
+
+  const variant = variants.find((v) => v.key === currentVariant) || variants[0];
+  renderVariant(variant);
+}
+
+function renderVariant(variant) {
+  const { starters, bench } = variant;
+  const totalScore = Math.round((starters.reduce((sum, p) => sum + p.score, 0) / starters.length) * 10) / 10;
+  const totalProjectedPoints = SquadBuilder.totalMetric(starters, 'projectedPoints');
+  const totalPriceVal = SquadBuilder.totalPrice(starters);
+  const overBudget = totalPriceVal > SquadBuilder.BUDGET;
+
+  const rows = POS_ORDER.map((pos) => {
+    const chips = starters.filter((p) => p.position === pos).map((p) => `
+      <div class="player-chip">
+        <div class="pname">${escapeHtml(p.name)}</div>
+        <div class="psquad">${escapeHtml(squadAbbr(p.squadId) ?? '?')} · ${p.position}</div>
+        <div class="pprice">$${Number(p.price).toFixed(1)} · Skor ${p.score}</div>
+        <div class="pproj">~${p.projectedPoints} pts (estimasi)</div>
+      </div>
+    `).join('');
+    return `<div class="pitch-row">${chips || '<div class="empty-msg">Tidak ada pemain</div>'}</div>`;
+  }).join('');
+
+  const benchRows = bench
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20)
+    .map((p) => `
+      <tr>
+        <td>${escapeHtml(p.name)}</td>
+        <td>${escapeHtml(squadAbbr(p.squadId) ?? '?')}</td>
+        <td>${p.position}</td>
+        <td class="num">$${Number(p.price).toFixed(1)}</td>
+        <td class="num">${p.score}</td>
+        <td class="num">${p.projectedPoints}</td>
+      </tr>
+    `).join('');
+
+  document.getElementById('panel').innerHTML = `
+    <div class="team-panel">
+      <div class="team-head">
+        <span class="tname">Best 15 Proyeksi</span>
+        <span>
+          <span class="ttotal">~${totalProjectedPoints} pts (estimasi)</span>
+          <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
+        </span>
+      </div>
+      <div class="formation-label">Komposisi 2-5-5-3 (15 pemain) · diseleksi dari skor indeks (60% form + 40% fixture, rata-rata: ${totalScore}/100) · "pts" = proyeksi poin fantasy, bukan poin resmi</div>
+      <div class="pitch">${rows}</div>
+      <div class="bench-section">
+        <div class="bench-title">Kandidat lapis kedua (top cadangan per posisi)</div>
+        <table class="bench">
+          <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Harga</th><th>Skor</th><th>Proyeksi pts</th></tr></thead>
+          <tbody>${benchRows || '<tr><td colspan="6" class="empty-msg">Tidak ada data.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+loadData();
+</script>
+</body>
+</html>

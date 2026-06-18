@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<title>FIFA Fantasy — Best 15 Keseluruhan</title>
+<style>
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 20px; margin: 0 0 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 18px; }
+  .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
+
+  .team-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .team-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .team-head .tname { font-size: 16px; font-weight: 700; }
+  .team-head .ttotal { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .formation-label { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; }
+
+  .pitch { background: var(--pitch); border: 2px solid var(--pitch-line); border-radius: 10px; padding: 14px 8px; display: flex; flex-direction: column; gap: 14px; }
+  .pitch-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .player-chip { background: rgba(0,0,0,0.35); border: 1px solid var(--pitch-line); border-radius: 8px; padding: 6px 10px; min-width: 120px; text-align: center; color: #fff; }
+  :root[data-theme="light"] .player-chip { background: rgba(255,255,255,0.7); color: var(--text); }
+  .player-chip .pname { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; margin: 0 auto; }
+  .player-chip .psquad { font-size: 10px; opacity: .8; }
+  .player-chip .ppos { font-size: 10px; opacity: .8; }
+  .player-chip .ppts { font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 700; margin-top: 2px; }
+
+  .bench-section { margin-top: 14px; }
+  .bench-title { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .03em; }
+  table.bench { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.bench th { text-align: left; color: var(--text-dim); padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  table.bench td { padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  table.bench td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+
+  .variant-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .variant-tab { padding: 7px 14px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); cursor: pointer; }
+  .variant-tab:hover { color: var(--text); }
+  .variant-tab.active { background: var(--accent); color: #14180a; border-color: var(--accent); font-weight: 700; }
+  .budget-badge { font-size: 12px; padding: 3px 9px; border-radius: 6px; font-variant-numeric: tabular-nums; margin-left: 8px; }
+  .budget-badge.ok { background: rgba(52,199,89,0.15); color: #34c759; }
+  .budget-badge.over { background: rgba(255,92,92,0.15); color: #ff5c5c; }
+  .player-chip .pprice { font-size: 11px; opacity: .85; margin-top: 1px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-header">
+    <h1>Best 15 Keseluruhan</h1>
+    <button class="toggle" id="themeToggle">☀ / ☾</button>
+  </div>
+  <nav class="top-nav">
+    <a href="index.html" class="nav-tab">Daftar Pemain</a>
+    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
+    <a href="best15-overall.html" class="nav-tab active">Best 15 Keseluruhan</a>
+    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
+    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
+    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
+    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
+  </nav>
+
+  <div class="disclaimer">
+    15 pemain dengan akumulasi poin tertinggi dari <b>seluruh tim/negara</b> (bukan per squad), disusun dengan komposisi 2 GK – 5 DEF – 5 MID – 3 FWD, dengan batas <b>maksimal 3 pemain per negara</b> (aturan FIFA Fantasy di babak grup).
+    Ini murni gabungan top performer lintas turnamen berdasarkan data lokal hasil scrape, bukan prediksi atau line-up resmi FIFA.
+    Budget squad FIFA Fantasy <b>100</b> — ada 3 varian: <b>Skor Tertinggi</b> (abaikan budget, buat referensi), <b>Dalam Budget</b> (skor terbaik yang masih ≤100, lewat penukaran pemain termurah), dan <b>Hemat (Value)</b> (efisiensi poin per harga, biasanya jauh di bawah budget).
+  </div>
+
+  <div class="variant-tabs" id="variantTabs"></div>
+
+  <div id="panel"></div>
+</div>
+
+<script src="squad-builder.js"></script>
+<script>
+const FORMATION = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
+const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
+let currentVariant = 'budget';
+
+let players = [];
+let squads = [];
+const root = document.documentElement;
+
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('fifa-fantasy-theme', t);
+}
+setTheme(localStorage.getItem('fifa-fantasy-theme') || 'dark');
+document.getElementById('themeToggle').addEventListener('click', () => {
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function flatten(p) {
+  return {
+    id: p?.id,
+    name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
+    position: p?.position ?? '—',
+    status: p?.status ?? 'unknown',
+    squadId: p?.squadId ?? null,
+    totalPoints: p?.stats?.totalPoints ?? 0,
+    price: p?.price ?? 0,
+  };
+}
+
+function squadAbbr(squadId) {
+  const s = squads.find((x) => x.id === squadId);
+  return s?.abbr ?? `#${squadId ?? '?'}`;
+}
+
+async function loadData() {
+  const panelEl = document.getElementById('panel');
+  try {
+    const [playersRes, squadsRes] = await Promise.all([
+      fetch('data/players.json'),
+      fetch('data/squads.json'),
+    ]);
+    if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
+    const playersJson = await playersRes.json();
+    players = (Array.isArray(playersJson) ? playersJson : []).map(flatten);
+
+    if (squadsRes.ok) {
+      const squadsJson = await squadsRes.json();
+      squads = Array.isArray(squadsJson) ? squadsJson : [];
+    } else {
+      squads = [];
+    }
+  } catch (e) {
+    panelEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server dan data/players.json + data/squads.json tersedia.</div>`;
+    return;
+  }
+
+  render();
+}
+
+const MAX_PER_SQUAD = 3;
+
+function render() {
+  const variants = SquadBuilder.buildVariants(players, 'totalPoints', FORMATION, POS_ORDER, MAX_PER_SQUAD);
+
+  document.getElementById('variantTabs').innerHTML = variants.map((v) => `
+    <button class="variant-tab ${v.key === currentVariant ? 'active' : ''}" data-key="${v.key}">${escapeHtml(v.label)}</button>
+  `).join('');
+  document.querySelectorAll('.variant-tab').forEach((btn) => {
+    btn.addEventListener('click', () => { currentVariant = btn.dataset.key; render(); });
+  });
+
+  const variant = variants.find((v) => v.key === currentVariant) || variants[0];
+  renderVariant(variant);
+}
+
+function renderVariant(variant) {
+  const { starters, bench } = variant;
+  const totalPoints = SquadBuilder.totalMetric(starters, 'totalPoints');
+  const totalPriceVal = SquadBuilder.totalPrice(starters);
+  const overBudget = totalPriceVal > SquadBuilder.BUDGET;
+
+  const rows = POS_ORDER.map((pos) => {
+    const chips = starters.filter((p) => p.position === pos).map((p) => `
+      <div class="player-chip">
+        <div class="pname">${escapeHtml(p.name)}</div>
+        <div class="psquad">${escapeHtml(squadAbbr(p.squadId))} · ${p.position}</div>
+        <div class="pprice">$${Number(p.price).toFixed(1)}</div>
+        <div class="ppts">${p.totalPoints}</div>
+      </div>
+    `).join('');
+    return `<div class="pitch-row">${chips || '<div class="empty-msg">Tidak ada pemain</div>'}</div>`;
+  }).join('');
+
+  const benchRows = bench
+    .sort((a, b) => b.totalPoints - a.totalPoints)
+    .slice(0, 20)
+    .map((p) => `
+      <tr>
+        <td>${escapeHtml(p.name)}</td>
+        <td>${escapeHtml(squadAbbr(p.squadId))}</td>
+        <td>${p.position}</td>
+        <td class="num">$${Number(p.price).toFixed(1)}</td>
+        <td class="num">${p.totalPoints}</td>
+      </tr>
+    `).join('');
+
+  document.getElementById('panel').innerHTML = `
+    <div class="team-panel">
+      <div class="team-head">
+        <span class="tname">Best 15 Lintas Tim</span>
+        <span>
+          <span class="ttotal">${totalPoints} pts</span>
+          <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
+        </span>
+      </div>
+      <div class="formation-label">Komposisi 2-5-5-3 (15 pemain) · diurutkan berdasarkan Total Points, tanpa batasan tim</div>
+      <div class="pitch">${rows}</div>
+      <div class="bench-section">
+        <div class="bench-title">Honourable mentions (top cadangan per posisi)</div>
+        <table class="bench">
+          <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Harga</th><th>Total</th></tr></thead>
+          <tbody>${benchRows || '<tr><td colspan="5" class="empty-msg">Tidak ada data.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+loadData();
+</script>
+</body>
+</html>

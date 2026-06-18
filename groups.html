@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<title>FIFA Fantasy — Klasemen & Jadwal</title>
+<style>
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 20px; margin: 0; }
+  h2.section-title { font-size: 15px; margin: 28px 0 12px; }
+  .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
+  .disclaimer b { color: var(--text); }
+
+  .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .group-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .group-card h3 { margin: 0; padding: 10px 12px; font-size: 13px; background: var(--panel2); border-bottom: 1px solid var(--border); }
+  table.standing { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.standing th { text-align: left; color: var(--text-dim); padding: 6px 8px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  table.standing th.num, table.standing td.num { text-align: right; }
+  table.standing td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  table.standing tr:last-child td { border-bottom: none; }
+  table.standing tr.qualify td:first-child { border-left: 3px solid var(--accent); }
+
+  table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
+  table.fixtures th { text-align: left; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 9px 12px; border-bottom: 1px solid var(--border); background: var(--panel2); }
+  table.fixtures td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  table.fixtures tr:hover td { background: var(--row-hover); }
+  .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-header">
+    <h1>Klasemen & Jadwal</h1>
+    <button class="toggle" id="themeToggle">☀ / ☾</button>
+  </div>
+  <nav class="top-nav">
+    <a href="index.html" class="nav-tab">Daftar Pemain</a>
+    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
+    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
+    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
+    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
+    <a href="groups.html" class="nav-tab active">Klasemen & Jadwal</a>
+    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
+  </nav>
+
+  <div class="disclaimer">
+    Data hasil & jadwal dari <b>worldcup26.ir/get/games</b> (bukan situs resmi FIFA, jadi bisa berbeda atau ada salah ketik nama pencetak gol/skor di sumbernya — silakan koreksi datanya kalau ketemu yang aneh).
+    Urutan klasemen <b>belum memperhitungkan head-to-head</b> antar tim dengan poin sama — hanya Poin → Selisih Gol → Gol Memasukkan. Untuk aturan resmi FIFA (head-to-head, fair play, dst.) cek sumber resmi.
+  </div>
+
+  <h2 class="section-title">Klasemen Per Grup</h2>
+  <div class="groups-grid" id="groupsGrid"></div>
+
+  <h2 class="section-title">Jadwal Ronde Berikutnya (Fase Grup)</h2>
+  <table class="fixtures">
+    <thead><tr><th>Tanggal</th><th>Grup</th><th>MD</th><th>Pertandingan</th></tr></thead>
+    <tbody id="fixturesBody"></tbody>
+  </table>
+</div>
+
+<script>
+let matches = [];
+let nameMap = {};
+const root = document.documentElement;
+
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('fifa-fantasy-theme', t);
+}
+setTheme(localStorage.getItem('fifa-fantasy-theme') || 'dark');
+document.getElementById('themeToggle').addEventListener('click', () => {
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function abbrFor(name) {
+  return nameMap[name] ?? name;
+}
+
+async function loadData() {
+  const gridEl = document.getElementById('groupsGrid');
+  try {
+    const [matchesRes, mapRes] = await Promise.all([
+      fetch('data/matches.json'),
+      fetch('data/team_name_map.json'),
+    ]);
+    if (!matchesRes.ok) throw new Error(`matches.json HTTP ${matchesRes.status}`);
+    const matchesJson = await matchesRes.json();
+    matches = matchesJson?.games ?? [];
+
+    if (mapRes.ok) {
+      const mapJson = await mapRes.json();
+      nameMap = mapJson?.map ?? {};
+    }
+  } catch (e) {
+    gridEl.innerHTML = `<div class="empty-msg">Gagal memuat data/matches.json: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu supaya data/matches.json terbuat, lalu pastikan diakses via http server.</div>`;
+    return;
+  }
+
+  renderStandings();
+  renderFixtures();
+}
+
+function renderStandings() {
+  const groupMatches = matches.filter((m) => m.type === 'group');
+  const groups = {};
+
+  for (const m of groupMatches) {
+    const g = m.group;
+    if (!groups[g]) groups[g] = {};
+    for (const side of ['home', 'away']) {
+      const name = m[`${side}_team_name_en`];
+      if (!name) continue;
+      if (!groups[g][name]) {
+        groups[g][name] = { name, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0 };
+      }
+    }
+  }
+
+  for (const m of groupMatches) {
+    if (String(m.finished).toUpperCase() !== 'TRUE') continue;
+    const g = m.group;
+    const hName = m.home_team_name_en;
+    const aName = m.away_team_name_en;
+    const hScore = Number(m.home_score);
+    const aScore = Number(m.away_score);
+    if (!groups[g] || !groups[g][hName] || !groups[g][aName]) continue;
+
+    const h = groups[g][hName];
+    const a = groups[g][aName];
+    h.P += 1; a.P += 1;
+    h.GF += hScore; h.GA += aScore;
+    a.GF += aScore; a.GA += hScore;
+    if (hScore > aScore) { h.W += 1; a.L += 1; }
+    else if (hScore < aScore) { a.W += 1; h.L += 1; }
+    else { h.D += 1; a.D += 1; }
+  }
+
+  const sortedGroupKeys = Object.keys(groups).sort();
+  const gridEl = document.getElementById('groupsGrid');
+  gridEl.innerHTML = sortedGroupKeys.map((g) => {
+    const teams = Object.values(groups[g]).map((t) => ({ ...t, GD: t.GF - t.GA, Pts: t.W * 3 + t.D }));
+    teams.sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF);
+
+    const rows = teams.map((t, i) => `
+      <tr class="${i < 2 ? 'qualify' : ''}">
+        <td>${escapeHtml(abbrFor(t.name))}</td>
+        <td class="num">${t.P}</td>
+        <td class="num">${t.W}</td>
+        <td class="num">${t.D}</td>
+        <td class="num">${t.L}</td>
+        <td class="num">${t.GF}</td>
+        <td class="num">${t.GA}</td>
+        <td class="num">${t.GD > 0 ? '+' : ''}${t.GD}</td>
+        <td class="num">${t.Pts}</td>
+      </tr>
+    `).join('');
+
+    return `
+      <div class="group-card">
+        <h3>Grup ${g.toUpperCase()}</h3>
+        <table class="standing">
+          <thead><tr><th>Tim</th><th class="num">P</th><th class="num">W</th><th class="num">D</th><th class="num">L</th><th class="num">GF</th><th class="num">GA</th><th class="num">GD</th><th class="num">Pts</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderFixtures() {
+  const upcoming = matches
+    .filter((m) => m.type === 'group' && String(m.finished).toUpperCase() !== 'TRUE')
+    .sort((a, b) => new Date(a.local_date) - new Date(b.local_date));
+
+  const rows = upcoming.map((m) => `
+    <tr>
+      <td>${escapeHtml(m.local_date ?? '?')}</td>
+      <td>${escapeHtml((m.group ?? '?').toUpperCase())}</td>
+      <td>MD${escapeHtml(m.matchday ?? '?')}</td>
+      <td>${escapeHtml(abbrFor(m.home_team_name_en))} vs ${escapeHtml(abbrFor(m.away_team_name_en))}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('fixturesBody').innerHTML = rows || '<tr><td colspan="4" class="empty-msg">Tidak ada jadwal mendatang.</td></tr>';
+}
+
+loadData();
+</script>
+</body>
+</html>

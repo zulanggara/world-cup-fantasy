@@ -1,0 +1,128 @@
+/* Stadium Night — shared design system for all fifa-fantasy pages.
+   Loaded via <link> before each page's own <style> block, so component
+   CSS that already references var(--accent), var(--pitch), etc. picks up
+   this palette automatically without per-page edits. */
+
+:root[data-theme="dark"] {
+  --bg: #0a0f0a;
+  --bg-grid: rgba(255, 183, 3, 0.05);
+  --panel: #121a10;
+  --panel2: #182013;
+  --border: #25341f;
+  --text: #edf2e8;
+  --text-dim: #8da27f;
+  --accent: #ffb703;
+  --accent2: #2ec4b6;
+  --row-hover: #1b2617;
+  --row-alt: #0d130a;
+  --pitch: #0f2e15;
+  --pitch-line: rgba(255, 183, 3, 0.3);
+}
+
+:root[data-theme="light"] {
+  --bg: #f3f6ee;
+  --bg-grid: rgba(217, 126, 0, 0.06);
+  --panel: #ffffff;
+  --panel2: #edf2e6;
+  --border: #d7e0cd;
+  --text: #16200e;
+  --text-dim: #5c6f51;
+  --accent: #d97e00;
+  --accent2: #0f8a7e;
+  --row-hover: #eef2e6;
+  --row-alt: #f8faf4;
+  --pitch: #d9ecd0;
+  --pitch-line: rgba(217, 126, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark light; }
+
+body {
+  margin: 0;
+  font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-optical-sizing: auto;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--bg-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+h1, h2, h3, .tname, .section-title, .bench-title, .formation-label {
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+h1 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+h2.section-title, h3.sub-title {
+  font-weight: 700;
+}
+
+/* Numbers, prices, scores, and codey bits get the mono treatment */
+.num, code, .ppts, .pscore, .pproj, .pprice, .budget-badge,
+.pid, table.bench td.num, table.rank-table td.num, table.standing td.num,
+table.fixtures td, .ttotal, .total-pts, .points, td.num {
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.top-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+
+.nav-tab {
+  padding: 8px 14px; border-radius: 8px; font-size: 13px; text-decoration: none;
+  color: var(--text-dim); border: 1px solid var(--border); background: var(--panel);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.01em;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.nav-tab:hover { background: var(--row-hover); color: var(--text); }
+.nav-tab.active {
+  background: var(--accent);
+  color: #14180a;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+
+a { color: var(--accent2); }
+a.nav-tab, a.nav-tab:visited { color: var(--text-dim); }
+a.nav-tab.active, a.nav-tab.active:visited { color: #14180a; }
+
+button.toggle {
+  background: var(--panel); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  transition: background-color .15s ease, transform .1s ease;
+}
+button.toggle:hover { background: var(--row-hover); }
+button.toggle:active { transform: scale(0.96); }
+
+/* One well-orchestrated load animation: top-level blocks rise + fade in,
+   staggered. Applied generically to direct children of .wrap so every
+   page gets it without per-page markup changes. */
+@keyframes stadiumRise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.wrap > * {
+  animation: stadiumRise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.wrap > *:nth-child(1) { animation-delay: 0s; }
+.wrap > *:nth-child(2) { animation-delay: 0.06s; }
+.wrap > *:nth-child(3) { animation-delay: 0.12s; }
+.wrap > *:nth-child(4) { animation-delay: 0.18s; }
+.wrap > *:nth-child(5) { animation-delay: 0.24s; }
+.wrap > *:nth-child(6) { animation-delay: 0.3s; }
+.wrap > *:nth-child(n+7) { animation-delay: 0.34s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap > * { animation: none; }
+}

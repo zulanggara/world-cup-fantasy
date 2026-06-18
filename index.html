@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<title>FIFA Fantasy Viewer</title>
+<style>
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 20px; margin: 0 0 16px; display: flex; align-items: center; gap: 12px; }
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin-bottom: 14px;
+  }
+  .toolbar input[type="text"], .toolbar select {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .toolbar input[type="text"] { width: 220px; }
+  .spacer { flex: 1; }
+  .count { color: var(--text-dim); font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  thead th {
+    position: sticky; top: 0;
+    background: var(--panel2);
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--text); }
+  thead th .arrow { font-size: 10px; margin-left: 4px; opacity: .7; }
+  tbody td {
+    padding: 9px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr.player-row { cursor: pointer; }
+  tbody tr.player-row:hover { background: var(--row-hover); }
+  tbody tr.player-row:nth-child(4n+1) { background: var(--row-alt); }
+  tbody tr.player-row:nth-child(4n+1):hover { background: var(--row-hover); }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #14161d;
+  }
+  .badge.GK { background: var(--accent); }
+  .badge.DEF { background: var(--accent2); color: #fff; }
+  .badge.MID { background: #6fcf67; }
+  .badge.FWD { background: #ef476f; color: #fff; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot.playing { background: #6fcf67; }
+  .dot.injured { background: #ef476f; }
+  .dot.transferred { background: var(--text-dim); }
+  .dot.other { background: var(--accent); }
+  .name-cell .pid { color: var(--text-dim); font-size: 11px; margin-left: 6px; }
+  tr.detail-row td {
+    background: var(--panel2);
+    cursor: default;
+    padding: 0;
+  }
+  .detail-inner { padding: 16px 18px; }
+  .round-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .round-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .round-head .title { font-size: 13px; color: var(--text-dim); }
+  .round-head .points { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 6px;
+  }
+  .stat-item {
+    display: flex; justify-content: space-between; gap: 8px;
+    font-size: 12px;
+    background: var(--panel2);
+    border-radius: 6px;
+    padding: 5px 8px;
+  }
+  .stat-item .v { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+  .loading-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+  .calc-head { font-size: 12px; color: var(--text-dim); margin: 10px 0 6px; text-transform: uppercase; letter-spacing: .03em; }
+  .calc-grid .stat-item { background: transparent; border: 1px solid var(--border); }
+  .calc-diff { font-size: 12px; color: var(--text-dim); margin-top: 8px; }
+  .pagination {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    margin-top: 14px; flex-wrap: wrap;
+  }
+  .pagination .page-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 7px 14px; cursor: pointer; font-size: 13px;
+  }
+  .pagination .page-btn:hover:not(:disabled) { background: var(--row-hover); }
+  .pagination .page-btn:disabled { opacity: .4; cursor: default; }
+  .pagination .page-info { font-size: 13px; color: var(--text-dim); min-width: 110px; text-align: center; }
+  .pagination select {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 7px 10px; font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-header">
+    <h1>FIFA Fantasy Viewer</h1>
+    <button class="toggle" id="themeToggle">☀ / ☾</button>
+  </div>
+  <nav class="top-nav">
+    <a href="index.html" class="nav-tab active">Daftar Pemain</a>
+    <a href="best-xi.html" class="nav-tab">Compare Tim</a>
+    <a href="best15-overall.html" class="nav-tab">Best 15 Keseluruhan</a>
+    <a href="best15-next-round.html" class="nav-tab">Prediksi Ronde Depan</a>
+    <a href="best15-research.html" class="nav-tab">Best 15 (Riset)</a>
+    <a href="groups.html" class="nav-tab">Klasemen & Jadwal</a>
+    <a href="copilot.html" class="nav-tab">Aturan & Copilot</a>
+  </nav>
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="Cari nama pemain..." />
+    <select id="filterPos">
+      <option value="">Semua Posisi</option>
+      <option value="GK">GK</option>
+      <option value="DEF">DEF</option>
+      <option value="MID">MID</option>
+      <option value="FWD">FWD</option>
+    </select>
+    <select id="filterStatus">
+      <option value="">Semua Status</option>
+    </select>
+    <span class="spacer"></span>
+    <span class="count" id="count"></span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th data-key="name">Nama</th>
+        <th data-key="position">Posisi</th>
+        <th data-key="status">Status</th>
+        <th data-key="price" class="num">Price</th>
+        <th data-key="totalPoints" class="num">Total Pts</th>
+        <th data-key="form" class="num">Form</th>
+        <th data-key="avgPoints" class="num">Avg Pts</th>
+        <th data-key="percentSelected" class="num">% Selected</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="pagination">
+    <button class="page-btn" id="pagePrev">‹ Prev</button>
+    <span class="page-info" id="pageInfo"></span>
+    <button class="page-btn" id="pageNext">Next ›</button>
+    <select id="pageSize">
+      <option value="25">25 / halaman</option>
+      <option value="50" selected>50 / halaman</option>
+      <option value="100">100 / halaman</option>
+      <option value="200">200 / halaman</option>
+    </select>
+  </div>
+</div>
+
+<script>
+const STAT_LABELS = {
+  SXI: 'Starting XI', MP: 'Minutes Played', AS: 'Assists', YC: 'Yellow Card',
+  RC: 'Red Card', OG: 'Own Goal', PW: 'Penalty Won', PC: 'Penalty Conceded',
+  CS: 'Clean Sheet', GS: 'Goals Scored', GC: 'Goals Conceded', PS: 'Penalty Saved',
+  T: 'Tackles', CC: 'Chances Created', ST: 'Shots on Target', FK: 'Free Kicks',
+  S: 'Saves', SB: 'Substitute',
+};
+
+// Resmi sesuai "How to Score" FIFA Fantasy. GS/CS bobot per posisi; sisanya berlaku untuk semua posisi.
+const GOAL_POINTS = { GK: 9, DEF: 7, MID: 6, FWD: 5 };
+const CLEAN_SHEET_POINTS = { GK: 5, DEF: 5, MID: 1, FWD: 0 };
+
+function calcOfficialPoints(position, s) {
+  const MP = s?.MP ?? 0, AS = s?.AS ?? 0, YC = s?.YC ?? 0, RC = s?.RC ?? 0, OG = s?.OG ?? 0,
+        PW = s?.PW ?? 0, PC = s?.PC ?? 0, CS = s?.CS ?? 0, GS = s?.GS ?? 0, GC = s?.GC ?? 0,
+        PS = s?.PS ?? 0, T = s?.T ?? 0, CC = s?.CC ?? 0, ST = s?.ST ?? 0, FK = s?.FK ?? 0, S = s?.S ?? 0;
+
+  const breakdown = [];
+  let total = 0;
+  function add(label, value) {
+    if (value) { total += value; breakdown.push({ label, value }); }
+  }
+
+  if (MP > 0) add('Appearance (≤60 min)', 1);
+  if (MP >= 60) add('Appearance (60+ min)', 1);
+  add('Assist', AS * 3);
+  add('Yellow Card', YC * -1);
+  add('Red Card', RC * -2);
+  add('Own Goal', OG * -2);
+  add('Winning a Penalty', PW * 2);
+  add('Conceding a Penalty', PC * -1);
+  add('Goal from Direct Free-Kick (bonus)', FK * 1);
+  add('Goal Scored', GS * (GOAL_POINTS[position] ?? 0));
+  add('Clean Sheet', CS * (CLEAN_SHEET_POINTS[position] ?? 0));
+
+  if (position === 'GK' || position === 'DEF') {
+    add('Goals Conceded (each beyond 1st)', GC > 0 ? -(GC - 1) : 0);
+  }
+  if (position === 'GK') {
+    add('Penalty Save', PS * 3);
+    add('Saves Bonus (every 3)', Math.floor(S / 3) * 1);
+  }
+  if (position === 'MID') {
+    add('Tackles Bonus (every 3)', Math.floor(T / 3) * 1);
+    add('Chances Created Bonus (every 2)', Math.floor(CC / 2) * 1);
+  }
+  if (position === 'FWD') {
+    add('Shots on Target Bonus (every 2)', Math.floor(ST / 2) * 1);
+  }
+
+  return { total, breakdown };
+}
+
+let players = [];
+let sortKey = 'totalPoints';
+let sortDir = 'desc';
+let currentPage = 1;
+let pageSize = 50;
+const statsCache = new Map();
+const expanded = new Set();
+
+const root = document.documentElement;
+const tbody = document.getElementById('tbody');
+const searchEl = document.getElementById('search');
+const filterPosEl = document.getElementById('filterPos');
+const filterStatusEl = document.getElementById('filterStatus');
+const countEl = document.getElementById('count');
+const themeToggle = document.getElementById('themeToggle');
+const pagePrevEl = document.getElementById('pagePrev');
+const pageNextEl = document.getElementById('pageNext');
+const pageInfoEl = document.getElementById('pageInfo');
+const pageSizeEl = document.getElementById('pageSize');
+
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('fifa-fantasy-theme', t);
+}
+setTheme(localStorage.getItem('fifa-fantasy-theme') || 'dark');
+themeToggle.addEventListener('click', () => {
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+function flatten(p) {
+  return {
+    id: p?.id,
+    name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
+    position: p?.position ?? '—',
+    status: p?.status ?? 'unknown',
+    price: p?.price ?? 0,
+    totalPoints: p?.stats?.totalPoints ?? 0,
+    form: p?.stats?.form ?? 0,
+    avgPoints: p?.stats?.avgPoints ?? 0,
+    percentSelected: p?.percentSelected ?? 0,
+    raw: p,
+  };
+}
+
+async function loadPlayers() {
+  try {
+    const res = await fetch('data/players.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    players = (Array.isArray(json) ? json : []).map(flatten);
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="8" class="empty-msg">Gagal memuat data/players.json: ${escapeHtml(String(e.message || e))}. Pastikan dijalankan via http server, bukan file://.</td></tr>`;
+    return;
+  }
+  populateStatusFilter();
+  render();
+}
+
+function populateStatusFilter() {
+  const statuses = Array.from(new Set(players.map((p) => p.status))).sort();
+  for (const s of statuses) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    filterStatusEl.appendChild(opt);
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function statusDotClass(status) {
+  if (status === 'playing') return 'playing';
+  if (status === 'injured') return 'injured';
+  if (status === 'transferred') return 'transferred';
+  return 'other';
+}
+
+function getFiltered() {
+  const q = searchEl.value.trim().toLowerCase();
+  const pos = filterPosEl.value;
+  const status = filterStatusEl.value;
+  let list = players.filter((p) => {
+    if (q && !p.name.toLowerCase().includes(q)) return false;
+    if (pos && p.position !== pos) return false;
+    if (status && p.status !== status) return false;
+    return true;
+  });
+  list.sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av < bv) return sortDir === 'asc' ? -1 : 1;
+    if (av > bv) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return list;
+}
+
+function render() {
+  const list = getFiltered();
+  countEl.textContent = `${list.length} dari ${players.length} pemain`;
+
+  document.querySelectorAll('thead th').forEach((th) => {
+    const key = th.dataset.key;
+    let arrow = '';
+    if (key === sortKey) arrow = `<span class="arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>`;
+    th.innerHTML = th.textContent.replace(/\s*[▲▼]?$/, '').trim() + arrow;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+  const start = (currentPage - 1) * pageSize;
+  const pageList = list.slice(start, start + pageSize);
+
+  pageInfoEl.textContent = `Halaman ${currentPage} / ${totalPages}`;
+  pagePrevEl.disabled = currentPage <= 1;
+  pageNextEl.disabled = currentPage >= totalPages;
+
+  tbody.innerHTML = '';
+  for (const p of pageList) {
+    const tr = document.createElement('tr');
+    tr.className = 'player-row';
+    tr.dataset.id = p.id;
+    tr.innerHTML = `
+      <td class="name-cell">${escapeHtml(p.name)}<span class="pid">#${p.id}</span></td>
+      <td><span class="badge ${escapeHtml(p.position)}">${escapeHtml(p.position)}</span></td>
+      <td><span class="dot ${statusDotClass(p.status)}"></span>${escapeHtml(p.status)}</td>
+      <td class="num">${Number(p.price).toFixed(1)}</td>
+      <td class="num">${p.totalPoints}</td>
+      <td class="num">${p.form}</td>
+      <td class="num">${Number(p.avgPoints).toFixed(1)}</td>
+      <td class="num">${Number(p.percentSelected).toFixed(1)}%</td>
+    `;
+    tr.addEventListener('click', () => toggleExpand(p.id, tr));
+    tbody.appendChild(tr);
+
+    if (expanded.has(p.id)) {
+      const detailTr = buildDetailRow(p.id);
+      tbody.appendChild(detailTr);
+      renderDetail(p.id, detailTr);
+    }
+  }
+}
+
+function buildDetailRow(id) {
+  const tr = document.createElement('tr');
+  tr.className = 'detail-row';
+  tr.dataset.detailFor = id;
+  const td = document.createElement('td');
+  td.colSpan = 8;
+  td.innerHTML = '<div class="detail-inner loading-msg">Memuat stats...</div>';
+  tr.appendChild(td);
+  return tr;
+}
+
+async function toggleExpand(id, tr) {
+  if (expanded.has(id)) {
+    expanded.delete(id);
+  } else {
+    expanded.add(id);
+  }
+  render();
+}
+
+async function renderDetail(id, tr) {
+  const td = tr.querySelector('td');
+  const player = players.find((p) => p.id === id);
+  const position = player?.position ?? 'MID';
+  let rounds = statsCache.get(id);
+  if (!rounds) {
+    try {
+      const res = await fetch(`data/stats/${id}.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      rounds = await res.json();
+      if (!Array.isArray(rounds)) rounds = [];
+      statsCache.set(id, rounds);
+    } catch (e) {
+      td.innerHTML = `<div class="detail-inner empty-msg">Gagal memuat stats: ${escapeHtml(String(e.message || e))}</div>`;
+      return;
+    }
+  }
+
+  if (!rounds.length) {
+    td.innerHTML = `<div class="detail-inner empty-msg">Belum ada data pertandingan.</div>`;
+    return;
+  }
+
+  const cards = rounds.map((r) => {
+    const statsObj = r?.stats ?? {};
+    const officialPoints = r?.points ?? 0;
+    const statItems = Object.keys(STAT_LABELS).map((code) => {
+      const val = statsObj[code] ?? 0;
+      return `<div class="stat-item"><span>${STAT_LABELS[code]} (${code})</span><span class="v">${val}</span></div>`;
+    }).join('');
+
+    const calc = calcOfficialPoints(position, statsObj);
+    const diff = officialPoints - calc.total;
+    const calcItems = calc.breakdown.map((b) => (
+      `<div class="stat-item"><span>${escapeHtml(b.label)}</span><span class="v">${b.value > 0 ? '+' : ''}${b.value}</span></div>`
+    )).join('') || '<div class="empty-msg">Tidak ada poin dari rumus ini.</div>';
+
+    let diffNote = '';
+    if (diff !== 0) {
+      diffNote = `<div class="calc-diff">Selisih dari poin resmi: ${diff > 0 ? '+' : ''}${diff} pts (kemungkinan dari scouting bonus +2 yang bergantung %selected saat pertandingan berlangsung, bukan %selected saat ini, atau kondisi lain yang tidak tertangkap rumus di atas).</div>`;
+    }
+
+    return `
+      <div class="round-card">
+        <div class="round-head">
+          <span class="title">Round ${r?.roundId ?? '?'} · Turnamen ${r?.tournamentId ?? '?'}</span>
+          <span class="points">${officialPoints} pts</span>
+        </div>
+        <div class="stat-grid">${statItems}</div>
+        <div class="calc-head">Breakdown perhitungan (rumus resmi "How to Score")</div>
+        <div class="stat-grid calc-grid">${calcItems}</div>
+        ${diffNote}
+      </div>
+    `;
+  }).join('');
+
+  td.innerHTML = `<div class="detail-inner">${cards}</div>`;
+}
+
+document.querySelectorAll('thead th').forEach((th) => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (sortKey === key) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortKey = key;
+      sortDir = 'desc';
+    }
+    currentPage = 1;
+    render();
+  });
+});
+
+searchEl.addEventListener('input', () => { currentPage = 1; render(); });
+filterPosEl.addEventListener('change', () => { currentPage = 1; render(); });
+filterStatusEl.addEventListener('change', () => { currentPage = 1; render(); });
+
+pagePrevEl.addEventListener('click', () => { currentPage -= 1; render(); });
+pageNextEl.addEventListener('click', () => { currentPage += 1; render(); });
+pageSizeEl.addEventListener('change', () => {
+  pageSize = Number(pageSizeEl.value);
+  currentPage = 1;
+  render();
+});
+
+loadPlayers();
+</script>
+</body>
+</html>
