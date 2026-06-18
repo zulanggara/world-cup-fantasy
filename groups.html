@@ -88,6 +88,7 @@
   .bracket-col { display: flex; flex-direction: column; justify-content: space-around; gap: 14px; position: relative; z-index: 1; min-width: 240px; }
   .bracket-col-label { position: absolute; top: -28px; left: 0; right: 0; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
   .bracket-match-box { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .bmatch-venue { padding: 5px 9px; font-size: 10.5px; color: var(--text-dim); background: var(--panel2); border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; }
   .bracket-team { display: flex; align-items: center; gap: 6px; padding: 7px 9px; font-size: 12.5px; border-bottom: 1px solid var(--border); }
   .bracket-match-box .bracket-team:last-child { border-bottom: none; }
   .bracket-team.resolved { cursor: pointer; font-weight: 700; color: var(--accent); }
@@ -113,16 +114,7 @@
 <body>
 <div class="wrap">
   <div class="page-header">
-    <nav class="top-nav">
-      <a href="index.html" class="nav-tab" data-i18n="nav.dashboard">Dashboard</a>
-      <a href="players.html" class="nav-tab" data-i18n="nav.players">Daftar Pemain</a>
-      <a href="best-xi.html" class="nav-tab" data-i18n="nav.compare">Compare Tim</a>
-      <a href="best15-overall.html" class="nav-tab" data-i18n="nav.best15overall">Best 15 Keseluruhan</a>
-      <a href="best15-next-round.html" class="nav-tab" data-i18n="nav.nextround">Prediksi Ronde Depan</a>
-      <a href="best15-research.html" class="nav-tab" data-i18n="nav.research">Best 15 (Riset)</a>
-      <a href="groups.html" class="nav-tab active" data-i18n="nav.groups">Klasemen & Jadwal</a>
-      <a href="my-squad.html" class="nav-tab" data-i18n="nav.mysquad">Susun Skuad</a>
-    </nav>
+    <nav class="top-nav"></nav>
     <button class="toggle" id="themeToggle">☀ / ☾</button>
   </div>
 
@@ -158,8 +150,8 @@
   <div class="section-pane" id="pane-bracket">
     <h2 class="section-title" data-i18n="groups.bracketTitle">Proyeksi Bracket Babak Gugur</h2>
     <div class="bracket-legend">
-      <span><span class="swatch" style="background:var(--accent);"></span> Tim pasti (klasemen sudah final)</span>
-      <span><span class="swatch" style="background:var(--accent2);"></span> Proyeksi (tebakan pemenang, belum dimainkan)</span>
+      <span><span class="swatch" style="background:var(--accent);"></span> <span data-i18n="groups.legendConfirmed">Tim pasti (klasemen final / hasil resmi)</span></span>
+      <span><span class="swatch" style="background:var(--accent2);"></span> <span data-i18n="groups.legendLive">Posisi saat ini (klasemen belum final, bisa berubah)</span></span>
     </div>
     <div class="bracket-scroll">
       <div class="bracket-tree" id="bracketTree"></div>
@@ -177,6 +169,7 @@
 </div>
 
 <script src="i18n.js"></script>
+<script src="nav.js"></script>
 <script src="flags.js"></script>
 <script src="brand.js"></script>
 <script src="detail-modal.js"></script>
@@ -185,6 +178,7 @@
 let tournaments = [];
 let squads = [];
 let matchesGames = [];
+let stadiums = {};
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -229,10 +223,11 @@ function renderTabs() {
 async function loadData() {
   const gridEl = document.getElementById('groupsGrid');
   try {
-    const [roundsRes, squadsRes, matchesRes] = await Promise.all([
+    const [roundsRes, squadsRes, matchesRes, stadiumsRes] = await Promise.all([
       fetch('data/rounds.json'),
       fetch('data/squads.json'),
       fetch('data/matches.json'),
+      fetch('data/stadiums.json'),
     ]);
     if (!roundsRes.ok) throw new Error(`rounds.json HTTP ${roundsRes.status}`);
     const roundsJson = await roundsRes.json();
@@ -244,6 +239,9 @@ async function loadData() {
     if (matchesRes.ok) {
       const matchesJson = await matchesRes.json();
       matchesGames = matchesJson?.games ?? [];
+    }
+    if (stadiumsRes.ok) {
+      stadiums = await stadiumsRes.json();
     }
   } catch (e) {
     gridEl.innerHTML = `<div class="empty-msg">Gagal memuat data: ${escapeHtml(String(e.message || e))}. Jalankan "node scraper.js" dulu, lalu akses via http server.</div>`;
@@ -345,9 +343,9 @@ function renderThirds(standings, bestThirds) {
 }
 
 // Strength score purely from real group-stage results (Pts -> GD -> GF),
-// used only to pick a plausible "projected winner" once both sides of a
-// hypothetical knockout match are known. This is a rough heuristic, not a
-// real prediction model — labelled clearly as such in the UI.
+// used only to break ties among teams *currently* sharing a qualification
+// slot (e.g. several groups' current 3rd-place teams). Never used to guess
+// the outcome of a knockout match that hasn't been played.
 function teamStrength(t) {
   return (t.Pts || 0) * 1000 + (t.GD || 0) * 10 + (t.GF || 0);
 }
@@ -403,25 +401,34 @@ function buildKnockoutTree(standings, bestThirds) {
     const direct = resolveGroupSlot(label, standings, bestThirds);
     if (direct) return direct;
 
+    // Winner/Loser of an earlier knockout match is only resolved once that
+    // match has actually been played (finished === "TRUE" with real
+    // scores). Otherwise we show the plain "Pemenang/Kalah Match N"
+    // placeholder — never a guessed result — matching the official bracket
+    // template.
     let m = label.match(/^Winner Match (\d+)$/i);
     if (m) {
       const refId = m[1];
+      const refMatch = byId[refId];
+      const desc = `Pemenang Match ${refId}`;
       const ref = resolved[refId];
-      if (!ref) return { pending: true, text: `Pemenang Match ${refId}` };
-      const { home, away } = ref;
-      if (home?.pending || away?.pending || !home || !away) return { pending: true, text: `Pemenang Match ${refId}` };
-      const winner = teamStrength(home) >= teamStrength(away) ? home : away;
-      return { ...winner, confirmed: false };
+      if (!refMatch || refMatch.finished !== 'TRUE' || !ref || ref.home?.pending || ref.away?.pending) {
+        return { pending: true, text: desc };
+      }
+      const winner = Number(refMatch.home_score) >= Number(refMatch.away_score) ? ref.home : ref.away;
+      return { ...winner, confirmed: true };
     }
     m = label.match(/^Loser Match (\d+)$/i);
     if (m) {
       const refId = m[1];
+      const refMatch = byId[refId];
+      const desc = `Tim Kalah Match ${refId}`;
       const ref = resolved[refId];
-      if (!ref) return { pending: true, text: `Kalah di Match ${refId}` };
-      const { home, away } = ref;
-      if (home?.pending || away?.pending || !home || !away) return { pending: true, text: `Kalah di Match ${refId}` };
-      const loser = teamStrength(home) < teamStrength(away) ? home : away;
-      return { ...loser, confirmed: false };
+      if (!refMatch || refMatch.finished !== 'TRUE' || !ref || ref.home?.pending || ref.away?.pending) {
+        return { pending: true, text: desc };
+      }
+      const loser = Number(refMatch.home_score) < Number(refMatch.away_score) ? ref.home : ref.away;
+      return { ...loser, confirmed: true };
     }
     return { pending: true, text: label };
   }
@@ -435,17 +442,29 @@ function buildKnockoutTree(standings, bestThirds) {
       const home = resolveSlot(m.home_team_label);
       const away = resolveSlot(m.away_team_label);
       resolved[m.id] = { home, away };
-      return { id: m.id, date: m.local_date, home, away };
+      return { id: m.id, date: m.local_date, stadiumId: m.stadium_id, home, away };
     });
   }
 
   const thirdMatch = Object.values(byId).find((m) => m.type === 'third');
   let thirdPlace = null;
   if (thirdMatch) {
-    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, home: resolveSlot(thirdMatch.home_team_label), away: resolveSlot(thirdMatch.away_team_label) };
+    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label), away: resolveSlot(thirdMatch.away_team_label) };
   }
 
   return { rounds: roundsOut, thirdPlace };
+}
+
+function matchVenueLabel(dateStr, stadiumId) {
+  if (!dateStr) return '';
+  const [datePart] = dateStr.split(' ');
+  const [mm, dd, yyyy] = datePart.split('/').map(Number);
+  if (!mm || !dd || !yyyy) return '';
+  const d = new Date(yyyy, mm - 1, dd);
+  const locale = (window.I18N && I18N.getLang() === 'id') ? 'id-ID' : 'en-US';
+  const dateLabel = d.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
+  const venue = stadiums[stadiumId];
+  return venue ? `${dateLabel} – ${venue.city}` : dateLabel;
 }
 
 function bracketTeamHtml(side) {
@@ -473,6 +492,7 @@ function renderBracket(standings, bestThirds) {
     const isFinal = round.key === 'final';
     const matchesHtml = matches.map((m) => `
       <div class="bracket-match-box" data-match-id="${m.id}">
+        <div class="bmatch-venue">${escapeHtml(matchVenueLabel(m.date, m.stadiumId))}</div>
         ${bracketTeamHtml(m.home)}
         ${bracketTeamHtml(m.away)}
       </div>
@@ -490,9 +510,8 @@ function renderBracket(standings, bestThirds) {
 
   if (thirdPlace) {
     document.getElementById('bracketThirdNote').innerHTML = `
-      <b>Perebutan Juara 3:</b>
+      <b>${escapeHtml(I18N.t('groups.thirdPlaceTitle', 'Perebutan Juara 3'))}</b> <span style="opacity:.7;">(${escapeHtml(matchVenueLabel(thirdPlace.date, thirdPlace.stadiumId))})</span>:
       ${bracketTeamHtml(thirdPlace.home)} vs ${bracketTeamHtml(thirdPlace.away)}
-      <span style="opacity:.7;"> — proyeksi, hanya valid kalau prediksi semifinal di atas benar.</span>
     `;
   }
 }

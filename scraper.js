@@ -12,6 +12,7 @@ const SQUADS_URL = 'https://play.fifa.com/json/fantasy/squads.json';
 const STATS_URL = (id) => `https://play.fifa.com/json/fantasy/player_stats/${id}.json`;
 const ROUNDS_URL = 'https://play.fifa.com/json/fantasy/rounds.json';
 const MATCHES_URL = 'https://worldcup26.ir/get/games';
+const STADIUMS_URL = 'https://worldcup26.ir/get/stadiums';
 
 const DATA_DIR = path.join(__dirname, 'data');
 const STATS_DIR = path.join(DATA_DIR, 'stats');
@@ -173,6 +174,33 @@ async function fetchMatches() {
   }
 }
 
+// stadium_id in matches.json (worldcup26.ir/get/games) refers to this same
+// source's own venue listing — confirmed by cross-checking id 9 = Gillette
+// Stadium, Foxborough, which matches the official bracket reference image.
+async function fetchStadiums() {
+  log('[stadiums] fetching worldcup26.ir/get/stadiums...');
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const data = await httpsGetJson(STADIUMS_URL);
+      const stadiums = data?.stadiums ?? [];
+      const byId = {};
+      for (const s of stadiums) {
+        byId[s.id] = { name: s.name_en, city: s.city_en };
+      }
+      const outPath = path.join(DATA_DIR, 'stadiums.json');
+      fs.writeFileSync(outPath, JSON.stringify(byId, null, 2));
+      log(`[stadiums] saved ${stadiums.length} stadiums -> ${outPath}`);
+      return;
+    } catch (e) {
+      if (attempt === 2) {
+        log(`[stadiums] could not fetch stadiums: ${e.message} (continuing without venue names)`);
+      } else {
+        await sleep(1000);
+      }
+    }
+  }
+}
+
 async function fetchRounds() {
   log('[rounds] fetching rounds.json (FIFA official fixtures)...');
   for (let attempt = 1; attempt <= 2; attempt++) {
@@ -230,6 +258,62 @@ async function fetchPlayers(page) {
   return result.data;
 }
 
+// Sums per-round stat codes (GS, CS, T, CC, ST, AS, S, ...) across every
+// round file in data/stats/ into one compact file. players.json only has
+// FIFA's own pre-aggregated totalPoints/avgPoints/form — goals, clean
+// sheets, tackles, etc. only exist per-round in the 1488 individual stats
+// files, so this is computed once here instead of fetching all of them
+// client-side on every dashboard page load.
+function buildAggregates() {
+  if (!fs.existsSync(STATS_DIR)) {
+    log('[aggregates] no data/stats/ directory yet, skipping.');
+    return;
+  }
+  const files = fs.readdirSync(STATS_DIR).filter((f) => f.endsWith('.json'));
+  if (!files.length) {
+    log('[aggregates] no stats files found, skipping.');
+    return;
+  }
+
+  const aggregates = {};
+  for (const file of files) {
+    const id = Number(file.replace(/\.json$/, ''));
+    if (!Number.isFinite(id)) continue;
+    let rounds;
+    try {
+      rounds = JSON.parse(fs.readFileSync(path.join(STATS_DIR, file), 'utf8'));
+    } catch (e) {
+      continue;
+    }
+    if (!Array.isArray(rounds) || !rounds.length) continue;
+
+    const sum = { GS: 0, CS: 0, AS: 0, T: 0, CC: 0, ST: 0, S: 0, YC: 0, RC: 0, OG: 0, PW: 0, PC: 0, PS: 0, MP: 0, roundsPlayed: 0 };
+    for (const r of rounds) {
+      const s = r?.stats ?? {};
+      sum.GS += s.GS ?? 0;
+      sum.CS += s.CS ?? 0;
+      sum.AS += s.AS ?? 0;
+      sum.T += s.T ?? 0;
+      sum.CC += s.CC ?? 0;
+      sum.ST += s.ST ?? 0;
+      sum.S += s.S ?? 0;
+      sum.YC += s.YC ?? 0;
+      sum.RC += s.RC ?? 0;
+      sum.OG += s.OG ?? 0;
+      sum.PW += s.PW ?? 0;
+      sum.PC += s.PC ?? 0;
+      sum.PS += s.PS ?? 0;
+      sum.MP += s.MP ?? 0;
+      if ((s.MP ?? 0) > 0) sum.roundsPlayed += 1;
+    }
+    aggregates[id] = sum;
+  }
+
+  const outPath = path.join(DATA_DIR, 'player_aggregates.json');
+  fs.writeFileSync(outPath, JSON.stringify(aggregates, null, 2));
+  log(`[aggregates] saved aggregates for ${Object.keys(aggregates).length} players -> ${outPath}`);
+}
+
 async function fetchStatsForIds(page, ids) {
   const concurrency = 3;
   let cursor = 0;
@@ -262,6 +346,7 @@ async function main() {
   ensureDirs();
 
   await fetchMatches();
+  await fetchStadiums();
   const roundsFetched = await fetchRounds();
 
   let headful = args.headful;
@@ -308,6 +393,8 @@ async function main() {
   }
 
   await browser.close();
+
+  buildAggregates();
 
   const syncMeta = {
     lastSync: new Date().toISOString(),

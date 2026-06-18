@@ -6,7 +6,10 @@ window.I18N = (function () {
   const DICT = {
     nav: {
       dashboard: { en: 'Dashboard', id: 'Dashboard' },
+      groupPlayers: { en: 'Players', id: 'Pemain' },
       players: { en: 'Player List', id: 'Daftar Pemain' },
+      playerCompare: { en: 'Player Compare', id: 'Compare Pemain' },
+      groupSquads: { en: 'Squads', id: 'Skuad & Tim' },
       compare: { en: 'Team Compare', id: 'Compare Tim' },
       best15overall: { en: 'Best 15 Overall', id: 'Best 15 Keseluruhan' },
       nextround: { en: 'Next Round Forecast', id: 'Prediksi Ronde Depan' },
@@ -89,6 +92,9 @@ window.I18N = (function () {
       tabFixtures: { en: 'Upcoming Fixtures', id: 'Jadwal Mendatang' },
       thirdsTitle: { en: 'Third-Place Ranking (Best 8 Qualify)', id: 'Ranking Peringkat 3 (8 Terbaik Lolos)' },
       bracketTitle: { en: 'Knockout Bracket Projection', id: 'Proyeksi Bracket Babak Gugur' },
+      legendConfirmed: { en: 'Confirmed team (final standings / official result)', id: 'Tim pasti (klasemen final / hasil resmi)' },
+      legendLive: { en: 'Current position (standings not final yet, may change)', id: 'Posisi saat ini (klasemen belum final, bisa berubah)' },
+      thirdPlaceTitle: { en: 'Third Place Play-off', id: 'Perebutan Juara 3' },
       fixturesTitle: { en: 'Upcoming Fixtures (Group Stage)', id: 'Jadwal Pertandingan Mendatang (Fase Grup)' },
       legendDirect: { en: 'Direct qualifier (1st/2nd place)', id: 'Lolos langsung (juara/runner-up)' },
       legendThird: { en: '3rd place — qualification candidate', id: 'Peringkat 3 — kandidat lolos' },
