@@ -94,6 +94,7 @@ window.I18N = (function () {
       emptyMsg: { en: 'Select at least 2 players above to compare.', id: 'Pilih minimal 2 pemain di atas untuk membandingkan.' },
       slotLabel: { en: 'Player', id: 'Pemain' },
       slotEmpty: { en: '— None —', id: '— Tidak Ada —' },
+      noResults: { en: 'No matching players', id: 'Tidak ada pemain cocok' },
       rowLabel: { en: 'Stat', id: 'Statistik' },
       rowPosition: { en: 'Position', id: 'Posisi' },
       rowPrice: { en: 'Price', id: 'Harga' },

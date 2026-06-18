@@ -93,6 +93,7 @@
 </div>
 
 <script src="i18n.js"></script>
+<script src="searchable-select.js"></script>
 <script src="nav.js"></script>
 <script src="flags.js"></script>
 <script src="brand.js"></script>
@@ -184,35 +185,37 @@ async function loadData() {
   renderTable();
 }
 
+let pickerWidgets = [];
+
 function renderPicker() {
   const row = document.getElementById('pickerRow');
   row.innerHTML = '';
+  pickerWidgets = [];
+  const optionList = players.map((p) => ({ value: p.id, label: `${p.name} (${p.squadAbbr})` }));
+
   for (let i = 0; i < MAX_SLOTS; i++) {
     const slot = document.createElement('div');
     slot.className = 'picker-slot';
     const label = document.createElement('div');
     label.className = 'picker-label';
     label.textContent = `${I18N.t('playerCompare.slotLabel', 'Player')} ${i + 1}`;
-    const select = document.createElement('select');
-    select.dataset.slot = i;
-    const noneOpt = document.createElement('option');
-    noneOpt.value = '';
-    noneOpt.textContent = I18N.t('playerCompare.slotEmpty', '— None —');
-    select.appendChild(noneOpt);
-    for (const p of players) {
-      const opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = `${p.name} (${p.squadAbbr})`;
-      if (String(selectedIds[i]) === String(p.id)) opt.selected = true;
-      select.appendChild(opt);
-    }
-    select.addEventListener('change', () => {
-      selectedIds[i] = select.value ? Number(select.value) : null;
-      renderTable();
-    });
     slot.appendChild(label);
-    slot.appendChild(select);
+
+    const selectHost = document.createElement('div');
+    slot.appendChild(selectHost);
     row.appendChild(slot);
+
+    const widget = SearchableSelect.create(selectHost, {
+      options: optionList,
+      value: selectedIds[i] ?? '',
+      placeholder: I18N.t('playerCompare.slotEmpty', '— None —'),
+      noResultsText: I18N.t('playerCompare.noResults', 'No matching players'),
+      onChange: (v) => {
+        selectedIds[i] = v ? Number(v) : null;
+        renderTable();
+      },
+    });
+    pickerWidgets.push(widget);
   }
 }
 
