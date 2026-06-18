@@ -87,7 +87,7 @@ window.I18N = (function () {
       tabBracket: { en: 'R32 Projection', id: 'Proyeksi 32 Besar' },
       tabFixtures: { en: 'Upcoming Fixtures', id: 'Jadwal Mendatang' },
       thirdsTitle: { en: 'Third-Place Ranking (Best 8 Qualify)', id: 'Ranking Peringkat 3 (8 Terbaik Lolos)' },
-      bracketTitle: { en: 'Round-of-32 Projection', id: 'Proyeksi Babak 32 Besar' },
+      bracketTitle: { en: 'Knockout Bracket Projection', id: 'Proyeksi Bracket Babak Gugur' },
       fixturesTitle: { en: 'Upcoming Fixtures (Group Stage)', id: 'Jadwal Pertandingan Mendatang (Fase Grup)' },
       legendDirect: { en: 'Direct qualifier (1st/2nd place)', id: 'Lolos langsung (juara/runner-up)' },
       legendThird: { en: '3rd place — qualification candidate', id: 'Peringkat 3 — kandidat lolos' },

@@ -79,14 +79,26 @@
   table.thirds td.team-name:hover { color: var(--accent2); text-decoration: underline; }
   table.thirds tr.qualify td { background: rgba(255,183,3,0.08); }
 
-  .bracket-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-  .bracket-match { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
-  .bracket-match .bdate { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
-  .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: 6px; font-size: 13px; }
-  .bracket-team.resolved { background: var(--panel2); font-weight: 600; cursor: pointer; }
+  .bracket-legend { display: flex; gap: 16px; margin-bottom: 14px; font-size: 11.5px; color: var(--text-dim); flex-wrap: wrap; }
+  .bracket-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .bracket-legend .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .bracket-scroll { overflow-x: auto; padding-bottom: 12px; }
+  .bracket-tree { position: relative; display: flex; gap: 56px; min-width: 1100px; padding: 10px 4px; }
+  .bracket-tree svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .bracket-col { display: flex; flex-direction: column; justify-content: space-around; gap: 14px; position: relative; z-index: 1; min-width: 190px; }
+  .bracket-col-label { position: absolute; top: -28px; left: 0; right: 0; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .bracket-match-box { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .bracket-team { display: flex; align-items: center; gap: 6px; padding: 7px 9px; font-size: 12.5px; border-bottom: 1px solid var(--border); }
+  .bracket-match-box .bracket-team:last-child { border-bottom: none; }
+  .bracket-team.resolved { cursor: pointer; font-weight: 700; color: var(--accent); }
   .bracket-team.resolved:hover { background: var(--row-hover); }
-  .bracket-team.tbd { color: var(--text-dim); font-style: italic; font-size: 12px; }
-  .bracket-vs { text-align: center; font-size: 10px; color: var(--text-dim); padding: 2px 0; }
+  .bracket-team.projected { cursor: pointer; font-style: italic; color: var(--accent2); opacity: .9; }
+  .bracket-team.projected:hover { background: var(--row-hover); }
+  .bracket-team.tbd { color: var(--text-dim); font-style: italic; font-size: 11.5px; }
+  .bracket-team .babbr { font-family: 'JetBrains Mono', monospace; }
+  .bracket-final-col { justify-content: center; }
+  .bracket-final-col .bracket-match-box { border-color: var(--accent); }
+  .bracket-third-note { margin-top: 10px; font-size: 11.5px; color: var(--text-dim); }
 
   table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
   table.fixtures th { text-align: left; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--panel2); }
@@ -142,8 +154,15 @@
   </div>
 
   <div class="section-pane" id="pane-bracket">
-    <h2 class="section-title" data-i18n="groups.bracketTitle">Proyeksi Babak 32 Besar</h2>
-    <div class="bracket-grid" id="bracketGrid"></div>
+    <h2 class="section-title" data-i18n="groups.bracketTitle">Proyeksi Bracket Babak Gugur</h2>
+    <div class="bracket-legend">
+      <span><span class="swatch" style="background:var(--accent);"></span> Tim pasti (klasemen sudah final)</span>
+      <span><span class="swatch" style="background:var(--accent2);"></span> Proyeksi (tebakan pemenang, belum dimainkan)</span>
+    </div>
+    <div class="bracket-scroll">
+      <div class="bracket-tree" id="bracketTree"></div>
+    </div>
+    <div class="bracket-third-note" id="bracketThirdNote"></div>
   </div>
 
   <div class="section-pane" id="pane-fixtures">
@@ -323,19 +342,27 @@ function renderThirds(standings, bestThirds) {
   document.getElementById('thirdsBody').innerHTML = rows || '<tr><td colspan="7" class="empty-msg">Belum ada data peringkat 3.</td></tr>';
 }
 
-function resolveBracketSlot(label, standings, bestThirds) {
+// Strength score purely from real group-stage results (Pts -> GD -> GF),
+// used only to pick a plausible "projected winner" once both sides of a
+// hypothetical knockout match are known. This is a rough heuristic, not a
+// real prediction model — labelled clearly as such in the UI.
+function teamStrength(t) {
+  return (t.Pts || 0) * 1000 + (t.GD || 0) * 10 + (t.GF || 0);
+}
+
+function resolveGroupSlot(label, standings, bestThirds) {
   if (!label) return null;
   let m = label.match(/^Winner Group ([A-L])$/i);
   if (m) {
     const g = m[1].toLowerCase();
     const team = standings[g]?.[0];
-    return team && team.P === 3 ? team : { pending: true, text: `Juara Grup ${m[1].toUpperCase()}` };
+    return team && team.P === 3 ? { ...team, confirmed: true } : { pending: true, text: `Juara Grup ${m[1].toUpperCase()}` };
   }
   m = label.match(/^Runner-up Group ([A-L])$/i);
   if (m) {
     const g = m[1].toLowerCase();
     const team = standings[g]?.[1];
-    return team && team.P === 3 ? team : { pending: true, text: `Runner-up Grup ${m[1].toUpperCase()}` };
+    return team && team.P === 3 ? { ...team, confirmed: true } : { pending: true, text: `Runner-up Grup ${m[1].toUpperCase()}` };
   }
   m = label.match(/^3rd Group ([A-L\/]+)$/i);
   if (m) {
@@ -346,38 +373,156 @@ function resolveBracketSlot(label, standings, bestThirds) {
     });
     if (!allGroupsComplete) return { pending: true, text: `Peringkat-3 Grup ${letters.join('/')}` };
     const found = bestThirds.slice(0, 8).find((t) => letters.includes(t.group.toUpperCase()));
-    return found || { pending: true, text: `Peringkat-3 Grup ${letters.join('/')} (belum pasti)` };
+    return found ? { ...found, confirmed: true } : { pending: true, text: `Peringkat-3 Grup ${letters.join('/')} (belum pasti)` };
   }
-  return { pending: true, text: label };
+  return null;
+}
+
+const KO_ROUNDS = [
+  { type: 'r32', key: 'r32', label: 'Babak 32 Besar' },
+  { type: 'r16', key: 'r16', label: 'Babak 16 Besar' },
+  { type: 'qf', key: 'qf', label: 'Perempat Final' },
+  { type: 'sf', key: 'sf', label: 'Semifinal' },
+  { type: 'final', key: 'final', label: 'Final' },
+];
+
+function buildKnockoutTree(standings, bestThirds) {
+  const byId = {};
+  for (const m of matchesGames) {
+    if (['r32', 'r16', 'qf', 'sf', 'third', 'final'].includes(m.type)) byId[m.id] = m;
+  }
+
+  const resolved = {}; // matchId -> { home, away }
+
+  function resolveSlot(label) {
+    const direct = resolveGroupSlot(label, standings, bestThirds);
+    if (direct) return direct;
+
+    let m = label.match(/^Winner Match (\d+)$/i);
+    if (m) {
+      const refId = m[1];
+      const ref = resolved[refId];
+      if (!ref) return { pending: true, text: `Pemenang Match ${refId}` };
+      const { home, away } = ref;
+      if (home?.pending || away?.pending || !home || !away) return { pending: true, text: `Pemenang Match ${refId}` };
+      const winner = teamStrength(home) >= teamStrength(away) ? home : away;
+      return { ...winner, confirmed: false };
+    }
+    m = label.match(/^Loser Match (\d+)$/i);
+    if (m) {
+      const refId = m[1];
+      const ref = resolved[refId];
+      if (!ref) return { pending: true, text: `Kalah di Match ${refId}` };
+      const { home, away } = ref;
+      if (home?.pending || away?.pending || !home || !away) return { pending: true, text: `Kalah di Match ${refId}` };
+      const loser = teamStrength(home) < teamStrength(away) ? home : away;
+      return { ...loser, confirmed: false };
+    }
+    return { pending: true, text: label };
+  }
+
+  const roundsOut = {};
+  for (const round of KO_ROUNDS) {
+    const matches = Object.values(byId)
+      .filter((m) => m.type === round.type)
+      .sort((a, b) => Number(a.id) - Number(b.id));
+    roundsOut[round.key] = matches.map((m) => {
+      const home = resolveSlot(m.home_team_label);
+      const away = resolveSlot(m.away_team_label);
+      resolved[m.id] = { home, away };
+      return { id: m.id, date: m.local_date, home, away };
+    });
+  }
+
+  const thirdMatch = Object.values(byId).find((m) => m.type === 'third');
+  let thirdPlace = null;
+  if (thirdMatch) {
+    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, home: resolveSlot(thirdMatch.home_team_label), away: resolveSlot(thirdMatch.away_team_label) };
+  }
+
+  return { rounds: roundsOut, thirdPlace };
+}
+
+function bracketTeamHtml(side) {
+  if (!side) return '<div class="bracket-team tbd">TBD</div>';
+  if (side.pending) return `<div class="bracket-team tbd">${escapeHtml(side.text)}</div>`;
+  const cls = side.confirmed ? 'resolved' : 'projected';
+  return `<div class="bracket-team ${cls}" onclick="DetailModal.openTeam(${side.squadId})">
+    <span class="babbr">${FLAGS.flagFor(side.abbr)} ${escapeHtml(side.abbr)}</span>
+  </div>`;
 }
 
 function renderBracket(standings, bestThirds) {
-  const r32 = matchesGames.filter((m) => m.type === 'r32');
-  if (!r32.length) {
-    document.getElementById('bracketGrid').innerHTML = '<div class="empty-msg">Data bracket babak 32 besar tidak tersedia.</div>';
+  const { rounds, thirdPlace } = buildKnockoutTree(standings, bestThirds);
+  const treeEl = document.getElementById('bracketTree');
+
+  if (!rounds.r32.length) {
+    treeEl.innerHTML = '<div class="empty-msg">Data bracket babak gugur tidak tersedia.</div>';
+    document.getElementById('bracketThirdNote').innerHTML = '';
     return;
   }
 
-  const html = r32.map((m) => {
-    const home = resolveBracketSlot(m.home_team_label, standings, bestThirds);
-    const away = resolveBracketSlot(m.away_team_label, standings, bestThirds);
-    const renderSide = (side) => {
-      if (!side) return '<div class="bracket-team tbd">TBD</div>';
-      if (side.pending) return `<div class="bracket-team tbd">${escapeHtml(side.text)}</div>`;
-      return `<div class="bracket-team resolved" onclick="DetailModal.openTeam(${side.squadId})">${FLAGS.flagFor(side.abbr)} ${escapeHtml(side.abbr)} <span style="color:var(--text-dim); font-weight:400;">${escapeHtml(side.name)}</span></div>`;
-    };
-    return `
-      <div class="bracket-match">
-        <div class="bdate">${escapeHtml(m.local_date ?? '?')} <span style="opacity:.7;">(jadwal venue, belum dikonversi WIB — tim belum pasti)</span></div>
-        ${renderSide(home)}
-        <div class="bracket-vs">vs</div>
-        ${renderSide(away)}
+  const colsHtml = KO_ROUNDS.map((round) => {
+    const matches = rounds[round.key];
+    const isFinal = round.key === 'final';
+    const matchesHtml = matches.map((m) => `
+      <div class="bracket-match-box" data-match-id="${m.id}">
+        ${bracketTeamHtml(m.home)}
+        ${bracketTeamHtml(m.away)}
       </div>
-    `;
+    `).join('');
+    return `<div class="bracket-col ${isFinal ? 'bracket-final-col' : ''}" data-round="${round.key}" style="position:relative;">
+      <div class="bracket-col-label">${escapeHtml(round.label)}</div>
+      ${matchesHtml}
+    </div>`;
   }).join('');
 
-  document.getElementById('bracketGrid').innerHTML = html;
+  treeEl.innerHTML = `<svg id="bracketSvg"></svg>${colsHtml}`;
+
+  // Draw connector lines once boxes are laid out (need real positions).
+  requestAnimationFrame(() => drawBracketConnectors());
+
+  if (thirdPlace) {
+    document.getElementById('bracketThirdNote').innerHTML = `
+      <b>Perebutan Juara 3:</b>
+      ${bracketTeamHtml(thirdPlace.home)} vs ${bracketTeamHtml(thirdPlace.away)}
+      <span style="opacity:.7;"> — proyeksi, hanya valid kalau prediksi semifinal di atas benar.</span>
+    `;
+  }
 }
+
+function drawBracketConnectors() {
+  const svg = document.getElementById('bracketSvg');
+  const tree = document.getElementById('bracketTree');
+  if (!svg || !tree) return;
+  const treeRect = tree.getBoundingClientRect();
+  svg.setAttribute('width', treeRect.width);
+  svg.setAttribute('height', treeRect.height);
+
+  const cols = Array.from(tree.querySelectorAll('.bracket-col'));
+  let lines = '';
+  for (let c = 0; c < cols.length - 1; c++) {
+    const curBoxes = Array.from(cols[c].querySelectorAll('.bracket-match-box'));
+    const nextBoxes = Array.from(cols[c + 1].querySelectorAll('.bracket-match-box'));
+    for (let i = 0; i < curBoxes.length; i++) {
+      const fromRect = curBoxes[i].getBoundingClientRect();
+      const toBox = nextBoxes[Math.floor(i / 2)];
+      if (!toBox) continue;
+      const toRect = toBox.getBoundingClientRect();
+      const x1 = fromRect.right - treeRect.left;
+      const y1 = fromRect.top + fromRect.height / 2 - treeRect.top;
+      const x2 = toRect.left - treeRect.left;
+      const y2 = toRect.top + toRect.height / 2 - treeRect.top;
+      const midX = x1 + (x2 - x1) / 2;
+      lines += `<path d="M${x1},${y1} L${midX},${y1} L${midX},${y2} L${x2},${y2}" style="stroke:var(--border); stroke-width:1.5; fill:none;" />`;
+    }
+  }
+  svg.innerHTML = lines;
+}
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('bracketTree')?.children.length) drawBracketConnectors();
+});
 
 function renderFixtures() {
   const upcoming = tournaments
