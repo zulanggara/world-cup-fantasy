@@ -5,6 +5,7 @@ window.I18N = (function () {
 
   const DICT = {
     nav: {
+      dashboard: { en: 'Dashboard', id: 'Dashboard' },
       players: { en: 'Player List', id: 'Daftar Pemain' },
       compare: { en: 'Team Compare', id: 'Compare Tim' },
       best15overall: { en: 'Best 15 Overall', id: 'Best 15 Keseluruhan' },
