@@ -2,11 +2,7 @@ name: Scheduled FIFA Fantasy Data Scrape
 
 on:
   schedule:
-    # WIB = UTC+7. Times below are UTC; comments show the WIB equivalent.
-    - cron: '0 1 * * *'   # 08:00 WIB
-    - cron: '0 5 * * *'   # 12:00 WIB
-    - cron: '0 11 * * *'  # 18:00 WIB
-    - cron: '0 15 * * *'  # 22:00 WIB
+    - cron: '0 * * * *'  # every hour, on the hour (UTC)
   workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
 
 permissions:

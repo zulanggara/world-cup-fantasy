@@ -215,7 +215,7 @@ Cara kerja:
 2. Kalau ada perubahan di folder `data/`, otomatis `git commit` + `git push` pakai token bawaan GitHub (`GITHUB_TOKEN`, tidak perlu setup secret tambahan).
 3. Push baru itu otomatis trigger Vercel redeploy (karena sudah terhubung git integration) — jadi situs live ikut ter-update tanpa kamu commit manual.
 
-Jadwal: **08.00, 12.00, 18.00, 22.00 WIB** setiap hari (dikonversi ke UTC di file workflow karena GitHub Actions cron selalu pakai UTC: `01:00`, `05:00`, `11:00`, `15:00` UTC).
+Jadwal: **tiap jam, di menit ke-0 UTC** (`0 * * * *`) — otomatis berarti tiap jam juga di WIB, cuma beda offset 7 jam.
 
 Cara cek/pakai:
 - Lihat histori jalan & status tiap run di tab **Actions** repo GitHub kamu.
