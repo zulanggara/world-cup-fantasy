@@ -510,7 +510,14 @@ function renderBracket(standings, bestThirds) {
   treeEl.innerHTML = `<svg id="bracketSvg"></svg>${colsHtml}`;
 
   // Draw connector lines once boxes are laid out (need real positions).
+  // Redraw again once webfonts finish loading — text reflow after the
+  // first paint (long team/venue labels wrapping to 2 lines) otherwise
+  // leaves the lines pointing at stale box positions.
   requestAnimationFrame(() => drawBracketConnectors());
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => drawBracketConnectors());
+  }
+  setTimeout(() => drawBracketConnectors(), 400);
 
   if (thirdPlace) {
     document.getElementById('bracketThirdNote').innerHTML = `

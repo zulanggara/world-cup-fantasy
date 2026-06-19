@@ -215,14 +215,14 @@ Cara kerja:
 2. Kalau ada perubahan di folder `data/`, otomatis `git commit` + `git push` pakai token bawaan GitHub (`GITHUB_TOKEN`, tidak perlu setup secret tambahan).
 3. Push baru itu otomatis trigger Vercel redeploy (karena sudah terhubung git integration) — jadi situs live ikut ter-update tanpa kamu commit manual.
 
-Jadwal: **tiap jam, di menit ke-0 UTC** (`0 * * * *`) — otomatis berarti tiap jam juga di WIB, cuma beda offset 7 jam.
+Jadwal: **tiap jam, di menit ke-17 UTC** (`17 * * * *`) — sengaja tidak di menit ke-0 karena itu waktu paling padat secara global di infrastruktur GitHub Actions (semua repo lain juga cenderung schedule di awal jam), jadi paling rawan telat/skip.
 
 Cara cek/pakai:
-- Lihat histori jalan & status tiap run di tab **Actions** repo GitHub kamu.
+- Lihat histori jalan & status tiap run di tab **Actions** repo GitHub kamu — ini sumber yang akurat untuk tahu kapan workflow benar-benar jalan, bukan dari histori commit (commit cuma muncul kalau scraper itu mendeteksi ada data yang berubah, jadi run yang valid tapi datanya sama tetap **tidak menghasilkan commit baru**).
 - Bisa trigger manual kapan saja lewat tab Actions → pilih workflow "Scheduled FIFA Fantasy Data Scrape" → **Run workflow** (berguna buat testing tanpa nunggu jadwal).
 
 **Keterbatasan yang perlu disadari**:
-- Jadwal GitHub Actions itu **best-effort**, bisa telat beberapa menit kalau runner sedang sibuk — jangan andalkan presisi ke detik.
+- Jadwal GitHub Actions itu **best-effort** — GitHub sendiri menyatakan jadwal cron bisa telat signifikan (bukan cuma beberapa menit) terutama saat beban tinggi, dan **run bisa di-skip sepenuhnya** tanpa pemberitahuan, bukan cuma telat. Tidak ada SLA presisi untuk schedule trigger, khususnya di akun gratis.
 - Runner GitHub Actions pakai IP datacenter (Azure), yang kadang lebih rawan terdeteksi/diblokir Akamai Bot Manager dibanding IP rumahan biasa. Kalau run otomatis sering gagal di langkah scraper (cek log di tab Actions), kemungkinan Akamai mulai memblokir IP range runner — solusinya scraping manual dari komputer sendiri tetap jadi fallback yang lebih reliable.
 - `--headful` (mode fallback kalau Akamai blokir headless) **tidak bisa dipakai** di GitHub Actions karena runner tidak punya display — workflow ini cuma jalan mode headless biasa.
 

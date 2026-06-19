@@ -2,7 +2,7 @@ name: Scheduled FIFA Fantasy Data Scrape
 
 on:
   schedule:
-    - cron: '0 * * * *'  # every hour, on the hour (UTC)
+    - cron: '17 * * * *'  # every hour, at :17 (off the top-of-hour rush, see README)
   workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
 
 permissions:
