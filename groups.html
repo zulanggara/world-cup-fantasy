@@ -78,6 +78,18 @@
   table.thirds td.team-name { cursor: pointer; }
   table.thirds td.team-name:hover { color: var(--accent2); text-decoration: underline; }
   table.thirds tr.qualify td { background: rgba(255,183,3,0.08); }
+  table.thirds tr.used-elsewhere td { opacity: .45; }
+
+  .thirds-slots-note { font-size: 12px; color: var(--text-dim); margin: 0 0 16px; line-height: 1.6; max-width: 760px; }
+  .third-slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .slot-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .slot-card h3 { margin: 0; padding: 10px 12px; font-size: 12.5px; background: var(--panel2); border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  table.slot-thirds { margin: 0; border: none; border-radius: 0; font-size: 12px; }
+  table.slot-thirds th { font-size: 10px; padding: 6px 8px; }
+  table.slot-thirds td { padding: 6px 8px; }
+  .r32-badge { display: inline-block; padding: 2px 6px; border-radius: 999px; font-size: 9.5px; font-weight: 700; white-space: nowrap; }
+  .r32-badge.rep { background: var(--accent); color: #1a1500; }
+  .r32-badge.used { background: var(--panel2); color: var(--text-dim); border: 1px solid var(--border); }
 
   .bracket-legend { display: flex; gap: 16px; margin-bottom: 14px; font-size: 11.5px; color: var(--text-dim); flex-wrap: wrap; }
   .bracket-legend span { display: inline-flex; align-items: center; gap: 6px; }
@@ -143,9 +155,13 @@
   <div class="section-pane" id="pane-thirds">
     <h2 class="section-title" data-i18n="groups.thirdsTitle">Ranking Peringkat 3 (8 Terbaik Lolos)</h2>
     <table class="thirds">
-      <thead><tr><th>#</th><th data-i18n="common.colTeam">Tim</th><th>Grup</th><th class="num">P</th><th class="num">GD</th><th class="num">GF</th><th class="num">Pts</th></tr></thead>
+      <thead><tr><th>#</th><th data-i18n="common.colTeam">Tim</th><th data-i18n="common.colGroup">Grup</th><th class="num">P</th><th class="num">GD</th><th class="num">GF</th><th class="num">Pts</th></tr></thead>
       <tbody id="thirdsBody"></tbody>
     </table>
+
+    <h2 class="section-title" data-i18n="groups.thirdSlotsTitle" style="margin-top:28px;">R32 Slot Assignment (Peringkat-3 per Slot)</h2>
+    <p class="thirds-slots-note" data-i18n="groups.thirdSlotsNote">Tiap slot babak 32 besar untuk peringkat-3 hanya mengambil dari grup tertentu (lihat label tiap tabel). Karena satu grup bisa muncul di lebih dari satu slot, satu tim peringkat-3 hanya bisa jadi wakil di salah satu slot — kalau sudah terpakai di slot lain, slot berikutnya otomatis jatuh ke peringkat berikutnya yang masih tersedia.</p>
+    <div class="third-slots-grid" id="thirdSlotsGrid"></div>
   </div>
 
   <div class="section-pane" id="pane-bracket">
@@ -218,6 +234,12 @@ function renderTabs() {
       renderTabs();
       document.querySelectorAll('.section-pane').forEach((p) => p.classList.remove('active'));
       document.getElementById('pane-' + currentSection).classList.add('active');
+      // The bracket pane is display:none until its tab is selected, so any
+      // earlier line-drawing pass saw zero-size boxes. Redraw now that the
+      // pane is actually visible and has real layout.
+      if (currentSection === 'bracket') {
+        requestAnimationFrame(() => drawBracketConnectors());
+      }
     });
   });
 }
@@ -254,8 +276,9 @@ async function loadData() {
   const standings = buildStandings();
   renderStandings(standings);
   const bestThirds = computeBestThirds(standings);
-  renderThirds(standings, bestThirds);
-  renderBracket(standings, bestThirds);
+  const thirdAssignments = assignThirdPlaceSlots(bestThirds);
+  renderThirds(standings, bestThirds, thirdAssignments);
+  renderBracket(standings, bestThirds, thirdAssignments);
   renderFixtures();
 }
 
@@ -329,7 +352,42 @@ function computeBestThirds(standings) {
   return thirds;
 }
 
-function renderThirds(standings, bestThirds) {
+// The 8 R32 slots that take a 3rd-placed team, each restricted to a fixed
+// set of 5 candidate groups — this is the actual official bracket data
+// (matches.json home/away_team_label for match ids 74/77/79/80/81/82/85/87),
+// listed here in official match order so the assignment below is
+// deterministic and matches the published bracket.
+const THIRD_PLACE_SLOTS = [
+  { matchId: '74', groups: ['A', 'B', 'C', 'D', 'F'] },
+  { matchId: '77', groups: ['C', 'D', 'F', 'G', 'H'] },
+  { matchId: '79', groups: ['C', 'E', 'F', 'H', 'I'] },
+  { matchId: '80', groups: ['E', 'H', 'I', 'J', 'K'] },
+  { matchId: '81', groups: ['B', 'E', 'F', 'I', 'J'] },
+  { matchId: '82', groups: ['A', 'E', 'H', 'I', 'J'] },
+  { matchId: '85', groups: ['E', 'F', 'G', 'I', 'J'] },
+  { matchId: '87', groups: ['D', 'E', 'I', 'J', 'L'] },
+];
+
+// A 3rd-placed team can be eligible for several of the 8 slots above (their
+// group shows up in more than one slot's candidate list), but each slot
+// needs a *distinct* representative — the same team can't fill two R32
+// slots. We resolve this the same way the real bracket does: walk the 8
+// slots in official order, and for each one assign the best-ranked eligible
+// team (by Pts -> GD -> GF) that hasn't already been claimed by an earlier
+// slot.
+function assignThirdPlaceSlots(bestThirds) {
+  const usedSquadIds = new Set();
+  return THIRD_PLACE_SLOTS.map((slot) => {
+    const groupSet = new Set(slot.groups.map((g) => g.toLowerCase()));
+    const eligible = bestThirds.filter((t) => groupSet.has(t.group));
+    const rep = eligible.find((t) => !usedSquadIds.has(t.squadId));
+    if (rep) usedSquadIds.add(rep.squadId);
+    const label = `3rd Group ${slot.groups.join('/')}`;
+    return { ...slot, label, eligible, rep };
+  });
+}
+
+function renderThirds(standings, bestThirds, thirdAssignments) {
   const rows = bestThirds.map((t, i) => `
     <tr class="${i < 8 ? 'qualify' : ''}" onclick="DetailModal.openTeam(${t.squadId})" style="cursor:pointer;">
       <td>${i + 1}</td>
@@ -342,6 +400,61 @@ function renderThirds(standings, bestThirds) {
     </tr>
   `).join('');
   document.getElementById('thirdsBody').innerHTML = rows || `<tr><td colspan="7" class="empty-msg">${I18N.t('common.noThirdPlaceData')}</td></tr>`;
+
+  renderThirdSlots(thirdAssignments);
+}
+
+function renderThirdSlots(thirdAssignments) {
+  const grid = document.getElementById('thirdSlotsGrid');
+  if (!grid) return;
+  if (!thirdAssignments?.length) {
+    grid.innerHTML = '';
+    return;
+  }
+
+  // Map every assigned representative's squadId -> which slot claimed them,
+  // so we can flag the same team showing up as "eligible" in a later slot's
+  // table as already taken, instead of leaving it ambiguous.
+  const repSquadToSlotIdx = {};
+  thirdAssignments.forEach((slot, idx) => {
+    if (slot.rep) repSquadToSlotIdx[slot.rep.squadId] = idx;
+  });
+
+  grid.innerHTML = thirdAssignments.map((slot, idx) => {
+    const rowsHtml = slot.eligible.map((t) => {
+      const isRep = slot.rep && t.squadId === slot.rep.squadId;
+      const usedElsewhere = !isRep && repSquadToSlotIdx[t.squadId] !== undefined;
+      let badge = '';
+      if (isRep) badge = `<span class="r32-badge rep">${escapeHtml(I18N.t('groups.r32Rep', 'Wakil R32'))}</span>`;
+      else if (usedElsewhere) badge = `<span class="r32-badge used">${escapeHtml(I18N.t('groups.r32UsedElsewhere', 'Sudah wakil slot lain'))}</span>`;
+      return `
+        <tr class="${isRep ? 'qualify' : ''}${usedElsewhere ? ' used-elsewhere' : ''}" onclick="DetailModal.openTeam(${t.squadId})" style="cursor:pointer;">
+          <td class="team-name">${FLAGS.flagFor(t.abbr)} ${escapeHtml(t.name)}</td>
+          <td>${t.group.toUpperCase()}</td>
+          <td class="num">${t.P}</td>
+          <td class="num">${t.GD > 0 ? '+' : ''}${t.GD}</td>
+          <td class="num">${t.GF}</td>
+          <td class="num">${t.Pts}</td>
+          <td>${badge}</td>
+        </tr>
+      `;
+    }).join('') || `<tr><td colspan="7" class="empty-msg">${escapeHtml(I18N.t('common.noThirdPlaceData'))}</td></tr>`;
+
+    return `
+      <div class="slot-card">
+        <h3>${escapeHtml(I18N.t('groups.thirdSlotLabel', 'Peringkat-3 Grup {groups}', { groups: slot.groups.join('/') }))}</h3>
+        <table class="thirds slot-thirds">
+          <thead><tr>
+            <th>${escapeHtml(I18N.t('common.colTeam'))}</th>
+            <th>${escapeHtml(I18N.t('common.colGroup'))}</th>
+            <th class="num">P</th><th class="num">GD</th><th class="num">GF</th><th class="num">Pts</th>
+            <th></th>
+          </tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    `;
+  }).join('');
 }
 
 // Strength score purely from real group-stage results (Pts -> GD -> GF),
@@ -352,7 +465,7 @@ function teamStrength(t) {
   return (t.Pts || 0) * 1000 + (t.GD || 0) * 10 + (t.GF || 0);
 }
 
-function resolveGroupSlot(label, standings, bestThirds) {
+function resolveGroupSlot(label, standings, bestThirds, thirdAssignments) {
   if (!label) return null;
   let m = label.match(/^Winner Group ([A-L])$/i);
   if (m) {
@@ -372,11 +485,15 @@ function resolveGroupSlot(label, standings, bestThirds) {
   if (m) {
     const letters = m[1].toUpperCase().split('/');
     const desc = `Peringkat-3 Grup ${letters.join('/')}`;
-    const candidates = letters.map((l) => standings[l.toLowerCase()]?.[2]).filter(Boolean);
-    if (!candidates.length) return { pending: true, text: desc };
-    candidates.sort((a, b) => teamStrength(b) - teamStrength(a));
-    const best = candidates[0];
-    const allGroupsComplete = letters.every((l) => (standings[l.toLowerCase()] || []).every((t) => t.P === 3));
+    // Use the globally conflict-free assignment (each 3rd-placed team can
+    // only fill one of the 8 slots) instead of independently picking the
+    // best candidate per slot, which could double-assign the same team to
+    // more than one slot when their group appears in several slots' lists.
+    const slot = thirdAssignments?.find((s) => s.label === label);
+    const best = slot?.rep;
+    if (!best) return { pending: true, text: desc };
+    const letterGroups = letters.map((l) => l.toLowerCase());
+    const allGroupsComplete = letterGroups.every((l) => (standings[l] || []).every((t) => t.P === 3));
     const isConfirmedTop8 = allGroupsComplete && bestThirds.slice(0, 8).some((t) => t.squadId === best.squadId);
     return { ...best, confirmed: isConfirmedTop8, slotDesc: desc };
   }
@@ -391,7 +508,7 @@ const KO_ROUNDS = [
   { type: 'final', key: 'final', label: 'Final' },
 ];
 
-function buildKnockoutTree(standings, bestThirds) {
+function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
   const byId = {};
   for (const m of matchesGames) {
     if (['r32', 'r16', 'qf', 'sf', 'third', 'final'].includes(m.type)) byId[m.id] = m;
@@ -400,7 +517,7 @@ function buildKnockoutTree(standings, bestThirds) {
   const resolved = {}; // matchId -> { home, away }
 
   function resolveSlot(label) {
-    const direct = resolveGroupSlot(label, standings, bestThirds);
+    const direct = resolveGroupSlot(label, standings, bestThirds, thirdAssignments);
     if (direct) return direct;
 
     // Winner/Loser of an earlier knockout match is only resolved once that
@@ -481,8 +598,8 @@ function bracketTeamHtml(side) {
   </div>`;
 }
 
-function renderBracket(standings, bestThirds) {
-  const { rounds, thirdPlace } = buildKnockoutTree(standings, bestThirds);
+function renderBracket(standings, bestThirds, thirdAssignments) {
+  const { rounds, thirdPlace } = buildKnockoutTree(standings, bestThirds, thirdAssignments);
   const treeEl = document.getElementById('bracketTree');
 
   if (!rounds.r32.length) {
@@ -587,8 +704,9 @@ document.addEventListener('i18n:change', () => {
   const standings = buildStandings();
   renderStandings(standings);
   const bestThirds = computeBestThirds(standings);
-  renderThirds(standings, bestThirds);
-  renderBracket(standings, bestThirds);
+  const thirdAssignments = assignThirdPlaceSlots(bestThirds);
+  renderThirds(standings, bestThirds, thirdAssignments);
+  renderBracket(standings, bestThirds, thirdAssignments);
   renderFixtures();
 });
 
