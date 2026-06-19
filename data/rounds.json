@@ -1241,8 +1241,8 @@
       },
       {
         "id": 29,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "half_time",
+        "minutes": 53,
         "extraMinutes": 0,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
@@ -1250,7 +1250,7 @@
         "venueCityTranslationKey": null,
         "venueId": 14,
         "date": "2026-06-19T20:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 47,
         "awaySquadId": 3,
@@ -1258,11 +1258,22 @@
         "awaySquadName": "Australia",
         "homeSquadAbbr": "USA",
         "awaySquadAbbr": "AUS",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
+        "homeScore": 2,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 61,
+            "assistId": null,
+            "isOwnGoal": true
+          },
+          {
+            "playerId": 1264,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
       },
       {
