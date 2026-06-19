@@ -1278,8 +1278,8 @@
       },
       {
         "id": 30,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 50,
         "extraMinutes": 0,
         "venueName": "Gillette Stadium",
         "venueCity": "Foxborough, Massachusetts",
@@ -1287,7 +1287,7 @@
         "venueCityTranslationKey": null,
         "venueId": 7,
         "date": "2026-06-19T23:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 38,
         "awaySquadId": 29,
@@ -1295,12 +1295,18 @@
         "awaySquadName": "Morocco",
         "homeSquadAbbr": "SCO",
         "awaySquadAbbr": "MAR",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 792,
+            "assistId": 2020,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 31,
