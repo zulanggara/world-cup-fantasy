@@ -1384,8 +1384,8 @@
       },
       {
         "id": 33,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 83,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -1393,7 +1393,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-06-20T18:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 30,
         "awaySquadId": 42,
@@ -1401,12 +1401,39 @@
         "awaySquadName": "Sweden",
         "homeSquadAbbr": "NED",
         "awaySquadAbbr": "SWE",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "homeScore": 4,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 807,
+            "assistId": 804,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 807,
+            "assistId": 795,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 804,
+            "assistId": 795,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 804,
+            "assistId": 2044,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1125,
+            "assistId": 1520,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 34,
