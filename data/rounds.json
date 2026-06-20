@@ -1310,8 +1310,8 @@
       },
       {
         "id": 31,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Lincoln Financial Field",
         "venueCity": "Philadelphia, Pennsylvania",
@@ -1319,7 +1319,7 @@
         "venueCityTranslationKey": null,
         "venueId": 11,
         "date": "2026-06-20T01:30:00+01:00",
-        "status": "scheduled",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 7,
         "awaySquadId": 22,
@@ -1327,17 +1327,33 @@
         "awaySquadName": "Haiti",
         "homeSquadAbbr": "BRA",
         "awaySquadAbbr": "HAI",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
+        "homeScore": 3,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 174,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 174,
+            "assistId": 173,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 173,
+            "assistId": 190,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
       },
       {
         "id": 32,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "full_time",
+        "minutes": 99,
         "extraMinutes": 0,
         "venueName": "Levi's Stadium",
         "venueCity": "Santa Clara, California",
@@ -1345,7 +1361,7 @@
         "venueCityTranslationKey": null,
         "venueId": 5,
         "date": "2026-06-20T04:00:00+01:00",
-        "status": "scheduled",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 45,
         "awaySquadId": 34,
@@ -1353,12 +1369,18 @@
         "awaySquadName": "Paraguay",
         "homeSquadAbbr": "TUR",
         "awaySquadAbbr": "PAR",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 890,
+            "assistId": 912,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 33,
