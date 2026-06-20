@@ -1384,8 +1384,8 @@
       },
       {
         "id": 33,
-        "period": "second_half",
-        "minutes": 83,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -1393,7 +1393,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-06-20T18:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 30,
         "awaySquadId": 42,
@@ -1401,7 +1401,7 @@
         "awaySquadName": "Sweden",
         "homeSquadAbbr": "NED",
         "awaySquadAbbr": "SWE",
-        "homeScore": 4,
+        "homeScore": 5,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": [
           {
@@ -1423,6 +1423,11 @@
             "playerId": 804,
             "assistId": 2044,
             "isOwnGoal": false
+          },
+          {
+            "playerId": 2044,
+            "assistId": 2043,
+            "isOwnGoal": false
           }
         ],
         "awayScore": 1,
@@ -1437,8 +1442,8 @@
       },
       {
         "id": 34,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 40,
         "extraMinutes": 0,
         "venueName": "Bmo Field",
         "venueCity": "Toronto",
@@ -1446,7 +1451,7 @@
         "venueCityTranslationKey": null,
         "venueId": 3,
         "date": "2026-06-20T21:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 20,
         "awaySquadId": 12,
@@ -1454,12 +1459,18 @@
         "awaySquadName": "Côte d'Ivoire",
         "homeSquadAbbr": "GER",
         "awaySquadAbbr": "CIV",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 322,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 35,
