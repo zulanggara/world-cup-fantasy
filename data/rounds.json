@@ -1442,8 +1442,8 @@
       },
       {
         "id": 34,
-        "period": "first_half",
-        "minutes": 40,
+        "period": "full_time",
+        "minutes": 98,
         "extraMinutes": 0,
         "venueName": "Bmo Field",
         "venueCity": "Toronto",
@@ -1459,9 +1459,20 @@
         "awaySquadName": "Côte d'Ivoire",
         "homeSquadAbbr": "GER",
         "awaySquadAbbr": "CIV",
-        "homeScore": 0,
+        "homeScore": 2,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 531,
+            "assistId": 1599,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 531,
+            "assistId": 1601,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 1,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [
