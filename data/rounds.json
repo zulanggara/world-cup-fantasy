@@ -1485,8 +1485,8 @@
       },
       {
         "id": 35,
-        "period": "first_half",
-        "minutes": 20,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Geha Field At Arrowhead Stadium",
         "venueCity": "Kansas City, Missouri",
@@ -1494,7 +1494,7 @@
         "venueCityTranslationKey": null,
         "venueId": 16,
         "date": "2026-06-21T01:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 16,
         "awaySquadId": 14,
@@ -1511,8 +1511,8 @@
       },
       {
         "id": 36,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Estadio Bbva",
         "venueCity": "Guadalupe",
@@ -1520,7 +1520,7 @@
         "venueCityTranslationKey": null,
         "venueId": 12,
         "date": "2026-06-21T05:00:00+01:00",
-        "status": "scheduled",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 44,
         "awaySquadId": 25,
@@ -1528,12 +1528,33 @@
         "awaySquadName": "Japan",
         "homeSquadAbbr": "TUN",
         "awaySquadAbbr": "JPN",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 4,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 682,
+            "assistId": 671,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 672,
+            "assistId": 1454,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 669,
+            "assistId": 672,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 672,
+            "assistId": 659,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 37,
