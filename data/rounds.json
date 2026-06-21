@@ -1558,8 +1558,8 @@
       },
       {
         "id": 37,
-        "period": "first_half",
-        "minutes": 8,
+        "period": "second_half",
+        "minutes": 87,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -1575,9 +1575,30 @@
         "awaySquadName": "Saudi Arabia",
         "homeSquadAbbr": "ESP",
         "awaySquadAbbr": "KSA",
-        "homeScore": 0,
+        "homeScore": 4,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1092,
+            "assistId": 1094,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1094,
+            "assistId": 1086,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1094,
+            "assistId": 1105,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1951,
+            "assistId": null,
+            "isOwnGoal": true
+          }
+        ],
         "awayScore": 0,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
