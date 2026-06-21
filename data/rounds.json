@@ -1558,8 +1558,8 @@
       },
       {
         "id": 37,
-        "period": "second_half",
-        "minutes": 87,
+        "period": "full_time",
+        "minutes": 99,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -1567,7 +1567,7 @@
         "venueCityTranslationKey": null,
         "venueId": 13,
         "date": "2026-06-21T17:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 41,
         "awaySquadId": 37,
@@ -1605,8 +1605,8 @@
       },
       {
         "id": 38,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "half_time",
+        "minutes": 54,
         "extraMinutes": 0,
         "venueName": "Sofi Stadium",
         "venueCity": "Inglewood, California",
@@ -1614,7 +1614,7 @@
         "venueCityTranslationKey": null,
         "venueId": 4,
         "date": "2026-06-21T20:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 5,
         "awaySquadId": 23,
@@ -1622,12 +1622,18 @@
         "awaySquadName": "IR Iran",
         "homeSquadAbbr": "BEL",
         "awaySquadAbbr": "IRN",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 610,
+            "assistId": 601,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 39,
