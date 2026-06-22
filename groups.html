@@ -130,6 +130,16 @@
   table.fixtures td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
   table.fixtures tr:hover td { background: var(--row-hover); }
   table.fixtures td.team-link { cursor: pointer; }
+  .elo-source-note { font-size: 11.5px; color: var(--text-dim); margin: 0 0 12px; line-height: 1.6; }
+  .elo-source-note a { color: var(--accent2); }
+  .elo-na { color: var(--text-dim); }
+  .winexp-bar { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; white-space: nowrap; }
+  .winexp-home { color: var(--accent); font-weight: 700; }
+  .winexp-away { color: var(--text-dim); }
+  .winexp-track { width: 60px; height: 6px; border-radius: 999px; background: var(--panel2); overflow: hidden; flex-shrink: 0; }
+  .winexp-fill { display: block; height: 100%; background: var(--accent); }
+  .bracket-winexp { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 9px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; border-top: 1px solid var(--border); background: var(--panel2); }
+  .bracket-winexp .winexp-track { width: 36px; }
   table.fixtures td.team-link:hover { color: var(--accent2); text-decoration: underline; }
   .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
 </style>
@@ -189,8 +199,9 @@
 
   <div class="section-pane" id="pane-fixtures">
     <h2 class="section-title" data-i18n="groups.fixturesTitle">Jadwal Pertandingan Mendatang (Fase Grup)</h2>
+    <p class="elo-source-note" data-i18n-html="groups.eloSourceNote">Win expectancy dari <b>World Football Elo Ratings</b> (<a href="https://www.eloratings.net" target="_blank" rel="noopener noreferrer">eloratings.net</a>), berdasarkan rating Elo tiap tim — bukan prediksi resmi FIFA.</p>
     <table class="fixtures">
-      <thead><tr><th data-i18n="groups.colDateTimeWIB">Tanggal & Waktu (WIB)</th><th data-i18n="groups.colFixture">Pertandingan</th></tr></thead>
+      <thead><tr><th data-i18n="groups.colDateTimeWIB">Tanggal & Waktu (WIB)</th><th data-i18n="groups.colFixture">Pertandingan</th><th data-i18n="groups.colWinExp">Win Expectancy</th></tr></thead>
       <tbody id="fixturesBody"></tbody>
     </table>
   </div>
@@ -207,6 +218,9 @@ let tournaments = [];
 let squads = [];
 let matchesGames = [];
 let stadiums = {};
+let eloFixtures = [];
+let eloResults = [];
+let eloRatings = {};
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -224,6 +238,18 @@ function escapeHtml(s) {
 
 function squadById(id) {
   return squads.find((s) => s.id === id);
+}
+
+// Match a fixture/result from data/elo.json (eloratings.net) to a real-world
+// match by team pair + calendar day — the two sources don't share a common
+// match id, but a same-day fixture between the same two squads is unique
+// within a single tournament.
+function findEloFixture(homeSquadId, awaySquadId, isoDate) {
+  if (!isoDate) return null;
+  const day = isoDate.slice(0, 10);
+  return eloFixtures.find((f) => f.date === day
+    && ((f.homeSquadId === homeSquadId && f.awaySquadId === awaySquadId)
+      || (f.homeSquadId === awaySquadId && f.awaySquadId === homeSquadId)));
 }
 
 const SECTIONS = [
@@ -257,11 +283,12 @@ function renderTabs() {
 async function loadData() {
   const gridEl = document.getElementById('groupsGrid');
   try {
-    const [roundsRes, squadsRes, matchesRes, stadiumsRes] = await Promise.all([
+    const [roundsRes, squadsRes, matchesRes, stadiumsRes, eloRes] = await Promise.all([
       fetch('data/rounds.json'),
       fetch('data/squads.json'),
       fetch('data/matches.json'),
       fetch('data/stadiums.json'),
+      fetch('data/elo.json'),
     ]);
     if (!roundsRes.ok) throw new Error(`rounds.json HTTP ${roundsRes.status}`);
     const roundsJson = await roundsRes.json();
@@ -276,6 +303,12 @@ async function loadData() {
     }
     if (stadiumsRes.ok) {
       stadiums = await stadiumsRes.json();
+    }
+    if (eloRes.ok) {
+      const eloJson = await eloRes.json();
+      eloFixtures = eloJson?.fixtures ?? [];
+      eloResults = eloJson?.results ?? [];
+      eloRatings = eloJson?.ratings ?? {};
     }
   } catch (e) {
     gridEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
@@ -598,6 +631,27 @@ function matchVenueLabel(dateStr, stadiumId) {
   return `${dateLabel}${timeLabel}${placeLabel}`;
 }
 
+// m.date here is matches.json's "MM/DD/YYYY HH:mm" local_date — convert to
+// the YYYY-MM-DD shape findEloFixture expects (same shape elo.json uses).
+function bracketWinExpHtml(home, away, localDate) {
+  if (!home || !away || home.pending || away.pending || !home.squadId || !away.squadId) return '';
+  if (!localDate) return '';
+  const [datePart] = localDate.split(' ');
+  const [mm, dd, yyyy] = datePart.split('/');
+  if (!mm || !dd || !yyyy) return '';
+  const isoDay = `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
+  const eloFx = findEloFixture(home.squadId, away.squadId, isoDay);
+  if (!eloFx) return '';
+  const homePct = eloFx.homeSquadId === home.squadId ? eloFx.homeWinPct : eloFx.awayWinPct;
+  const awayPct = eloFx.homeSquadId === home.squadId ? eloFx.awayWinPct : eloFx.homeWinPct;
+  if (homePct == null || awayPct == null) return '';
+  return `<div class="bracket-winexp" title="Elo win expectancy">
+    <span class="winexp-home">${homePct}%</span>
+    <span class="winexp-track"><span class="winexp-fill" style="width:${homePct}%"></span></span>
+    <span class="winexp-away">${awayPct}%</span>
+  </div>`;
+}
+
 function bracketTeamHtml(side) {
   if (!side) return '<div class="bracket-team tbd">TBD</div>';
   if (side.pending) return `<div class="bracket-team tbd">${escapeHtml(side.text)}</div>`;
@@ -626,6 +680,7 @@ function renderBracket(standings, bestThirds, thirdAssignments) {
         <div class="bmatch-venue">${escapeHtml(matchVenueLabel(m.date, m.stadiumId))}</div>
         ${bracketTeamHtml(m.home)}
         ${bracketTeamHtml(m.away)}
+        ${bracketWinExpHtml(m.home, m.away, m.date)}
       </div>
     `).join('');
     return `<div class="bracket-col ${isFinal ? 'bracket-final-col' : ''}" data-round="${round.key}" style="position:relative;">
@@ -694,6 +749,17 @@ function renderFixtures() {
 
   const rows = upcoming.map((t) => {
     const wib = DetailModal.formatWIB(t.date, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const eloFx = findEloFixture(t.homeSquadId, t.awaySquadId, t.date);
+    let winExpHtml = `<span class="elo-na">—</span>`;
+    if (eloFx) {
+      const homePct = eloFx.homeSquadId === t.homeSquadId ? eloFx.homeWinPct : eloFx.awayWinPct;
+      const awayPct = eloFx.homeSquadId === t.homeSquadId ? eloFx.awayWinPct : eloFx.homeWinPct;
+      winExpHtml = `<span class="winexp-bar" title="Elo: ${homePct}% / ${awayPct}%">
+        <span class="winexp-home">${homePct}%</span>
+        <span class="winexp-track"><span class="winexp-fill" style="width:${homePct}%"></span></span>
+        <span class="winexp-away">${awayPct}%</span>
+      </span>`;
+    }
     return `
       <tr>
         <td>${escapeHtml(wib)}</td>
@@ -702,11 +768,12 @@ function renderFixtures() {
           vs
           <span class="team-link" onclick="DetailModal.openTeam(${t.awaySquadId})">${FLAGS.flagFor(t.awaySquadAbbr)} ${escapeHtml(t.awaySquadAbbr ?? '?')}</span>
         </td>
+        <td>${winExpHtml}</td>
       </tr>
     `;
   }).join('');
 
-  document.getElementById('fixturesBody').innerHTML = rows || `<tr><td colspan="2" class="empty-msg">${I18N.t('common.noUpcomingFixtures')}</td></tr>`;
+  document.getElementById('fixturesBody').innerHTML = rows || `<tr><td colspan="3" class="empty-msg">${I18N.t('common.noUpcomingFixtures')}</td></tr>`;
 }
 
 document.addEventListener('i18n:change', () => {

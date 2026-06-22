@@ -130,6 +130,7 @@ const MAX_PER_SQUAD = 3;
 let players = [];
 let squads = [];
 let tournaments = [];
+let eloFixtures = [];
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -168,10 +169,11 @@ function squadAbbr(squadId) {
 async function loadData() {
   const panelEl = document.getElementById('panel');
   try {
-    const [playersRes, squadsRes, roundsRes] = await Promise.all([
+    const [playersRes, squadsRes, roundsRes, eloRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/rounds.json'),
+      fetch('data/elo.json'),
     ]);
     if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
     players = ((await playersRes.json()) ?? []).map(flatten);
@@ -182,6 +184,11 @@ async function loadData() {
     if (!roundsRes.ok) throw new Error(`rounds.json HTTP ${roundsRes.status} — jalankan "node scraper.js" dulu`);
     const roundsJson = await roundsRes.json();
     tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
+
+    if (eloRes.ok) {
+      const eloJson = await eloRes.json();
+      eloFixtures = eloJson?.fixtures ?? [];
+    }
   } catch (e) {
     panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}.</div>`;
     return;
@@ -210,7 +217,23 @@ function buildTeamStrength() {
   return stats;
 }
 
+// Same team-pair + calendar-day matching used on groups.html — eloratings.net
+// has no shared match id with our FIFA-sourced schedule.
+function findEloWinPct(squadId, opponentId, isoDate) {
+  if (!isoDate) return null;
+  const day = isoDate.slice(0, 10);
+  const fx = eloFixtures.find((f) => f.date === day
+    && ((f.homeSquadId === squadId && f.awaySquadId === opponentId)
+      || (f.homeSquadId === opponentId && f.awaySquadId === squadId)));
+  if (!fx) return null;
+  return fx.homeSquadId === squadId ? fx.homeWinPct : fx.awayWinPct;
+}
+
 function buildNextOpponent() {
+  // Only ever looks at matches not yet played, so a team's *next* opponent
+  // (and the Elo win% attached to it) only changes once that specific match
+  // is completed — re-scraping fresher Elo numbers for a round that has
+  // already been played never touches an already-finished round's data.
   const upcoming = tournaments
     .filter((t) => t.status !== 'complete')
     .sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -218,8 +241,12 @@ function buildNextOpponent() {
   const next = {};
   for (const t of upcoming) {
     const hId = t.homeSquadId, aId = t.awaySquadId;
-    if (hId != null && !next[hId]) next[hId] = { opponentId: aId, opponent: t.awaySquadAbbr, venue: 'H', date: t.date };
-    if (aId != null && !next[aId]) next[aId] = { opponentId: hId, opponent: t.homeSquadAbbr, venue: 'A', date: t.date };
+    if (hId != null && !next[hId]) {
+      next[hId] = { opponentId: aId, opponent: t.awaySquadAbbr, venue: 'H', date: t.date, winPct: findEloWinPct(hId, aId, t.date) };
+    }
+    if (aId != null && !next[aId]) {
+      next[aId] = { opponentId: hId, opponent: t.homeSquadAbbr, venue: 'A', date: t.date, winPct: findEloWinPct(aId, hId, t.date) };
+    }
   }
   return next;
 }
@@ -254,6 +281,15 @@ function computeProjections() {
       } else {
         multiplier = clamp(1 + 0.5 * ((oppStrength.avgGA - leagueAvgGA) / leagueAvgGA), 0.5, 1.8);
       }
+    }
+
+    // Blend in Elo win expectancy for the player's own team in that same
+    // next match, when eloratings.net has already published it — a second,
+    // independent strength signal (whole match-history Elo, not just this
+    // tournament's goals) averaged in with the goals-based factor above.
+    if (next?.winPct != null) {
+      const eloFactor = clamp(1 + (next.winPct - 50) / 50 * 0.5, 0.5, 1.8);
+      multiplier = oppStrength && oppStrength.played > 0 ? (multiplier + eloFactor) / 2 : eloFactor;
     }
 
     const projectedPoints = Math.round(p.avgPoints * multiplier * 10) / 10;
@@ -294,9 +330,10 @@ function renderVariant(variant) {
 
   const rows = POS_ORDER.map((pos) => {
     const chips = starters.filter((p) => p.position === pos).map((p) => {
+      const winPctLabel = p.next?.winPct != null ? ` · ${p.next.winPct}% ${I18N.t('research.winLabel', 'win')}` : '';
       const nextLabel = p.next
-        ? `vs ${escapeHtml(p.next.opponent ?? '?')} (${p.next.venue}) · ${DetailModal.formatWIB(p.next.date, { day: 'numeric', month: 'short' })}`
-        : 'lawan belum terdeteksi';
+        ? `vs ${escapeHtml(p.next.opponent ?? '?')} (${p.next.venue}) · ${DetailModal.formatWIB(p.next.date, { day: 'numeric', month: 'short' })}${winPctLabel}`
+        : I18N.t('research.noOpponentDetected', 'lawan belum terdeteksi');
       return `
         <div class="player-chip">
           <div class="pname" onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">${escapeHtml(p.name)}</div>
@@ -318,7 +355,7 @@ function renderVariant(variant) {
         <td>${escapeHtml(p.name)}</td>
         <td>${escapeHtml(p.abbr ?? '?')}</td>
         <td>${p.position}</td>
-        <td>${p.next ? `vs ${escapeHtml(p.next.opponent ?? '?')} (${p.next.venue})` : '—'}</td>
+        <td>${p.next ? `vs ${escapeHtml(p.next.opponent ?? '?')} (${p.next.venue})${p.next.winPct != null ? ` · ${p.next.winPct}%` : ''}` : '—'}</td>
         <td class="num">$${Number(p.price).toFixed(1)}</td>
         <td class="num">${p.projectedPoints}</td>
       </tr>
