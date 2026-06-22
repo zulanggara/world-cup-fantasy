@@ -1764,8 +1764,8 @@
       },
       {
         "id": 42,
-        "period": "first_half",
-        "minutes": 10,
+        "period": "half_time",
+        "minutes": 49,
         "extraMinutes": 0,
         "venueName": "Lincoln Financial Field",
         "venueCity": "Philadelphia, Pennsylvania",
@@ -1781,9 +1781,15 @@
         "awaySquadName": "Iraq",
         "homeSquadAbbr": "FRA",
         "awaySquadAbbr": "IRQ",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 500,
+            "assistId": 517,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 0,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
