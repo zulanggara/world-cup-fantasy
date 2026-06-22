@@ -79,6 +79,17 @@
   .lb-row .lb-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .lb-row .lb-value { font-family: 'JetBrains Mono', monospace; color: var(--text-dim); flex-shrink: 0; }
   .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+  .lb-row-tied-leader { background: rgba(255,183,3,0.12); }
+  :root[data-theme="light"] .lb-row-tied-leader { background: rgba(179,134,0,0.12); }
+
+  .lb-vis-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; padding: 4px 14px; }
+  .lb-vis-panel summary { cursor: pointer; padding: 10px 0; font-size: 13px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .lb-vis-panel summary:hover { color: var(--text); }
+  .lb-vis-groups { display: flex; flex-wrap: wrap; gap: 18px; padding: 4px 0 14px; }
+  .lb-vis-group { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+  .lb-vis-group-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); margin-bottom: 2px; }
+  .lb-vis-item { display: flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; }
+  .lb-vis-item input { accent-color: var(--accent); cursor: pointer; }
 </style>
 </head>
 <body>
@@ -94,6 +105,11 @@
     <p data-i18n="index.heroSubtitle">Pemuncak statistik turnamen sekilas — poin, gol, dan statistik bertahan ter-update dari data scrape. Klik nama pemain atau tim untuk detail lengkap. Cari daftar lengkap pemain? Buka menu Pemain.</p>
     <div class="hero-stats" id="heroStats"></div>
   </div>
+
+  <details class="lb-vis-panel">
+    <summary data-i18n="index.visToggleLabel">Tampilkan/Sembunyikan Kategori</summary>
+    <div class="lb-vis-groups" id="lbVisibility"></div>
+  </details>
 
   <div class="lb-grid" id="lbGrid"></div>
 </div>
@@ -146,6 +162,15 @@ function flatten(p) {
     tackles: agg.T ?? 0,
     keyPasses: agg.CC ?? 0,
     shots: agg.ST ?? 0,
+    minutesPlayed: agg.MP ?? 0,
+    penaltyWon: agg.PW ?? 0,
+    penaltyConceded: agg.PC ?? 0,
+    penaltySaved: agg.PS ?? 0,
+    freeKicks: agg.FK ?? 0,
+    ownGoals: agg.OG ?? 0,
+    yellowCards: agg.YC ?? 0,
+    redCards: agg.RC ?? 0,
+    startingXI: agg.SXI ?? 0,
   };
 }
 
@@ -167,6 +192,7 @@ async function loadData() {
     return;
   }
   renderHeroStats();
+  renderVisibilityControls();
   renderLeaderboards();
 }
 
@@ -178,25 +204,114 @@ function renderHeroStats() {
   `;
 }
 
-const LEADERBOARDS = [
-  { key: 'totalPoints', titleKey: 'index.lbTotalPoints', unitKey: 'index.unitPts', format: (v) => v },
-  { key: 'avgPoints', titleKey: 'index.lbAvgPoints', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
-  { key: 'form', titleKey: 'index.lbForm', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
-  { key: 'percentSelected', titleKey: 'index.lbSelected', unitKey: '', format: (v) => `${v.toFixed(1)}%` },
-  { key: 'goals', titleKey: 'index.lbGoals', unitKey: 'index.unitGoals', format: (v) => v },
-  { key: 'assists', titleKey: 'index.lbAssists', unitKey: 'index.unitAssists', format: (v) => v },
-  { key: 'cleanSheets', titleKey: 'index.lbCleanSheets', unitKey: 'index.unitCleanSheets', format: (v) => v },
-  { key: 'tackles', titleKey: 'index.lbTackles', unitKey: 'index.unitTackles', format: (v) => v },
-  { key: 'keyPasses', titleKey: 'index.lbKeyPasses', unitKey: 'index.unitKeyPasses', format: (v) => v },
-  { key: 'shots', titleKey: 'index.lbShots', unitKey: 'index.unitShots', format: (v) => v },
+// Grouped by theme, most-commonly-checked groups first (overall fantasy
+// stats, then attacking, then defending/goalkeeping, then playing time,
+// then discipline) so related cards (e.g. yellow/red cards) sit next to
+// each other instead of in insertion order.
+const LEADERBOARD_GROUPS = [
+  {
+    groupKey: 'overall',
+    items: [
+      { key: 'totalPoints', titleKey: 'index.lbTotalPoints', unitKey: 'index.unitPts', format: (v) => v },
+      { key: 'avgPoints', titleKey: 'index.lbAvgPoints', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
+      { key: 'form', titleKey: 'index.lbForm', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
+      { key: 'percentSelected', titleKey: 'index.lbSelected', unitKey: '', format: (v) => `${v.toFixed(1)}%` },
+    ],
+  },
+  {
+    groupKey: 'attacking',
+    items: [
+      { key: 'goals', titleKey: 'index.lbGoals', unitKey: 'index.unitGoals', format: (v) => v },
+      { key: 'assists', titleKey: 'index.lbAssists', unitKey: 'index.unitAssists', format: (v) => v },
+      { key: 'keyPasses', titleKey: 'index.lbKeyPasses', unitKey: 'index.unitKeyPasses', format: (v) => v },
+      { key: 'shots', titleKey: 'index.lbShots', unitKey: 'index.unitShots', format: (v) => v },
+      { key: 'penaltyWon', titleKey: 'index.lbPenaltyWon', unitKey: 'index.unitPenaltyWon', format: (v) => v },
+      { key: 'freeKicks', titleKey: 'index.lbFreeKicks', unitKey: 'index.unitFreeKicks', format: (v) => v },
+    ],
+  },
+  {
+    groupKey: 'defending',
+    items: [
+      { key: 'cleanSheets', titleKey: 'index.lbCleanSheets', unitKey: 'index.unitCleanSheets', format: (v) => v },
+      { key: 'tackles', titleKey: 'index.lbTackles', unitKey: 'index.unitTackles', format: (v) => v },
+      { key: 'penaltySaved', titleKey: 'index.lbPenaltySaved', unitKey: 'index.unitPenaltySaved', format: (v) => v },
+      { key: 'penaltyConceded', titleKey: 'index.lbPenaltyConceded', unitKey: 'index.unitPenaltyConceded', format: (v) => v },
+    ],
+  },
+  {
+    groupKey: 'playingTime',
+    items: [
+      { key: 'minutesPlayed', titleKey: 'index.lbMinutesPlayed', unitKey: 'index.unitMinutes', format: (v) => v },
+      { key: 'startingXI', titleKey: 'index.lbStartingXI', unitKey: 'index.unitStartingXI', format: (v) => v },
+    ],
+  },
+  {
+    groupKey: 'discipline',
+    items: [
+      { key: 'yellowCards', titleKey: 'index.lbYellowCards', unitKey: 'index.unitYellowCards', format: (v) => v },
+      { key: 'redCards', titleKey: 'index.lbRedCards', unitKey: 'index.unitRedCards', format: (v) => v },
+      { key: 'ownGoals', titleKey: 'index.lbOwnGoals', unitKey: 'index.unitOwnGoals', format: (v) => v },
+    ],
+  },
 ];
+const LEADERBOARDS = LEADERBOARD_GROUPS.flatMap((g) => g.items);
+
+const VISIBILITY_KEY = 'fifa-fantasy-dashboard-hidden-cats';
+function getHiddenCats() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(VISIBILITY_KEY) || '[]'));
+  } catch (e) {
+    return new Set();
+  }
+}
+function setHiddenCats(set) {
+  localStorage.setItem(VISIBILITY_KEY, JSON.stringify([...set]));
+}
+let hiddenCats = getHiddenCats();
+
+// Standard "competition ranking": equal values share the same rank and the
+// next distinct value's rank skips ahead (1,1,1,4,4,6...), matching how
+// sports leaderboards usually present ties.
+function withRanks(sorted, key) {
+  let rank = 1;
+  return sorted.map((p, i) => {
+    if (i > 0 && sorted[i - 1][key] !== p[key]) rank = i + 1;
+    return { ...p, rank };
+  });
+}
+
+const TOP_N = 10;
+
+function renderVisibilityControls() {
+  const el = document.getElementById('lbVisibility');
+  if (!el) return;
+  el.innerHTML = LEADERBOARD_GROUPS.map((g) => `
+    <div class="lb-vis-group">
+      <span class="lb-vis-group-label">${escapeHtml(I18N.t(`index.visGroup_${g.groupKey}`))}</span>
+      ${g.items.map((lb) => `
+        <label class="lb-vis-item">
+          <input type="checkbox" data-cat="${lb.key}" ${hiddenCats.has(lb.key) ? '' : 'checked'} />
+          ${escapeHtml(I18N.t(lb.titleKey))}
+        </label>
+      `).join('')}
+    </div>
+  `).join('');
+  el.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) hiddenCats.delete(cb.dataset.cat);
+      else hiddenCats.add(cb.dataset.cat);
+      setHiddenCats(hiddenCats);
+      renderLeaderboards();
+    });
+  });
+}
 
 function renderLeaderboards() {
   const grid = document.getElementById('lbGrid');
-  grid.innerHTML = LEADERBOARDS.map((lb) => {
-    const sorted = players.slice().sort((a, b) => b[lb.key] - a[lb.key]);
-    const top5 = sorted.slice(0, 5);
-    const leader = top5[0];
+  grid.innerHTML = LEADERBOARDS.filter((lb) => !hiddenCats.has(lb.key)).map((lb) => {
+    const sorted = withRanks(players.slice().sort((a, b) => b[lb.key] - a[lb.key]), lb.key);
+    const top10 = sorted.slice(0, TOP_N);
+    const leader = top10[0];
     if (!leader || leader[lb.key] <= 0) {
       return `<div class="lb-card">
         <div class="lb-head">${escapeHtml(I18N.t(lb.titleKey))}</div>
@@ -204,11 +319,11 @@ function renderLeaderboards() {
       </div>`;
     }
     const unit = lb.unitKey ? escapeHtml(I18N.t(lb.unitKey)) : '';
-    const rest = top5.slice(1).map((p, i) => `
-      <div class="lb-row" onclick="DetailModal.openPlayer(${p.id})">
-        <span class="lb-rank">${i + 2}</span>
+    const rest = top10.slice(1).map((p) => `
+      <div class="lb-row${p.rank === 1 ? ' lb-row-tied-leader' : ''}" onclick="DetailModal.openPlayer(${p.id})">
+        <span class="lb-rank">${p.rank}</span>
         <span class="lb-name">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.name)}</span>
-        <span class="lb-value">${lb.format(leader ? p[lb.key] : 0)}</span>
+        <span class="lb-value">${lb.format(p[lb.key])}</span>
       </div>
     `).join('');
     return `<div class="lb-card">
@@ -228,6 +343,7 @@ function renderLeaderboards() {
 
 document.addEventListener('i18n:change', () => {
   renderHeroStats();
+  renderVisibilityControls();
   renderLeaderboards();
 });
 

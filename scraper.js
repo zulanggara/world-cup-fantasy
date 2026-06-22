@@ -476,7 +476,7 @@ function buildAggregates() {
     }
     if (!Array.isArray(rounds) || !rounds.length) continue;
 
-    const sum = { GS: 0, CS: 0, AS: 0, T: 0, CC: 0, ST: 0, S: 0, YC: 0, RC: 0, OG: 0, PW: 0, PC: 0, PS: 0, MP: 0, roundsPlayed: 0 };
+    const sum = { GS: 0, CS: 0, AS: 0, T: 0, CC: 0, ST: 0, S: 0, YC: 0, RC: 0, OG: 0, PW: 0, PC: 0, PS: 0, MP: 0, FK: 0, SXI: 0, roundsPlayed: 0 };
     for (const r of rounds) {
       const s = r?.stats ?? {};
       sum.GS += s.GS ?? 0;
@@ -493,6 +493,8 @@ function buildAggregates() {
       sum.PC += s.PC ?? 0;
       sum.PS += s.PS ?? 0;
       sum.MP += s.MP ?? 0;
+      sum.FK += s.FK ?? 0;
+      sum.SXI += s.SXI ?? 0;
       if ((s.MP ?? 0) > 0) sum.roundsPlayed += 1;
     }
     aggregates[id] = sum;
