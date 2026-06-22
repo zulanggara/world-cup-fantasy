@@ -265,7 +265,13 @@ window.DetailModal = (function () {
   }
 
   // ---- player modal ----
-  async function openPlayer(playerId) {
+  // opts.mdIndex (0-based) lets a caller that's showing a specific matchday
+  // projection (e.g. best15-next-round.html's MD1/MD2/MD3 selector) pin the
+  // shown match to that team's Nth group match by date, instead of always
+  // defaulting to whichever match is chronologically next overall. Without
+  // it, viewing a player's "next match" while looking at an MD3 projection
+  // would wrongly show MD2 if MD2 hasn't been played yet.
+  async function openPlayer(playerId, opts) {
     open(`<div class="dm-loading">${tt('modal.loadingPlayer', 'Memuat data pemain...')}</div>`);
     const [players, squads, rounds, elo] = await Promise.all([loadPlayers(), loadSquads(), loadRounds(), loadElo()]);
     const p = players.find((x) => x.id === playerId);
@@ -275,21 +281,26 @@ window.DetailModal = (function () {
     const stats = await loadStats(playerId);
     const tournaments = allTournaments(rounds);
 
-    const nextMatch = tournaments
-      .filter((t) => t.status !== 'complete' && (t.homeSquadId === p.squadId || t.awaySquadId === p.squadId))
-      .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+    const squadMatches = tournaments
+      .filter((t) => t.homeSquadId === p.squadId || t.awaySquadId === p.squadId)
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
+    const mdIndex = opts?.mdIndex;
+    const targetMatch = mdIndex != null
+      ? squadMatches[mdIndex]
+      : squadMatches.find((t) => t.status !== 'complete');
     let nextMatchHtml = '';
-    if (nextMatch) {
-      const isHome = nextMatch.homeSquadId === p.squadId;
-      const oppId = isHome ? nextMatch.awaySquadId : nextMatch.homeSquadId;
-      const oppAbbr = isHome ? nextMatch.awaySquadAbbr : nextMatch.homeSquadAbbr;
-      const winPct = findEloFixture(elo, p.squadId, oppId, nextMatch.date);
+    if (targetMatch) {
+      const isHome = targetMatch.homeSquadId === p.squadId;
+      const oppId = isHome ? targetMatch.awaySquadId : targetMatch.homeSquadId;
+      const oppAbbr = isHome ? targetMatch.awaySquadAbbr : targetMatch.homeSquadAbbr;
+      const winPct = findEloFixture(elo, p.squadId, oppId, targetMatch.date);
+      const label = mdIndex != null ? `MD${mdIndex + 1}` : tt('modal.nextMatch', 'Pertandingan berikutnya');
       nextMatchHtml = `
         <div class="dm-sub" style="margin-top:-4px;">
-          ${tt('modal.nextMatch', 'Pertandingan berikutnya')}: ${flag(oppAbbr)}
+          ${label}: ${flag(oppAbbr)}
           <button class="dm-link" onclick="DetailModal.openTeam(${oppId})">${escapeHtml(oppAbbr ?? '?')}</button>
           (${isHome ? tt('modal.home', 'Kandang') : tt('modal.away', 'Tandang')})
-          · ${escapeHtml(formatWIB(nextMatch.date, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}
+          · ${escapeHtml(formatWIB(targetMatch.date, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}
           ${winPct != null ? `· ${eloWinExpHtml(winPct)}` : ''}
         </div>
       `;

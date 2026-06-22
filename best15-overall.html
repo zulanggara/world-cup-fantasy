@@ -68,6 +68,7 @@
   .player-chip .pname { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; margin: 0 auto; }
   .player-chip .psquad { font-size: 10px; opacity: .8; }
   .player-chip .ppos { font-size: 10px; opacity: .8; }
+  .player-chip .pwinexp { font-size: 10.5px; opacity: .9; margin-top: 1px; }
   .player-chip .ppts { font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 700; margin-top: 2px; }
 
   .bench-section { margin-top: 14px; }
@@ -126,6 +127,8 @@ let currentVariant = 'budget';
 
 let players = [];
 let squads = [];
+let tournaments = [];
+let eloFixtures = [];
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -158,12 +161,41 @@ function squadAbbr(squadId) {
   return s?.abbr ?? `#${squadId ?? '?'}`;
 }
 
+// Same ±1-day matching used everywhere else this site joins eloratings.net
+// data to our FIFA-sourced schedule.
+function nearbyDays(isoDate) {
+  const base = new Date(isoDate.slice(0, 10) + 'T00:00:00Z');
+  return [-1, 0, 1].map((offset) => {
+    const d = new Date(base);
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d.toISOString().slice(0, 10);
+  });
+}
+
+function nextMatchWinExp(squadId) {
+  const next = tournaments
+    .filter((t) => t.status !== 'complete' && (t.homeSquadId === squadId || t.awaySquadId === squadId))
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+  if (!next) return null;
+  const isHome = next.homeSquadId === squadId;
+  const oppId = isHome ? next.awaySquadId : next.homeSquadId;
+  const oppAbbr = isHome ? next.awaySquadAbbr : next.homeSquadAbbr;
+  const days = nearbyDays(next.date);
+  const fx = eloFixtures.find((f) => days.includes(f.date)
+    && ((f.homeSquadId === squadId && f.awaySquadId === oppId)
+      || (f.homeSquadId === oppId && f.awaySquadId === squadId)));
+  const winPct = fx ? (fx.homeSquadId === squadId ? fx.homeWinPct : fx.awayWinPct) : null;
+  return { oppAbbr, winPct };
+}
+
 async function loadData() {
   const panelEl = document.getElementById('panel');
   try {
-    const [playersRes, squadsRes] = await Promise.all([
+    const [playersRes, squadsRes, roundsRes, eloRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
+      fetch('data/rounds.json'),
+      fetch('data/elo.json'),
     ]);
     if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
     const playersJson = await playersRes.json();
@@ -174,6 +206,14 @@ async function loadData() {
       squads = Array.isArray(squadsJson) ? squadsJson : [];
     } else {
       squads = [];
+    }
+    if (roundsRes.ok) {
+      const roundsJson = await roundsRes.json();
+      tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
+    }
+    if (eloRes.ok) {
+      const eloJson = await eloRes.json();
+      eloFixtures = eloJson?.fixtures ?? [];
     }
   } catch (e) {
     panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json + data/squads.json. ${I18N.t('common.errHttpServerHint')}</div>`;
@@ -206,14 +246,21 @@ function renderVariant(variant) {
   const overBudget = totalPriceVal > SquadBuilder.BUDGET;
 
   const rows = POS_ORDER.map((pos) => {
-    const chips = starters.filter((p) => p.position === pos).map((p) => `
+    const chips = starters.filter((p) => p.position === pos).map((p) => {
+      const we = p.squadId != null ? nextMatchWinExp(p.squadId) : null;
+      const winLabel = we?.winPct != null
+        ? `vs ${escapeHtml(we.oppAbbr ?? '?')} · <b style="color:#4a9eff;">${we.winPct}%</b> ${escapeHtml(I18N.t('modal.winChance', 'win chance'))}`
+        : '';
+      return `
       <div class="player-chip">
         <div class="pname" onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">${escapeHtml(p.name)}</div>
         <div class="psquad"><span onclick="DetailModal.openTeam(${p.squadId})" style="cursor:pointer; text-decoration:underline;">${FLAGS.flagFor(squadAbbr(p.squadId))} ${escapeHtml(squadAbbr(p.squadId))}</span> · ${p.position}</div>
         <div class="pprice">$${Number(p.price).toFixed(1)}</div>
+        ${winLabel ? `<div class="pwinexp">${winLabel}</div>` : ''}
         <div class="ppts">${p.totalPoints}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
     return `<div class="pitch-row">${chips || `<div class="empty-msg">${I18N.t('common.noPlayers')}</div>`}</div>`;
   }).join('');
 
@@ -239,12 +286,12 @@ function renderVariant(variant) {
           <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
         </span>
       </div>
-      <div class="formation-label">Komposisi 2-5-5-3 (15 pemain) · diurutkan berdasarkan Total Points, tanpa batasan tim</div>
+      <div class="formation-label">${escapeHtml(I18N.t('overall.formationLabel'))}</div>
       <div class="pitch">${rows}</div>
       <div class="bench-section">
-        <div class="bench-title">Honourable mentions (top cadangan per posisi)</div>
+        <div class="bench-title">${escapeHtml(I18N.t('overall.benchTitle'))}</div>
         <table class="bench">
-          <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Harga</th><th>Total</th></tr></thead>
+          <thead><tr><th>${escapeHtml(I18N.t('common.colName'))}</th><th>${escapeHtml(I18N.t('common.colTeam'))}</th><th>${escapeHtml(I18N.t('common.colPosition'))}</th><th>${escapeHtml(I18N.t('common.colPrice'))}</th><th>${escapeHtml(I18N.t('common.total'))}</th></tr></thead>
           <tbody>${benchRows || `<tr><td colspan="5" class="empty-msg">${I18N.t('common.noData')}</td></tr>`}</tbody>
         </table>
       </div>

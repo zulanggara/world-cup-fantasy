@@ -381,12 +381,12 @@ function renderVariant(variant) {
           <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
         </span>
       </div>
-      <div class="formation-label">Komposisi 2-5-5-3 (15 pemain) · proyeksi berbasis kekuatan tim aktual + lawan ronde depan otomatis</div>
+      <div class="formation-label">${escapeHtml(I18N.t('research.formationLabel'))}</div>
       <div class="pitch">${rows}</div>
       <div class="bench-section">
-        <div class="bench-title">Kandidat lapis kedua (top cadangan per posisi)</div>
+        <div class="bench-title">${escapeHtml(I18N.t('research.benchTitle'))}</div>
         <table class="bench">
-          <thead><tr><th>Nama</th><th>Tim</th><th>Pos</th><th>Lawan depan</th><th>Harga</th><th>Proyeksi pts</th></tr></thead>
+          <thead><tr><th>${escapeHtml(I18N.t('common.colName'))}</th><th>${escapeHtml(I18N.t('common.colTeam'))}</th><th>${escapeHtml(I18N.t('common.colPosition'))}</th><th>${escapeHtml(I18N.t('research.colNextOpponent'))}</th><th>${escapeHtml(I18N.t('common.colPrice'))}</th><th>${escapeHtml(I18N.t('nextround.colProjPts'))}</th></tr></thead>
           <tbody>${benchRows || `<tr><td colspan="6" class="empty-msg">${I18N.t('common.noData')}</td></tr>`}</tbody>
         </table>
       </div>

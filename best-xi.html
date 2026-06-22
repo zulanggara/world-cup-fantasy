@@ -65,6 +65,7 @@
   .team-head .tname { font-size: 16px; font-weight: 700; }
   .team-head .ttotal { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
   .formation-label { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; }
+  .team-winexp { font-size: 11.5px; color: var(--text-dim); margin-bottom: 8px; }
 
   .pitch { background: var(--pitch); border: 2px solid var(--pitch-line); border-radius: 10px; padding: 14px 8px; display: flex; flex-direction: column; gap: 14px; }
   .pitch-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
@@ -155,6 +156,8 @@ let currentVariant = 'budget';
 
 let players = [];
 let squads = [];
+let tournaments = [];
+let eloFixtures = [];
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -185,9 +188,11 @@ function flatten(p) {
 async function loadData() {
   const matchupEl = document.getElementById('matchup');
   try {
-    const [playersRes, squadsRes] = await Promise.all([
+    const [playersRes, squadsRes, roundsRes, eloRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
+      fetch('data/rounds.json'),
+      fetch('data/elo.json'),
     ]);
     if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
     const playersJson = await playersRes.json();
@@ -198,6 +203,14 @@ async function loadData() {
       squads = Array.isArray(squadsJson) ? squadsJson : [];
     } else {
       squads = [];
+    }
+    if (roundsRes.ok) {
+      const roundsJson = await roundsRes.json();
+      tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
+    }
+    if (eloRes.ok) {
+      const eloJson = await eloRes.json();
+      eloFixtures = eloJson?.fixtures ?? [];
     }
   } catch (e) {
     matchupEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json + data/squads.json. ${I18N.t('common.errHttpServerHint')}</div>`;
@@ -239,6 +252,33 @@ function renderRanking() {
 function squadName(squadId) {
   const s = squads.find((x) => x.id === squadId);
   return s ? `${s.name} (${s.abbr ?? ''})`.trim() : `Squad #${squadId ?? '?'}`;
+}
+
+// Same ±1-day matching used everywhere else this site joins eloratings.net
+// data to our FIFA-sourced schedule.
+function nearbyDays(isoDate) {
+  const base = new Date(isoDate.slice(0, 10) + 'T00:00:00Z');
+  return [-1, 0, 1].map((offset) => {
+    const d = new Date(base);
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d.toISOString().slice(0, 10);
+  });
+}
+
+function nextMatchWinExp(squadId) {
+  const next = tournaments
+    .filter((t) => t.status !== 'complete' && (t.homeSquadId === squadId || t.awaySquadId === squadId))
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+  if (!next) return null;
+  const isHome = next.homeSquadId === squadId;
+  const oppId = isHome ? next.awaySquadId : next.homeSquadId;
+  const oppAbbr = isHome ? next.awaySquadAbbr : next.homeSquadAbbr;
+  const days = nearbyDays(next.date);
+  const fx = eloFixtures.find((f) => days.includes(f.date)
+    && ((f.homeSquadId === squadId && f.awaySquadId === oppId)
+      || (f.homeSquadId === oppId && f.awaySquadId === squadId)));
+  const winPct = fx ? (fx.homeSquadId === squadId ? fx.homeWinPct : fx.awayWinPct) : null;
+  return { oppAbbr, winPct };
 }
 
 function populateTeamSelects() {
@@ -300,6 +340,11 @@ function renderTeamPanel(squadId, variantKey) {
       </tr>
     `).join('');
 
+  const we = nextMatchWinExp(squadId);
+  const winExpHtml = we?.winPct != null
+    ? `<div class="team-winexp">${I18N.t('bestxi.nextMatchLabel', 'Next match')}: vs ${escapeHtml(we.oppAbbr ?? '?')} · <b style="color:#4a9eff;">${we.winPct}%</b> ${escapeHtml(I18N.t('modal.winChance', 'win chance'))}</div>`
+    : '';
+
   return `
     <div class="team-panel">
       <div class="team-head">
@@ -309,10 +354,11 @@ function renderTeamPanel(squadId, variantKey) {
           <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
         </span>
       </div>
-      <div class="formation-label">Komposisi 2-5-5-3 (15 pemain) · diurutkan berdasarkan Total Points</div>
+      ${winExpHtml}
+      <div class="formation-label">${escapeHtml(I18N.t('bestxi.formationLabel', 'Komposisi 2-5-5-3 (15 pemain) · diurutkan berdasarkan Total Points'))}</div>
       <div class="pitch">${rows}</div>
       <div class="bench-section">
-        <div class="bench-title">Bangku cadangan (sisanya di squad)</div>
+        <div class="bench-title">${escapeHtml(I18N.t('bestxi.benchTitle', 'Bangku cadangan (sisanya di squad)'))}</div>
         <table class="bench">
           <thead><tr><th>Nama</th><th>Pos</th><th>Harga</th><th>Total</th></tr></thead>
           <tbody>${benchRows || `<tr><td colspan="4" class="empty-msg">${I18N.t('common.noBenchPlayers')}</td></tr>`}</tbody>
