@@ -14,6 +14,26 @@ const ROUNDS_URL = 'https://play.fifa.com/json/fantasy/rounds.json';
 const MATCHES_URL = 'https://worldcup26.ir/get/games';
 const STADIUMS_URL = 'https://worldcup26.ir/get/stadiums';
 
+const ELO_BASE = 'https://www.eloratings.net';
+const ELO_TEAMS_URL = `${ELO_BASE}/en.teams.tsv`;
+const ELO_CURRENT_URL = `${ELO_BASE}/2026_World_Cup.tsv`;
+const ELO_FIXTURES_URL = `${ELO_BASE}/2026_World_Cup_fixtures.tsv`;
+const ELO_RESULTS_URL = `${ELO_BASE}/2026_World_Cup_latest.tsv`;
+
+// eloratings.net's team-name strings don't always match our squads.json
+// names verbatim (FIFA vs. common-usage naming) — only these 7 of 48 World
+// Cup 2026 teams needed a manual override; everything else matches by
+// normalized name automatically.
+const ELO_NAME_OVERRIDES = {
+  'Cabo Verde': 'Cape Verde',
+  'Congo DR': 'DR Congo',
+  "Côte d'Ivoire": 'Ivory Coast',
+  'IR Iran': 'Iran',
+  'Korea Republic': 'South Korea',
+  'Türkiye': 'Turkey',
+  'USA': 'United States',
+};
+
 const DATA_DIR = path.join(__dirname, 'data');
 const STATS_DIR = path.join(DATA_DIR, 'stats');
 
@@ -154,6 +174,24 @@ function httpsGetJson(url) {
   });
 }
 
+function httpsGetText(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers: { accept: 'text/plain', 'user-agent': UA } }, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => {
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          reject(new Error(`HTTP ${res.statusCode}`));
+          return;
+        }
+        resolve(body);
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(20000, () => req.destroy(new Error('timeout')));
+  });
+}
+
 async function fetchMatches() {
   log('[matches] fetching worldcup26.ir/get/games...');
   for (let attempt = 1; attempt <= 2; attempt++) {
@@ -199,6 +237,148 @@ async function fetchStadiums() {
       }
     }
   }
+}
+
+function normTeamName(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+}
+
+// eloratings.net serves no JSON API — its SPA (scripts/ratings.js) fetches
+// plain TSV files client-side and renders them into a slickgrid. We fetch
+// the same TSV files directly. Column layouts below were reverse-engineered
+// from ratings.js's pushFixtureRow/pushMatchRow functions and confirmed by
+// screenshotting the live rendered tables (see project notes) — not guessed.
+async function fetchEloData() {
+  log('[elo] fetching eloratings.net World Cup 2026 data...');
+  let squads;
+  try {
+    squads = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'squads.json'), 'utf8'));
+  } catch (e) {
+    log(`[elo] squads.json not found, skipping (run players/squads fetch first): ${e.message}`);
+    return;
+  }
+
+  let teamsTsv, currentTsv, fixturesTsv, resultsTsv;
+  try {
+    [teamsTsv, currentTsv, fixturesTsv, resultsTsv] = await Promise.all([
+      httpsGetText(ELO_TEAMS_URL),
+      httpsGetText(ELO_CURRENT_URL),
+      httpsGetText(ELO_FIXTURES_URL),
+      httpsGetText(ELO_RESULTS_URL),
+    ]);
+  } catch (e) {
+    log(`[elo] could not fetch eloratings.net data: ${e.message} (continuing without Elo data)`);
+    return;
+  }
+
+  // code -> English team name, e.g. "ES" -> "Spain"
+  const eloNameByCode = {};
+  for (const line of teamsTsv.split('\n')) {
+    const [code, name] = line.split('\t');
+    if (code && name) eloNameByCode[code] = name.trim();
+  }
+  const eloCodeByNormName = {};
+  for (const [code, name] of Object.entries(eloNameByCode)) {
+    eloCodeByNormName[normTeamName(name)] = code;
+  }
+
+  // squadId <-> eloCode, both directions.
+  const squadIdToEloCode = {};
+  const eloCodeToSquadId = {};
+  const unmatchedSquads = [];
+  for (const s of squads) {
+    const lookupName = ELO_NAME_OVERRIDES[s.name] || s.name;
+    const code = eloCodeByNormName[normTeamName(lookupName)];
+    if (code) {
+      squadIdToEloCode[s.id] = code;
+      eloCodeToSquadId[code] = s.id;
+    } else {
+      unmatchedSquads.push(s.name);
+    }
+  }
+  if (unmatchedSquads.length) {
+    log(`[elo] WARNING: could not map ${unmatchedSquads.length} squad(s) to an Elo code: ${unmatchedSquads.join(', ')}`);
+  }
+
+  // 2026_World_Cup.tsv: rankLocal, rankGlobal, code, rating, ...
+  const ratings = {};
+  for (const line of currentTsv.split('\n')) {
+    if (!line.trim()) continue;
+    const f = line.split('\t');
+    const code = f[2];
+    const squadId = eloCodeToSquadId[code];
+    if (!squadId) continue;
+    ratings[squadId] = {
+      eloCode: code,
+      rank: Number(f[1]),
+      rating: Number(f[3]),
+    };
+  }
+
+  // 2026_World_Cup_fixtures.tsv: y,m,d,home,away,comp,host,homeRank,awayRank,
+  // homeElo,awayElo,homeWinPct,drawChange,win1Home,win1Away,win2Home,win2Away,
+  // win3Home,win3Away,win4Home,win4Away,win5Home,win5Away
+  const fixtures = [];
+  for (const line of fixturesTsv.split('\n')) {
+    if (!line.trim()) continue;
+    const f = line.split('\t');
+    const homeCode = f[3], awayCode = f[4];
+    const homeSquadId = eloCodeToSquadId[homeCode];
+    const awaySquadId = eloCodeToSquadId[awayCode];
+    if (!homeSquadId || !awaySquadId) continue;
+    const homeWinPct = Number(f[11]);
+    fixtures.push({
+      date: `${f[0]}-${f[1]}-${f[2]}`,
+      hostCountry: f[6],
+      homeSquadId, awaySquadId,
+      homeEloCode: homeCode, awayEloCode: awayCode,
+      homeRank: Number(f[7]) || null, awayRank: Number(f[8]) || null,
+      homeRating: Number(f[9]), awayRating: Number(f[10]),
+      homeWinPct, awayWinPct: Math.round((100 - homeWinPct) * 10) / 10,
+      eloPointsAtStake: {
+        draw: Number(f[12]),
+        winMargin1: [Number(f[13]), Number(f[14])],
+        winMargin2: [Number(f[15]), Number(f[16])],
+        winMargin3: [Number(f[17]), Number(f[18])],
+        winMargin4: [Number(f[19]), Number(f[20])],
+        winMargin5: [Number(f[21]), Number(f[22])],
+      },
+    });
+  }
+
+  // 2026_World_Cup_latest.tsv: y,m,d,home,away,homeScore,awayScore,comp,host,
+  // eloChangeHome,homeEloAfter,awayEloAfter,homeRankMove,awayRankMove,
+  // homeRankAfter,awayRankAfter
+  const results = [];
+  for (const line of resultsTsv.split('\n')) {
+    if (!line.trim()) continue;
+    const f = line.split('\t');
+    const homeCode = f[3], awayCode = f[4];
+    const homeSquadId = eloCodeToSquadId[homeCode];
+    const awaySquadId = eloCodeToSquadId[awayCode];
+    if (!homeSquadId || !awaySquadId) continue;
+    results.push({
+      date: `${f[0]}-${f[1]}-${f[2]}`,
+      hostCountry: f[8],
+      homeSquadId, awaySquadId,
+      homeEloCode: homeCode, awayEloCode: awayCode,
+      homeScore: Number(f[5]), awayScore: Number(f[6]),
+      eloChangeHome: Number(f[9]),
+      homeRatingAfter: Number(f[10]), awayRatingAfter: Number(f[11]),
+      homeRankAfter: Number(f[14]) || null, awayRankAfter: Number(f[15]) || null,
+    });
+  }
+
+  const outPath = path.join(DATA_DIR, 'elo.json');
+  fs.writeFileSync(outPath, JSON.stringify({
+    fetchedAt: new Date().toISOString(),
+    source: 'eloratings.net (World Football Elo Ratings, 2026 World Cup)',
+    squadIdToEloCode,
+    ratings,
+    fixtures,
+    results,
+  }, null, 2));
+  log(`[elo] saved ${Object.keys(ratings).length} team ratings, ${fixtures.length} fixtures, ${results.length} results -> ${outPath}`);
 }
 
 async function fetchRounds() {
@@ -347,6 +527,7 @@ async function main() {
 
   await fetchMatches();
   await fetchStadiums();
+  await fetchEloData();
   const roundsFetched = await fetchRounds();
 
   let headful = args.headful;
