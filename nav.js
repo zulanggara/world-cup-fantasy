@@ -23,6 +23,7 @@ window.NAV = (function () {
     },
     { type: 'link', href: 'groups.html', i18nKey: 'nav.groups', fallback: 'Standings & Fixtures' },
     { type: 'link', href: 'my-squad.html', i18nKey: 'nav.mysquad', fallback: 'Build Squad' },
+    { type: 'link', href: 'donate.html', i18nKey: 'nav.donate', fallback: '❤ Donate', cta: true },
   ];
 
   function tt(key, fallback) {
@@ -50,7 +51,8 @@ window.NAV = (function () {
     for (const g of GROUPS) {
       if (g.type === 'link') {
         const active = normalizePage(g.href) === cur ? ' active' : '';
-        html += `<a href="${g.href}" class="nav-tab${active}" data-i18n="${g.i18nKey}">${tt(g.i18nKey, g.fallback)}</a>`;
+        const ctaClass = g.cta ? ' nav-cta' : '';
+        html += `<a href="${g.href}" class="nav-tab${ctaClass}${active}" data-i18n="${g.i18nKey}">${tt(g.i18nKey, g.fallback)}</a>`;
       } else {
         const childActive = g.items.some((it) => normalizePage(it.href) === cur);
         html += `<div class="nav-dropdown">

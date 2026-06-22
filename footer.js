@@ -43,6 +43,14 @@
       .app-footer .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #6fcf67; display: inline-block; margin-right: 6px; }
       .app-footer .sync-dot.stale { background: var(--accent); }
       .app-footer .sync-dot.very-stale { background: #ef476f; }
+      .app-footer .footer-donate {
+        margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+        background: transparent; border: 1px solid #ff424d; color: #ff424d;
+        padding: 5px 12px; border-radius: 999px; text-decoration: none; font-weight: 700;
+        font-family: 'JetBrains Mono', monospace; font-size: 12px;
+        transition: background-color .15s ease, color .15s ease;
+      }
+      .app-footer .footer-donate:hover { background: #ff424d; color: #fff; }
     `;
     document.head.appendChild(style);
   }
@@ -59,6 +67,7 @@
     } else {
       html = `<span>${tt('footer.noSync', 'Waktu sinkronisasi data tidak tersedia — jalankan')} <code>node scraper.js</code> ${tt('footer.toCreate', 'untuk membuat')} <code>data/sync_meta.json</code>.</span>`;
     }
+    html += `<a class="footer-donate" href="donate.html">${tt('donate.footerCta', '❤ Donate')}</a>`;
 
     if (!footerEl) {
       const wrap = document.querySelector('.wrap');

@@ -16,6 +16,7 @@ window.I18N = (function () {
       research: { en: 'Best 15 (Research)', id: 'Best 15 (Riset)' },
       groups: { en: 'Standings & Fixtures', id: 'Klasemen & Jadwal' },
       mysquad: { en: 'Build Squad', id: 'Susun Skuad' },
+      donate: { en: '❤ Donate', id: '❤ Donasi' },
     },
     common: {
       searchPlaceholder: { en: 'Search player name...', id: 'Cari nama pemain...' },
@@ -87,6 +88,17 @@ window.I18N = (function () {
       kicker: { en: 'Live · Player Intel', id: 'Live · Info Pemain' },
       heroTitle: { en: 'Player Database', id: 'Database Pemain' },
       heroSubtitle: { en: 'Complete 2026 World Cup player database — prices, status, and fantasy points, updated from live scrape data. Click a name for the per-round point breakdown, click a team code for match results & roster.', id: 'Database lengkap pemain Piala Dunia 2026 — harga, status, dan poin fantasy, ter-update dari hasil scrape resmi. Klik nama untuk lihat breakdown poin per ronde, klik kode tim untuk lihat hasil pertandingan & roster.' },
+    },
+    donate: {
+      kicker: { en: 'Support This Project', id: 'Dukung Project Ini' },
+      heroTitle: { en: 'Support World Cup 2026 Fantasy Stats', id: 'Dukung World Cup 2026 Fantasy Stats' },
+      heroSubtitle: { en: 'This project is built and self-hosted as a fan project, ad-free. If this site has been useful to you, any support helps cover hosting costs and development time.', id: 'Project ini dikerjakan dan dihosting sendiri, tanpa iklan, sebagai proyek penggemar. Kalau situs ini bermanfaat buat kamu, dukungan sekecil apapun sangat berarti untuk biaya hosting dan waktu pengembangan.' },
+      patreonDesc: { en: 'One-time support via Patreon.', id: 'Dukungan sekali bayar lewat Patreon.' },
+      patreonCta: { en: 'Support on Patreon', id: 'Dukung di Patreon' },
+      saweriaDesc: { en: 'One-time support — like "buy me a coffee", quick and no account needed.', id: 'Dukungan sekali bayar, cocok untuk "traktir kopi" — cepat dan tanpa perlu akun.' },
+      saweriaCta: { en: 'Support on Saweria', id: 'Dukung di Saweria' },
+      note: { en: '<b>Where does this go?</b> Hosting costs (Vercel), and the time spent keeping data &amp; features updated throughout the tournament. Donating is never required — this site stays free and open for everyone.', id: '<b>Ke mana dukungan ini dipakai?</b> Biaya hosting (Vercel), dan waktu untuk terus update data &amp; fitur selama turnamen berlangsung. Tidak ada keharusan untuk donasi — situs ini tetap gratis dan terbuka untuk semua orang.' },
+      footerCta: { en: '❤ Donate', id: '❤ Donasi' },
     },
     playerCompare: {
       kicker: { en: 'Head-to-Head', id: 'Head-to-Head' },
