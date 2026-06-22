@@ -218,11 +218,22 @@ function buildTeamStrength() {
 }
 
 // Same team-pair + calendar-day matching used on groups.html — eloratings.net
-// has no shared match id with our FIFA-sourced schedule.
+// has no shared match id with our FIFA-sourced schedule, and its date is the
+// host-country local calendar day, which can differ by ±1 day from
+// rounds.json's fixed +01:00 ISO timestamp for late-night kickoffs.
+function nearbyDays(isoDate) {
+  const base = new Date(isoDate.slice(0, 10) + 'T00:00:00Z');
+  return [-1, 0, 1].map((offset) => {
+    const d = new Date(base);
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d.toISOString().slice(0, 10);
+  });
+}
+
 function findEloWinPct(squadId, opponentId, isoDate) {
   if (!isoDate) return null;
-  const day = isoDate.slice(0, 10);
-  const fx = eloFixtures.find((f) => f.date === day
+  const days = nearbyDays(isoDate);
+  const fx = eloFixtures.find((f) => days.includes(f.date)
     && ((f.homeSquadId === squadId && f.awaySquadId === opponentId)
       || (f.homeSquadId === opponentId && f.awaySquadId === squadId)));
   if (!fx) return null;

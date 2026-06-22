@@ -249,6 +249,9 @@ window.I18N = (function () {
       goals: { en: 'Goals', id: 'Gol', ar: 'الأهداف', ms: 'Gol' },
       playerNotFound: { en: 'Player not found.', id: 'Pemain tidak ditemukan.', ar: 'اللاعب غير موجود.', ms: 'Pemain tidak dijumpai.' },
       teamNotFound: { en: 'Team not found.', id: 'Tim tidak ditemukan.', ar: 'الفريق غير موجود.', ms: 'Pasukan tidak dijumpai.' },
+      notPlayedYet: { en: 'Not played yet', id: 'Belum main', ar: 'لم تُلعب بعد', ms: 'Belum dimainkan' },
+      winChance: { en: 'win chance', id: 'kesempatan menang', ar: 'فرصة الفوز', ms: 'peluang menang' },
+      nextMatch: { en: 'Next match', id: 'Pertandingan berikutnya', ar: 'المباراة القادمة', ms: 'Perlawanan seterusnya' },
     },
     footer: {
       lastSync: { en: 'Data last synced', id: 'Data terakhir disinkronkan', ar: 'آخر مزامنة للبيانات', ms: 'Data terakhir disegerakkan' },

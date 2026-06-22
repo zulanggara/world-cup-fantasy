@@ -134,10 +134,11 @@
   .elo-source-note a { color: var(--accent2); }
   .elo-na { color: var(--text-dim); }
   .winexp-bar { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; white-space: nowrap; }
-  .winexp-home { color: var(--accent); font-weight: 700; }
-  .winexp-away { color: var(--text-dim); }
-  .winexp-track { width: 60px; height: 6px; border-radius: 999px; background: var(--panel2); overflow: hidden; flex-shrink: 0; }
-  .winexp-fill { display: block; height: 100%; background: var(--accent); }
+  .winexp-home { color: #4a9eff; font-weight: 700; }
+  .winexp-away { color: #ff5c5c; font-weight: 700; }
+  .winexp-track { display: flex; width: 60px; height: 6px; border-radius: 999px; background: var(--panel2); overflow: hidden; flex-shrink: 0; }
+  .winexp-fill-home { display: block; height: 100%; background: #4a9eff; }
+  .winexp-fill-away { display: block; height: 100%; background: #ff5c5c; }
   .bracket-winexp { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 9px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; border-top: 1px solid var(--border); background: var(--panel2); }
   .bracket-winexp .winexp-track { width: 36px; }
   table.fixtures td.team-link:hover { color: var(--accent2); text-decoration: underline; }
@@ -242,12 +243,23 @@ function squadById(id) {
 
 // Match a fixture/result from data/elo.json (eloratings.net) to a real-world
 // match by team pair + calendar day — the two sources don't share a common
-// match id, but a same-day fixture between the same two squads is unique
-// within a single tournament.
+// match id. rounds.json's ISO date is in a fixed +01:00 offset while
+// eloratings.net reports the match's host-country local calendar date, so a
+// late-night kickoff can land on different days in the two sources (e.g.
+// "2026-06-23T01:00:00+01:00" is still June 22 in the US). Allow ±1 day.
+function nearbyDays(isoDate) {
+  const base = new Date(isoDate.slice(0, 10) + 'T00:00:00Z');
+  return [-1, 0, 1].map((offset) => {
+    const d = new Date(base);
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d.toISOString().slice(0, 10);
+  });
+}
+
 function findEloFixture(homeSquadId, awaySquadId, isoDate) {
   if (!isoDate) return null;
-  const day = isoDate.slice(0, 10);
-  return eloFixtures.find((f) => f.date === day
+  const days = nearbyDays(isoDate);
+  return eloFixtures.find((f) => days.includes(f.date)
     && ((f.homeSquadId === homeSquadId && f.awaySquadId === awaySquadId)
       || (f.homeSquadId === awaySquadId && f.awaySquadId === homeSquadId)));
 }
@@ -647,7 +659,7 @@ function bracketWinExpHtml(home, away, localDate) {
   if (homePct == null || awayPct == null) return '';
   return `<div class="bracket-winexp" title="Elo win expectancy">
     <span class="winexp-home">${homePct}%</span>
-    <span class="winexp-track"><span class="winexp-fill" style="width:${homePct}%"></span></span>
+    <span class="winexp-track"><span class="winexp-fill-home" style="flex-grow:${homePct}"></span><span class="winexp-fill-away" style="flex-grow:${awayPct}"></span></span>
     <span class="winexp-away">${awayPct}%</span>
   </div>`;
 }
@@ -756,7 +768,7 @@ function renderFixtures() {
       const awayPct = eloFx.homeSquadId === t.homeSquadId ? eloFx.awayWinPct : eloFx.homeWinPct;
       winExpHtml = `<span class="winexp-bar" title="Elo: ${homePct}% / ${awayPct}%">
         <span class="winexp-home">${homePct}%</span>
-        <span class="winexp-track"><span class="winexp-fill" style="width:${homePct}%"></span></span>
+        <span class="winexp-track"><span class="winexp-fill-home" style="flex-grow:${homePct}"></span><span class="winexp-fill-away" style="flex-grow:${awayPct}"></span></span>
         <span class="winexp-away">${awayPct}%</span>
       </span>`;
     }

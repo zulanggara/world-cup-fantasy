@@ -53,7 +53,7 @@ window.DetailModal = (function () {
   }
 
   // ---- lazy cached data loading ----
-  const cache = { players: null, squads: null, rounds: null, stats: new Map() };
+  const cache = { players: null, squads: null, rounds: null, elo: null, stats: new Map() };
 
   async function loadPlayers() {
     if (!cache.players) {
@@ -79,6 +79,17 @@ window.DetailModal = (function () {
       }
     }
     return cache.rounds;
+  }
+  async function loadElo() {
+    if (!cache.elo) {
+      try {
+        const res = await fetch('data/elo.json');
+        cache.elo = res.ok ? await res.json() : { ratings: {}, fixtures: {} };
+      } catch (e) {
+        cache.elo = { ratings: {}, fixtures: {} };
+      }
+    }
+    return cache.elo;
   }
   async function loadStats(id) {
     if (!cache.stats.has(id)) {
@@ -106,6 +117,41 @@ window.DetailModal = (function () {
 
   function flag(abbr) {
     return window.FLAGS ? window.FLAGS.flagFor(abbr) : '⚽';
+  }
+
+  // Match an eloratings.net fixture to a real-world match by team pair +
+  // calendar day — the two sources share no common match id, and
+  // eloratings.net's date is the host-country local calendar day, which can
+  // differ by ±1 day from rounds.json's fixed +01:00 ISO timestamp for
+  // late-night kickoffs.
+  function nearbyDays(isoDate) {
+    const base = new Date(isoDate.slice(0, 10) + 'T00:00:00Z');
+    return [-1, 0, 1].map((offset) => {
+      const d = new Date(base);
+      d.setUTCDate(d.getUTCDate() + offset);
+      return d.toISOString().slice(0, 10);
+    });
+  }
+
+  function findEloFixture(elo, squadId, opponentId, isoDate) {
+    if (!isoDate || !elo?.fixtures?.length) return null;
+    const days = nearbyDays(isoDate);
+    const fx = elo.fixtures.find((f) => days.includes(f.date)
+      && ((f.homeSquadId === squadId && f.awaySquadId === opponentId)
+        || (f.homeSquadId === opponentId && f.awaySquadId === squadId)));
+    if (!fx) return null;
+    const winPct = fx.homeSquadId === squadId ? fx.homeWinPct : fx.awayWinPct;
+    return winPct == null ? null : winPct;
+  }
+
+  function eloWinExpHtml(winPct) {
+    if (winPct == null) return '';
+    const oppPct = Math.round((100 - winPct) * 10) / 10;
+    return `<span class="dm-winexp" title="Elo win expectancy (eloratings.net)">
+      <span class="dm-winexp-pct">${winPct}%</span>
+      <span class="dm-winexp-track"><span class="dm-winexp-fill-home" style="flex-grow:${winPct}"></span><span class="dm-winexp-fill-away" style="flex-grow:${oppPct}"></span></span>
+      ${tt('modal.winChance', 'win chance')}
+    </span>`;
   }
 
   // No licensed player photos available — render a deterministic colored
@@ -176,6 +222,13 @@ window.DetailModal = (function () {
       .dm-match-row .scorers { color: var(--text-dim); font-size: 11px; }
       .dm-empty { color: var(--text-dim); font-size: 13px; padding: 6px 2px; }
       .dm-loading { color: var(--text-dim); font-size: 13px; padding: 20px; text-align: center; }
+      .dm-winexp { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
+      .dm-winexp-pct { color: #4a9eff; font-weight: 700; }
+      .dm-winexp-track { display: flex; width: 44px; height: 5px; border-radius: 999px; background: var(--panel2); overflow: hidden; flex-shrink: 0; }
+      .dm-winexp-fill-home { display: block; height: 100%; background: #4a9eff; }
+      .dm-winexp-fill-away { display: block; height: 100%; background: #ff5c5c; }
+      .dm-elo-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--panel2); border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); }
+      .dm-elo-badge b { color: var(--text); }
     `;
     document.head.appendChild(style);
 
@@ -214,13 +267,33 @@ window.DetailModal = (function () {
   // ---- player modal ----
   async function openPlayer(playerId) {
     open(`<div class="dm-loading">${tt('modal.loadingPlayer', 'Memuat data pemain...')}</div>`);
-    const [players, squads, rounds] = await Promise.all([loadPlayers(), loadSquads(), loadRounds()]);
+    const [players, squads, rounds, elo] = await Promise.all([loadPlayers(), loadSquads(), loadRounds(), loadElo()]);
     const p = players.find((x) => x.id === playerId);
     if (!p) { setBody(`<div class="dm-empty">${tt('modal.playerNotFound', 'Pemain tidak ditemukan.')}</div>`); return; }
 
     const abbr = squadAbbr(squads, p.squadId);
     const stats = await loadStats(playerId);
     const tournaments = allTournaments(rounds);
+
+    const nextMatch = tournaments
+      .filter((t) => t.status !== 'complete' && (t.homeSquadId === p.squadId || t.awaySquadId === p.squadId))
+      .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+    let nextMatchHtml = '';
+    if (nextMatch) {
+      const isHome = nextMatch.homeSquadId === p.squadId;
+      const oppId = isHome ? nextMatch.awaySquadId : nextMatch.homeSquadId;
+      const oppAbbr = isHome ? nextMatch.awaySquadAbbr : nextMatch.homeSquadAbbr;
+      const winPct = findEloFixture(elo, p.squadId, oppId, nextMatch.date);
+      nextMatchHtml = `
+        <div class="dm-sub" style="margin-top:-4px;">
+          ${tt('modal.nextMatch', 'Pertandingan berikutnya')}: ${flag(oppAbbr)}
+          <button class="dm-link" onclick="DetailModal.openTeam(${oppId})">${escapeHtml(oppAbbr ?? '?')}</button>
+          (${isHome ? tt('modal.home', 'Kandang') : tt('modal.away', 'Tandang')})
+          · ${escapeHtml(formatWIB(nextMatch.date, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}
+          ${winPct != null ? `· ${eloWinExpHtml(winPct)}` : ''}
+        </div>
+      `;
+    }
 
     const roundsHtml = (Array.isArray(stats) && stats.length)
       ? stats.map((r) => {
@@ -266,6 +339,7 @@ window.DetailModal = (function () {
         · ${escapeHtml(p.position ?? '?')} · $${Number(p.price ?? 0).toFixed(1)} · ${escapeHtml(p.status ?? 'unknown')}
         · Total ${p.stats?.totalPoints ?? 0} pts · Avg ${p.stats?.avgPoints ?? 0} · Form ${p.stats?.form ?? 0}
       </div>
+      ${nextMatchHtml}
       <div class="dm-section-title">${tt('modal.roundsTitle', 'Stats per Ronde & Hasil Pertandingan')}</div>
       ${roundsHtml}
     `);
@@ -274,9 +348,14 @@ window.DetailModal = (function () {
   // ---- team modal ----
   async function openTeam(squadId) {
     open(`<div class="dm-loading">${tt('modal.loadingTeam', 'Memuat data tim...')}</div>`);
-    const [players, squads, rounds] = await Promise.all([loadPlayers(), loadSquads(), loadRounds()]);
+    const [players, squads, rounds, elo] = await Promise.all([loadPlayers(), loadSquads(), loadRounds(), loadElo()]);
     const squad = squads.find((s) => s.id === squadId);
     if (!squad) { setBody(`<div class="dm-empty">${tt('modal.teamNotFound', 'Tim tidak ditemukan.')}</div>`); return; }
+
+    const eloRating = elo?.ratings?.[squadId];
+    const eloBadgeHtml = eloRating
+      ? `<span class="dm-elo-badge" title="World Football Elo Ratings (eloratings.net)">Elo <b>${eloRating.rating}</b> · #${eloRating.rank}</span>`
+      : '';
 
     const tournaments = allTournaments(rounds)
       .filter((t) => t.homeSquadId === squadId || t.awaySquadId === squadId)
@@ -302,12 +381,13 @@ window.DetailModal = (function () {
           const oppAbbr = isHome ? t.awaySquadAbbr : t.homeSquadAbbr;
           const oppId = isHome ? t.awaySquadId : t.homeSquadId;
           const scoreKnown = t.homeScore != null && t.awayScore != null;
-          const scoreText = scoreKnown ? `${t.homeScore} – ${t.awayScore}` : 'Belum main';
+          const scoreText = scoreKnown ? `${t.homeScore} – ${t.awayScore}` : tt('modal.notPlayedYet', 'Belum main');
           const scorers = scoreKnown ? scorerNames(isHome ? t.homeGoalScorersAssists : t.awayGoalScorersAssists) : '';
           const dateStr = t.date ? formatWIB(t.date, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+          const winPct = !scoreKnown ? findEloFixture(elo, squadId, oppId, t.date) : null;
           return `
             <div class="dm-match-row">
-              <span>${dateStr} · ${isHome ? tt('modal.home', 'Kandang') : tt('modal.away', 'Tandang')} vs ${flag(oppAbbr)} <button class="dm-link" onclick="DetailModal.openTeam(${oppId})">${escapeHtml(oppAbbr ?? '?')}</button></span>
+              <span>${dateStr} · ${isHome ? tt('modal.home', 'Kandang') : tt('modal.away', 'Tandang')} vs ${flag(oppAbbr)} <button class="dm-link" onclick="DetailModal.openTeam(${oppId})">${escapeHtml(oppAbbr ?? '?')}</button>${winPct != null ? ` · ${eloWinExpHtml(winPct)}` : ''}</span>
               <span class="score">${escapeHtml(scoreText)}</span>
             </div>
             ${scorers ? `<div class="dm-match-row" style="background:none;padding:0 10px 6px;"><span class="scorers">${tt('modal.goals', 'Gol')}: ${escapeHtml(scorers)}</span></div>` : ''}
@@ -331,7 +411,7 @@ window.DetailModal = (function () {
 
     setBody(`
       <div class="dm-head"><span class="dm-flag">${flag(squad.abbr)}</span><h2>${escapeHtml(squad.name)} <span style="color:var(--text-dim); font-weight:400;">(${escapeHtml(squad.abbr)})</span></h2></div>
-      <div class="dm-sub">Grup ${escapeHtml((squad.group ?? '?').toUpperCase())} ${squad.isEliminated ? '· Tersingkir' : ''}</div>
+      <div class="dm-sub">Grup ${escapeHtml((squad.group ?? '?').toUpperCase())} ${squad.isEliminated ? '· Tersingkir' : ''} ${eloBadgeHtml}</div>
       <div class="dm-section-title">${tt('modal.matchesTitle', 'Hasil & Jadwal Pertandingan')}</div>
       ${matchesHtml}
       <div class="dm-section-title">${tt('modal.rosterTitle', 'Roster (diurutkan Total Points)')}</div>
