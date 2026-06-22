@@ -299,6 +299,15 @@ async function fetchEloData() {
   if (unmatchedSquads.length) {
     log(`[elo] WARNING: could not map ${unmatchedSquads.length} squad(s) to an Elo code: ${unmatchedSquads.join(', ')}`);
   }
+  // If eloratings.net's response was unparsable (e.g. blocked/rate-limited
+  // from a CI IP and served something other than the expected TSV), every
+  // squad fails to map and we'd otherwise happily write an all-empty
+  // elo.json over a previously good one. Bail out instead — keep stale data
+  // rather than silently destroying it.
+  if (Object.keys(squadIdToEloCode).length === 0) {
+    log('[elo] ERROR: matched 0/48 squads to an Elo code — eloratings.net likely returned unexpected content. Leaving existing data/elo.json untouched.');
+    return;
+  }
 
   // 2026_World_Cup.tsv: rankLocal, rankGlobal, code, rating, ...
   const ratings = {};
