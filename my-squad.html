@@ -178,6 +178,7 @@
 <script src="nav.js"></script>
 <script src="flags.js"></script>
 <script src="brand.js"></script>
+<script src="player-photo.js"></script>
 <script src="detail-modal.js"></script>
 <script src="footer.js"></script>
 <script>
@@ -212,6 +213,7 @@ function squadAbbr(squadId) {
 function flatten(p) {
   return {
     id: p?.id,
+    fifaId: p?.fifaId ?? null,
     name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
     position: p?.position ?? '—',
     squadId: p?.squadId ?? null,
@@ -337,7 +339,7 @@ function renderPlayerTable() {
     const btnClass = inSquad ? 'add-btn added' : 'add-btn';
     return `
       <tr>
-        <td onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer;">${escapeHtml(p.name)}</td>
+        <td onclick="DetailModal.openPlayer(${p.id})" style="cursor:pointer; display:flex; align-items:center; gap:8px;">${PlayerPhoto.html(p.fifaId, p.name, 24)} ${escapeHtml(p.name)}</td>
         <td onclick="DetailModal.openTeam(${p.squadId})" style="cursor:pointer; color:var(--accent2);">${FLAGS.flagFor(squadAbbr(p.squadId))} ${escapeHtml(squadAbbr(p.squadId))}</td>
         <td>${p.position}</td>
         <td class="num">$${Number(p.price).toFixed(1)}</td>
@@ -376,6 +378,7 @@ function renderSquadPanel() {
         cells.push(`
           <div class="slot filled" onclick="DetailModal.openPlayer(${p.id})">
             <span class="remove-x" onclick="event.stopPropagation(); removePlayer(${p.id})" title="Hapus">✕</span>
+            ${PlayerPhoto.html(p.fifaId, p.name, 36)}
             <div class="pname">${escapeHtml(p.name)}</div>
             <div class="pmeta">${FLAGS.flagFor(squadAbbr(p.squadId))} ${escapeHtml(squadAbbr(p.squadId))} · $${Number(p.price).toFixed(1)} · ${p.totalPoints}pt</div>
           </div>

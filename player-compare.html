@@ -107,6 +107,7 @@
 <script src="nav.js"></script>
 <script src="flags.js"></script>
 <script src="brand.js"></script>
+<script src="player-photo.js"></script>
 <script src="detail-modal.js"></script>
 <script src="footer.js"></script>
 <script>
@@ -138,6 +139,7 @@ function flatten(p) {
   const agg = aggregates[p?.id] || {};
   return {
     id: p?.id,
+    fifaId: p?.fifaId ?? null,
     name: [p?.firstName, p?.lastName].filter(Boolean).join(' ') || p?.knownName || `#${p?.id ?? '?'}`,
     squadId: p?.squadId ?? null,
     position: p?.position ?? '—',
@@ -249,6 +251,7 @@ function renderTable() {
   headRow.innerHTML = `<th class="row-label">${escapeHtml(I18N.t('playerCompare.rowLabel', 'Stat'))}</th>` +
     chosen.map((p) => `
       <th class="player-head" onclick="DetailModal.openPlayer(${p.id})">
+        <div>${PlayerPhoto.html(p.fifaId, p.name, 40)}</div>
         <div class="ph-name">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.name)}</div>
         <div class="ph-team">${escapeHtml(p.squadAbbr)} · ${escapeHtml(p.position)}</div>
       </th>

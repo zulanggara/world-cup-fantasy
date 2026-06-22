@@ -154,20 +154,11 @@ window.DetailModal = (function () {
     </span>`;
   }
 
-  // No licensed player photos available — render a deterministic colored
-  // initials circle instead (see README "SEO & Bahasa" / asset notes).
-  function avatarColor(seed) {
-    let hash = 0;
-    for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-    const hue = hash % 360;
-    return `hsl(${hue}, 65%, 62%)`;
-  }
-  function initials(name) {
-    return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
-  }
-  function avatarHtml(name, size) {
-    const s = size || 44;
-    return `<span class="avatar-circle" style="width:${s}px;height:${s}px;font-size:${Math.round(s * 0.4)}px;background:${avatarColor(name)};">${escapeHtml(initials(name))}</span>`;
+  // Real headshot from play.fifa.com when the player has a fifaId, falling
+  // back to a deterministic colored-initials circle on load error or when
+  // no fifaId exists (see player-photo.js).
+  function avatarHtml(fifaId, name, size) {
+    return window.PlayerPhoto ? window.PlayerPhoto.html(fifaId, name, size) : '';
   }
 
   // ---- modal shell ----
@@ -343,7 +334,7 @@ window.DetailModal = (function () {
       : `<div class="dm-empty">${tt('modal.noMatchData', 'Belum ada data pertandingan.')}</div>`;
 
     setBody(`
-      <div class="dm-head">${avatarHtml(playerName(p), 48)}<h2>${escapeHtml(playerName(p))}</h2></div>
+      <div class="dm-head">${avatarHtml(p.fifaId, playerName(p), 48)}<h2>${escapeHtml(playerName(p))}</h2></div>
       <div class="dm-sub">
         <span class="dm-flag">${flag(abbr)}</span>
         <button class="dm-link" onclick="DetailModal.openTeam(${p.squadId})">${escapeHtml(abbr)}</button>
@@ -411,7 +402,7 @@ window.DetailModal = (function () {
           <thead><tr><th>${tt('common.colName', 'Nama')}</th><th>${tt('common.colPosition', 'Pos')}</th><th class="num">${tt('bestxi.colPrice', 'Harga')}</th><th class="num">${tt('common.colTotalPts', 'Total Pts')}</th></tr></thead>
           <tbody>${roster.map((p) => `
             <tr onclick="DetailModal.openPlayer(${p.id})">
-              <td>${avatarHtml(playerName(p), 24)} ${escapeHtml(playerName(p))}</td>
+              <td>${avatarHtml(p.fifaId, playerName(p), 24)} ${escapeHtml(playerName(p))}</td>
               <td>${escapeHtml(p.position ?? '?')}</td>
               <td class="num">$${Number(p.price ?? 0).toFixed(1)}</td>
               <td class="num">${p.stats?.totalPoints ?? 0}</td>

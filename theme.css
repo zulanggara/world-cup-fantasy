@@ -180,7 +180,7 @@ button.toggle:active { transform: scale(0.96); }
   text-transform: uppercase;
 }
 
-/* ---- player/team initial avatars (no licensed photos available — see README) ---- */
+/* ---- colored-initials fallback for player photos (see player-photo.js) ---- */
 .avatar-circle {
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: 50%; font-family: 'Montserrat', sans-serif; font-weight: 800;
