@@ -1764,8 +1764,8 @@
       },
       {
         "id": 42,
-        "period": "half_time",
-        "minutes": 49,
+        "period": "second_half",
+        "minutes": 65,
         "extraMinutes": 0,
         "venueName": "Lincoln Financial Field",
         "venueCity": "Philadelphia, Pennsylvania",
@@ -1781,12 +1781,17 @@
         "awaySquadName": "Iraq",
         "homeSquadAbbr": "FRA",
         "awaySquadAbbr": "IRQ",
-        "homeScore": 1,
+        "homeScore": 2,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": [
           {
             "playerId": 500,
             "assistId": 517,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 500,
+            "assistId": 501,
             "isOwnGoal": false
           }
         ],
@@ -1796,8 +1801,8 @@
       },
       {
         "id": 43,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 20,
         "extraMinutes": 0,
         "venueName": "Metlife Stadium",
         "venueCity": "East Rutherford, New Jersey",
@@ -1805,7 +1810,7 @@
         "venueCityTranslationKey": null,
         "venueId": 6,
         "date": "2026-06-23T01:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 32,
         "awaySquadId": 39,
@@ -1813,11 +1818,11 @@
         "awaySquadName": "Senegal",
         "homeSquadAbbr": "NOR",
         "awaySquadAbbr": "SEN",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
       },
       {
