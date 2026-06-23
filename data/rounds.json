@@ -1051,7 +1051,8 @@
         ]
       }
     ],
-    "stage": "GROUP"
+    "stage": "GROUP",
+    "isLockoutFinished": true
   },
   {
     "id": 2,
@@ -2005,7 +2006,8 @@
         "awayGoalScorersAssists": null
       }
     ],
-    "stage": "GROUP"
+    "stage": "GROUP",
+    "isLockoutFinished": true
   },
   {
     "id": 3,
@@ -2638,7 +2640,8 @@
         "awayGoalScorersAssists": null
       }
     ],
-    "stage": "GROUP"
+    "stage": "GROUP",
+    "isLockoutFinished": false
   },
   {
     "id": 4,
@@ -2646,7 +2649,8 @@
     "startDate": "2026-06-28T20:00:00+01:00",
     "endDate": "2026-07-04T04:30:00+01:00",
     "tournaments": [],
-    "stage": "R32"
+    "stage": "R32",
+    "isLockoutFinished": false
   },
   {
     "id": 5,
@@ -2654,7 +2658,8 @@
     "startDate": "2026-07-04T18:00:00+01:00",
     "endDate": "2026-07-07T23:00:00+01:00",
     "tournaments": [],
-    "stage": "R16"
+    "stage": "R16",
+    "isLockoutFinished": false
   },
   {
     "id": 6,
@@ -2662,7 +2667,8 @@
     "startDate": "2026-07-09T21:00:00+01:00",
     "endDate": "2026-07-12T04:00:00+01:00",
     "tournaments": [],
-    "stage": "QF"
+    "stage": "QF",
+    "isLockoutFinished": false
   },
   {
     "id": 7,
@@ -2670,7 +2676,8 @@
     "startDate": "2026-07-14T20:00:00+01:00",
     "endDate": "2026-07-15T22:00:00+01:00",
     "tournaments": [],
-    "stage": "SF"
+    "stage": "SF",
+    "isLockoutFinished": false
   },
   {
     "id": 8,
@@ -2678,6 +2685,7 @@
     "startDate": "2026-07-18T22:00:00+01:00",
     "endDate": "2026-07-19T22:00:00+01:00",
     "tournaments": [],
-    "stage": "F"
+    "stage": "F",
+    "isLockoutFinished": false
   }
 ]
