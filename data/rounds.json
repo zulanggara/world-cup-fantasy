@@ -1903,8 +1903,8 @@
       },
       {
         "id": 45,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 49,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -1912,7 +1912,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-06-23T18:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 35,
         "awaySquadId": 48,
@@ -1920,11 +1920,27 @@
         "awaySquadName": "Uzbekistan",
         "homeSquadAbbr": "POR",
         "awaySquadAbbr": "UZB",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
+        "homeScore": 3,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1573,
+            "assistId": 917,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 916,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1573,
+            "assistId": 939,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
       },
       {
