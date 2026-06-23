@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-23T00:21:08.843Z",
+  "fetchedAt": "2026-06-23T05:14:54.014Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -774,7 +774,7 @@
           24
         ]
       }
-    },  
+    },
     {
       "date": "2026-06-25",
       "hostCountry": "US",
