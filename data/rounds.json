@@ -1981,8 +1981,8 @@
       },
       {
         "id": 47,
-        "period": "second_half",
-        "minutes": 50,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Bmo Field",
         "venueCity": "Toronto",
@@ -1990,7 +1990,7 @@
         "venueCityTranslationKey": null,
         "venueId": 3,
         "date": "2026-06-24T00:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 33,
         "awaySquadId": 13,
@@ -2001,14 +2001,20 @@
         "homeScore": 0,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "awayScore": 1,
         "awayPenaltyScore": 0,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 332,
+            "assistId": 325,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 48,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "half_time",
+        "minutes": 50,
         "extraMinutes": 0,
         "venueName": "Estadio Akron",
         "venueCity": "Guadalajara",
@@ -2016,7 +2022,7 @@
         "venueCityTranslationKey": null,
         "venueId": 2,
         "date": "2026-06-24T03:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 10,
         "awaySquadId": 11,
@@ -2024,11 +2030,11 @@
         "awaySquadName": "Congo DR",
         "homeSquadAbbr": "COL",
         "awaySquadAbbr": "COD",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
+        "awayScore": 0,
+        "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
       }
     ],
