@@ -2055,8 +2055,8 @@
     "tournaments": [
       {
         "id": 49,
-        "period": "first_half",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Bc Place",
         "venueCity": "Vancouver",
@@ -2072,17 +2072,34 @@
         "awaySquadName": "Canada",
         "homeSquadAbbr": "SUI",
         "awaySquadAbbr": "CAN",
-        "homeScore": 0,
+        "homeScore": 2,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1158,
+            "assistId": 1133,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1133,
+            "assistId": 1149,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
         "awayPenaltyScore": 0,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1970,
+            "assistId": 241,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 50,
-        "period": "first_half",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 92,
         "extraMinutes": 0,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
@@ -2098,12 +2115,34 @@
         "awaySquadName": "Qatar",
         "homeSquadAbbr": "BIH",
         "awaySquadAbbr": "QAT",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "homeScore": 3,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 152,
+            "assistId": 160,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 971,
+            "assistId": null,
+            "isOwnGoal": true
+          },
+          {
+            "playerId": 1342,
+            "assistId": 1341,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 961,
+            "assistId": 960,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 52,
@@ -2679,7 +2718,7 @@
       }
     ],
     "stage": "GROUP",
-    "isLockoutFinished": false
+    "isLockoutFinished": true
   },
   {
     "id": 4,
