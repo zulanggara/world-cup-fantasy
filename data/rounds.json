@@ -2055,8 +2055,8 @@
     "tournaments": [
       {
         "id": 49,
-        "period": "second_half",
-        "minutes": 96,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Bc Place",
         "venueCity": "Vancouver",
@@ -2064,7 +2064,7 @@
         "venueCityTranslationKey": null,
         "venueId": 8,
         "date": "2026-06-24T20:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 43,
         "awaySquadId": 9,
@@ -2098,8 +2098,8 @@
       },
       {
         "id": 50,
-        "period": "second_half",
-        "minutes": 92,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
@@ -2107,7 +2107,7 @@
         "venueCityTranslationKey": null,
         "venueId": 14,
         "date": "2026-06-24T20:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 6,
         "awaySquadId": 36,
@@ -2146,8 +2146,8 @@
       },
       {
         "id": 52,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 38,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -2155,7 +2155,7 @@
         "venueCityTranslationKey": null,
         "venueId": 13,
         "date": "2026-06-24T23:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 29,
         "awaySquadId": 22,
@@ -2163,17 +2163,23 @@
         "awaySquadName": "Haiti",
         "homeSquadAbbr": "MAR",
         "awaySquadAbbr": "HAI",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 2010,
+            "assistId": null,
+            "isOwnGoal": true
+          }
+        ]
       },
       {
         "id": 51,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 38,
         "extraMinutes": 0,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
@@ -2181,7 +2187,7 @@
         "venueCityTranslationKey": null,
         "venueId": 15,
         "date": "2026-06-24T23:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 38,
         "awaySquadId": 7,
@@ -2189,12 +2195,18 @@
         "awaySquadName": "Brazil",
         "homeSquadAbbr": "SCO",
         "awaySquadAbbr": "BRA",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 173,
+            "assistId": 179,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 54,
