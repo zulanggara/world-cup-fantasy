@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-24T08:33:42.882Z",
+  "fetchedAt": "2026-06-24T12:01:40.697Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -100,12 +100,12 @@
     "10": {
       "eloCode": "CO",
       "rank": 5,
-      "rating": 1998
+      "rating": 2006
     },
     "11": {
       "eloCode": "CD",
-      "rank": 51,
-      "rating": 1674
+      "rank": 53,
+      "rating": 1666
     },
     "12": {
       "eloCode": "CI",
@@ -214,7 +214,7 @@
     },
     "33": {
       "eloCode": "PA",
-      "rank": 52,
+      "rank": 51,
       "rating": 1668
     },
     "34": {
@@ -294,43 +294,6 @@
     }
   },
   "fixtures": [
-    {
-      "date": "2026-06-23",
-      "hostCountry": "MX",
-      "homeSquadId": 10,
-      "awaySquadId": 11,
-      "homeEloCode": "CO",
-      "awayEloCode": "CD",
-      "homeRank": 5,
-      "awayRank": 51,
-      "homeRating": 1998,
-      "awayRating": 1674,
-      "homeWinPct": 87,
-      "awayWinPct": 13,
-      "eloPointsAtStake": {
-        "draw": -22,
-        "winMargin1": [
-          8,
-          52
-        ],
-        "winMargin2": [
-          12,
-          78
-        ],
-        "winMargin3": [
-          14,
-          91
-        ],
-        "winMargin4": [
-          15,
-          97
-        ],
-        "winMargin5": [
-          16,
-          104
-        ]
-      }
-    },
     {
       "date": "2026-06-24",
       "hostCountry": "US",
@@ -1080,31 +1043,31 @@
       "awayEloCode": "PT",
       "homeRank": 5,
       "awayRank": 6,
-      "homeRating": 1998,
+      "homeRating": 2006,
       "awayRating": 1988,
-      "homeWinPct": 51,
-      "awayWinPct": 49,
+      "homeWinPct": 53,
+      "awayWinPct": 47,
       "eloPointsAtStake": {
-        "draw": -1,
+        "draw": -2,
         "winMargin1": [
-          29,
-          31
+          28,
+          32
         ],
         "winMargin2": [
-          44,
-          46
+          43,
+          47
         ],
         "winMargin3": [
-          51,
-          54
+          50,
+          55
         ],
         "winMargin4": [
-          55,
-          58
+          53,
+          59
         ],
         "winMargin5": [
-          58,
-          62
+          57,
+          63
         ]
       }
     },
@@ -1152,33 +1115,33 @@
       "awaySquadId": 48,
       "homeEloCode": "CD",
       "awayEloCode": "UZ",
-      "homeRank": 51,
+      "homeRank": 53,
       "awayRank": 50,
-      "homeRating": 1674,
+      "homeRating": 1666,
       "awayRating": 1677,
-      "homeWinPct": 50,
-      "awayWinPct": 50,
+      "homeWinPct": 48,
+      "awayWinPct": 52,
       "eloPointsAtStake": {
-        "draw": 0,
+        "draw": 1,
         "winMargin1": [
-          30,
-          30
+          31,
+          29
         ],
         "winMargin2": [
-          45,
-          45
+          46,
+          44
         ],
         "winMargin3": [
-          53,
-          52
+          54,
+          51
         ],
         "winMargin4": [
-          57,
-          56
+          58,
+          54
         ],
         "winMargin5": [
-          61,
-          59
+          62,
+          58
         ]
       }
     },
@@ -1190,7 +1153,7 @@
       "homeEloCode": "EN",
       "awayEloCode": "PA",
       "homeRank": 4,
-      "awayRank": 52,
+      "awayRank": 51,
       "homeRating": 2028,
       "awayRating": 1668,
       "homeWinPct": 89,
@@ -2407,6 +2370,21 @@
   "results": [
     {
       "date": "2026-06-23",
+      "hostCountry": "MX",
+      "homeSquadId": 10,
+      "awaySquadId": 11,
+      "homeEloCode": "CO",
+      "awayEloCode": "CD",
+      "homeScore": 1,
+      "awayScore": 0,
+      "eloChangeHome": 8,
+      "homeRatingAfter": 2006,
+      "awayRatingAfter": 1666,
+      "homeRankAfter": 5,
+      "awayRankAfter": 53
+    },
+    {
+      "date": "2026-06-23",
       "hostCountry": "CA",
       "homeSquadId": 13,
       "awaySquadId": 33,
@@ -2418,7 +2396,7 @@
       "homeRatingAfter": 1896,
       "awayRatingAfter": 1668,
       "homeRankAfter": 12,
-      "awayRankAfter": 52
+      "awayRankAfter": 51
     },
     {
       "date": "2026-06-23",
