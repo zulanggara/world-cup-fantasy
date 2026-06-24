@@ -1056,7 +1056,7 @@
   },
   {
     "id": 2,
-    "status": "playing",
+    "status": "complete",
     "startDate": "2026-06-18T17:00:00+01:00",
     "endDate": "2026-06-24T05:00:00+01:00",
     "tournaments": [
@@ -2013,8 +2013,8 @@
       },
       {
         "id": 48,
-        "period": "half_time",
-        "minutes": 50,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Estadio Akron",
         "venueCity": "Guadalajara",
@@ -2022,7 +2022,7 @@
         "venueCityTranslationKey": null,
         "venueId": 2,
         "date": "2026-06-24T03:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 10,
         "awaySquadId": 11,
@@ -2030,9 +2030,15 @@
         "awaySquadName": "Congo DR",
         "homeSquadAbbr": "COL",
         "awaySquadAbbr": "COD",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 248,
+            "assistId": 267,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 0,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": null
