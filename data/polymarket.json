@@ -1,13 +1,13 @@
 {
-  "fetchedAt": "2026-06-25T15:12:07.674Z",
+  "fetchedAt": "2026-06-25T17:23:20.133Z",
   "source": "Polymarket (gamma-api.polymarket.com) — aggregated prediction-market odds, not an official forecast",
   "teams": {
     "1": {
-      "makeR32": 0.745,
-      "makeR16": 0.185,
+      "makeR32": 0.735,
+      "makeR16": 0.225,
       "makeQF": 0.06,
-      "makeSF": 0.0245,
-      "makeFinal": 0.004,
+      "makeSF": 0.0235,
+      "makeFinal": 0.0025,
       "winWC": 0.0005,
       "winGroup": 0,
       "group": "j"
@@ -15,7 +15,7 @@
     "2": {
       "makeR32": 1,
       "makeR16": 0.845,
-      "makeQF": 0.685,
+      "makeQF": 0.69,
       "makeSF": 0.485,
       "makeFinal": 0.275,
       "winWC": 0.1485,
@@ -24,7 +24,7 @@
     },
     "3": {
       "makeR32": 0.905,
-      "makeR16": 0.31,
+      "makeR16": 0.32,
       "makeQF": 0.077,
       "makeSF": 0.0185,
       "makeFinal": 0.0085,
@@ -37,35 +37,35 @@
       "makeR16": 0.24,
       "makeQF": 0.115,
       "makeSF": 0.0295,
-      "makeFinal": 0.0145,
+      "makeFinal": 0.0155,
       "winWC": 0.0025,
       "winGroup": 0,
       "group": "j"
     },
     "5": {
-      "makeR32": 0.9405,
+      "makeR32": 0.941,
       "makeR16": 0.595,
       "makeQF": 0.245,
       "makeSF": 0.105,
       "makeFinal": 0.0285,
       "winWC": 0.0105,
-      "winGroup": 0.295,
+      "winGroup": 0.315,
       "group": "g"
     },
     "6": {
       "makeR32": 1,
-      "makeR16": 0.205,
+      "makeR16": 0.225,
       "makeQF": 0.0755,
-      "makeSF": 0.0235,
+      "makeSF": 0.0225,
       "makeFinal": 0.0185,
       "winGroup": 0,
       "group": "b"
     },
     "7": {
       "makeR32": 1,
-      "makeR16": 0.69,
+      "makeR16": 0.695,
       "makeQF": 0.45,
-      "makeSF": 0.23,
+      "makeSF": 0.285,
       "makeFinal": 0.145,
       "winWC": 0.0545,
       "winGroup": 1,
@@ -73,29 +73,29 @@
     },
     "8": {
       "makeR32": 0.685,
-      "makeR16": 0.0925,
-      "makeQF": 0.049,
+      "makeR16": 0.0905,
+      "makeQF": 0.0485,
       "makeSF": 0.0145,
       "makeFinal": 0.0075,
       "winWC": 0.0015,
-      "winGroup": 0.029,
+      "winGroup": 0.0305,
       "group": "h"
     },
     "9": {
       "makeR32": 1,
-      "makeR16": 0.725,
-      "makeQF": 0.19,
+      "makeR16": 0.705,
+      "makeQF": 0.18,
       "makeSF": 0.0435,
-      "makeFinal": 0.0165,
+      "makeFinal": 0.016,
       "winWC": 0.0025,
       "winGroup": 0,
       "group": "b"
     },
     "10": {
       "makeR32": 1,
-      "makeR16": 0.635,
+      "makeR16": 0.62,
       "makeQF": 0.335,
-      "makeSF": 0.115,
+      "makeSF": 0.095,
       "makeFinal": 0.0535,
       "winWC": 0.0175,
       "winGroup": 0.475,
@@ -104,15 +104,15 @@
     "11": {
       "makeR32": 0.565,
       "makeR16": 0.115,
-      "makeQF": 0.0335,
-      "makeSF": 0.0195,
+      "makeQF": 0.029,
+      "makeSF": 0.0225,
       "makeFinal": 0.006,
       "winWC": 0.0005,
       "winGroup": 0,
       "group": "k"
     },
     "12": {
-      "makeR32": 0.96,
+      "makeR32": 0.9615,
       "makeR16": 0.3,
       "makeQF": 0.135,
       "makeSF": 0.047,
@@ -123,19 +123,19 @@
     },
     "13": {
       "makeR32": 0.935,
-      "makeR16": 0.365,
-      "makeQF": 0.145,
-      "makeSF": 0.0515,
-      "makeFinal": 0.0215,
+      "makeR16": 0.355,
+      "makeQF": 0.15,
+      "makeSF": 0.051,
+      "makeFinal": 0.022,
       "winWC": 0.0045,
-      "winGroup": 0.0795,
+      "winGroup": 0.0815,
       "group": "l"
     },
     "14": {
-      "makeR32": 0.0505,
+      "makeR32": 0.06,
       "makeR16": 0.0075,
       "makeQF": 0.0035,
-      "makeSF": 0.0015,
+      "makeSF": 0.001,
       "makeFinal": 0.0015,
       "winWC": 0.0005,
       "winGroup": 0,
@@ -155,7 +155,7 @@
       "makeR32": 0.195,
       "makeR16": 0.07,
       "makeQF": 0.03,
-      "makeSF": 0.014,
+      "makeSF": 0.015,
       "makeFinal": 0.0025,
       "winWC": 0.0015,
       "winGroup": 0,
@@ -163,12 +163,12 @@
     },
     "17": {
       "makeR32": 0.9985,
-      "makeR16": 0.435,
-      "makeQF": 0.145,
+      "makeR16": 0.425,
+      "makeQF": 0.155,
       "makeSF": 0.038,
       "makeFinal": 0.0065,
       "winWC": 0.0025,
-      "winGroup": 0.595,
+      "winGroup": 0.605,
       "group": "g"
     },
     "18": {
@@ -178,16 +178,16 @@
       "makeSF": 0.385,
       "makeFinal": 0.235,
       "winWC": 0.1055,
-      "winGroup": 0.885,
+      "winGroup": 0.875,
       "group": "l"
     },
     "19": {
       "makeR32": 1,
-      "makeR16": 0.88,
+      "makeR16": 0.875,
       "makeQF": 0.645,
-      "makeSF": 0.445,
+      "makeSF": 0.455,
       "makeFinal": 0.325,
-      "winWC": 0.1935,
+      "winWC": 0.1905,
       "winGroup": 0.795,
       "group": "i"
     },
@@ -202,13 +202,13 @@
       "group": "e"
     },
     "21": {
-      "makeR32": 0.997,
+      "makeR32": 0.998,
       "makeR16": 0.265,
-      "makeQF": 0.09,
+      "makeQF": 0.084,
       "makeSF": 0.0355,
-      "makeFinal": 0.0185,
+      "makeFinal": 0.018,
       "winWC": 0.0015,
-      "winGroup": 0.0445,
+      "winGroup": 0.045,
       "group": "l"
     },
     "22": {
@@ -222,18 +222,18 @@
       "group": "c"
     },
     "23": {
-      "makeR32": 0.5725,
-      "makeR16": 0.19,
-      "makeQF": 0.042,
+      "makeR32": 0.5665,
+      "makeR16": 0.195,
+      "makeQF": 0.0395,
       "makeSF": 0.026,
       "makeFinal": 0.003,
       "winWC": 0.0005,
-      "winGroup": 0.1025,
+      "winGroup": 0.099,
       "group": "g"
     },
     "24": {
-      "makeR32": 0.015,
-      "makeR16": 0.0025,
+      "makeR32": 0.017,
+      "makeR16": 0.0015,
       "makeQF": 0.0075,
       "makeSF": 0.0005,
       "makeFinal": 0.0015,
@@ -242,11 +242,11 @@
       "group": "i"
     },
     "25": {
-      "makeR32": 0.9985,
-      "makeR16": 0.385,
+      "makeR32": 0.999,
+      "makeR16": 0.365,
       "makeQF": 0.22,
       "makeSF": 0.13,
-      "makeFinal": 0.0445,
+      "makeFinal": 0.0435,
       "winWC": 0.0175,
       "winGroup": 0.185,
       "group": "f"
@@ -262,32 +262,32 @@
       "group": "j"
     },
     "27": {
-      "makeR32": 0.885,
+      "makeR32": 0.875,
       "makeR16": 0.335,
-      "makeQF": 0.105,
+      "makeQF": 0.11,
       "makeSF": 0.016,
-      "makeFinal": 0.015,
+      "makeFinal": 0.0135,
       "winWC": 0.0015,
       "winGroup": 0,
       "group": "a"
     },
     "28": {
       "makeR32": 1,
-      "makeR16": 0.685,
+      "makeR16": 0.675,
       "makeQF": 0.305,
       "makeSF": 0.14,
-      "makeFinal": 0.064,
+      "makeFinal": 0.062,
       "winWC": 0.0125,
       "winGroup": 1,
       "group": "a"
     },
     "29": {
       "makeR32": 1,
-      "makeR16": 0.415,
-      "makeQF": 0.295,
+      "makeR16": 0.435,
+      "makeQF": 0.305,
       "makeSF": 0.115,
-      "makeFinal": 0.0735,
-      "winWC": 0.0165,
+      "makeFinal": 0.0725,
+      "winWC": 0.0155,
       "winGroup": 0,
       "group": "c"
     },
@@ -298,13 +298,13 @@
       "makeSF": 0.215,
       "makeFinal": 0.125,
       "winWC": 0.0565,
-      "winGroup": 0.795,
+      "winGroup": 0.805,
       "group": "f"
     },
     "31": {
       "makeR32": 0.055,
-      "makeR16": 0.0095,
-      "makeQF": 0.013,
+      "makeR16": 0.02,
+      "makeQF": 0.0135,
       "makeSF": 0.005,
       "makeFinal": 0.0025,
       "winWC": 0.0005,
@@ -317,7 +317,7 @@
       "makeQF": 0.325,
       "makeSF": 0.185,
       "makeFinal": 0.085,
-      "winWC": 0.0315,
+      "winWC": 0.0325,
       "winGroup": 0.205,
       "group": "i"
     },
@@ -335,19 +335,19 @@
       "makeR32": 0.855,
       "makeR16": 0.235,
       "makeQF": 0.0465,
-      "makeSF": 0.016,
-      "makeFinal": 0.01,
+      "makeSF": 0.0165,
+      "makeFinal": 0.011,
       "winWC": 0.0005,
       "winGroup": 0,
       "group": "d"
     },
     "35": {
       "makeR32": 0.9985,
-      "makeR16": 0.745,
+      "makeR16": 0.755,
       "makeQF": 0.485,
       "makeSF": 0.3,
-      "makeFinal": 0.155,
-      "winWC": 0.0785,
+      "makeFinal": 0.16,
+      "winWC": 0.0825,
       "winGroup": 0.525,
       "group": "k"
     },
@@ -362,10 +362,10 @@
       "group": "b"
     },
     "37": {
-      "makeR32": 0.325,
-      "makeR16": 0.0305,
+      "makeR32": 0.32,
+      "makeR16": 0.0365,
       "makeQF": 0.0115,
-      "makeSF": 0.006,
+      "makeSF": 0.009,
       "makeFinal": 0.004,
       "winWC": 0.0005,
       "winGroup": 0,
@@ -373,8 +373,8 @@
     },
     "38": {
       "makeR32": 0.255,
-      "makeR16": 0.06,
-      "makeQF": 0.0335,
+      "makeR16": 0.055,
+      "makeQF": 0.028,
       "makeSF": 0.0185,
       "makeFinal": 0.004,
       "winWC": 0.0005,
@@ -382,19 +382,19 @@
       "group": "c"
     },
     "39": {
-      "makeR32": 0.675,
+      "makeR32": 0.68,
       "makeR16": 0.255,
       "makeQF": 0.105,
-      "makeSF": 0.0335,
-      "makeFinal": 0.0095,
+      "makeSF": 0.033,
+      "makeFinal": 0.009,
       "winWC": 0.0025,
       "winGroup": 0,
       "group": "i"
     },
     "40": {
       "makeR32": 1,
-      "makeR16": 0.2765,
-      "makeQF": 0.0335,
+      "makeR16": 0.2895,
+      "makeQF": 0.033,
       "makeSF": 0.008,
       "makeFinal": 0.007,
       "winWC": 0.0005,
@@ -403,7 +403,7 @@
     },
     "41": {
       "makeR32": 0.9985,
-      "makeR16": 0.83,
+      "makeR16": 0.825,
       "makeQF": 0.595,
       "makeSF": 0.445,
       "makeFinal": 0.275,
@@ -415,15 +415,15 @@
       "makeR32": 0.9215,
       "makeR16": 0.215,
       "makeQF": 0.085,
-      "makeSF": 0.028,
+      "makeSF": 0.0275,
       "makeFinal": 0.0185,
-      "winWC": 0.0025,
+      "winWC": 0.0015,
       "winGroup": 0.0185,
       "group": "f"
     },
     "43": {
       "makeR32": 1,
-      "makeR16": 0.665,
+      "makeR16": 0.66,
       "makeQF": 0.255,
       "makeSF": 0.0845,
       "makeFinal": 0.0265,
@@ -455,7 +455,7 @@
       "makeR32": 0.355,
       "makeR16": 0.165,
       "makeQF": 0.05,
-      "makeSF": 0.0295,
+      "makeSF": 0.03,
       "makeFinal": 0.0125,
       "winWC": 0.0015,
       "winGroup": 0.095,
@@ -463,8 +463,8 @@
     },
     "47": {
       "makeR32": 1,
-      "makeR16": 0.765,
-      "makeQF": 0.515,
+      "makeR16": 0.755,
+      "makeQF": 0.51,
       "makeSF": 0.19,
       "makeFinal": 0.0625,
       "winWC": 0.0345,
@@ -472,11 +472,11 @@
       "group": "d"
     },
     "48": {
-      "makeR32": 0.026,
-      "makeR16": 0.015,
+      "makeR32": 0.0265,
+      "makeR16": 0.0155,
       "makeQF": 0.003,
       "makeSF": 0.0015,
-      "makeFinal": 0.0025,
+      "makeFinal": 0.0015,
       "winWC": 0.0005,
       "winGroup": 0,
       "group": "k"
@@ -1809,7 +1809,7 @@
         "p": 0.1515
       },
       {
-        "t": 1782400324,
+        "t": 1782408123,
         "p": 0.1485
       }
     ],
@@ -3171,7 +3171,7 @@
         "p": 0.0575
       },
       {
-        "t": 1782400204,
+        "t": 1782408184,
         "p": 0.0545
       }
     ],
@@ -4497,7 +4497,7 @@
         "p": 0.1055
       },
       {
-        "t": 1782400325,
+        "t": 1782408123,
         "p": 0.1055
       }
     ],
@@ -5851,8 +5851,8 @@
         "p": 0.1935
       },
       {
-        "t": 1782400265,
-        "p": 0.1925
+        "t": 1782408065,
+        "p": 0.1905
       }
     ],
     "20": [
@@ -7209,7 +7209,7 @@
         "p": 0.0535
       },
       {
-        "t": 1782400204,
+        "t": 1782408184,
         "p": 0.0525
       }
     ],
@@ -8567,7 +8567,7 @@
         "p": 0.0535
       },
       {
-        "t": 1782400204,
+        "t": 1782408184,
         "p": 0.0565
       }
     ],
@@ -9925,8 +9925,8 @@
         "p": 0.0785
       },
       {
-        "t": 1782400324,
-        "p": 0.0785
+        "t": 1782408123,
+        "p": 0.082
       }
     ],
     "41": [
@@ -11335,7 +11335,7 @@
         "p": 0.1385
       },
       {
-        "t": 1782400324,
+        "t": 1782408123,
         "p": 0.1385
       }
     ]
