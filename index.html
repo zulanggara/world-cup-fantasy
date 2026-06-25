@@ -372,6 +372,17 @@ function setHiddenCats(set) {
 }
 let hiddenCats = getHiddenCats();
 
+// startingXI was added to DEFAULT_HIDDEN_CATS after some visitors already had
+// a saved (unhidden) visibility state, so the default never applied to them.
+// One-time migration: force it hidden once, then leave it to the user's own
+// toggle from then on.
+const SXI_MIGRATION_KEY = 'fifa-fantasy-dashboard-sxi-default-migrated';
+if (!localStorage.getItem(SXI_MIGRATION_KEY)) {
+  hiddenCats.add('startingXI');
+  setHiddenCats(hiddenCats);
+  localStorage.setItem(SXI_MIGRATION_KEY, '1');
+}
+
 // Standard "competition ranking": equal values share the same rank and the
 // next distinct value's rank skips ahead (1,1,1,4,4,6...), matching how
 // sports leaderboards usually present ties.
