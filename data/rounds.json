@@ -2146,8 +2146,8 @@
       },
       {
         "id": 52,
-        "period": "first_half",
-        "minutes": 38,
+        "period": "full_time",
+        "minutes": 99,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -2155,7 +2155,7 @@
         "venueCityTranslationKey": null,
         "venueId": 13,
         "date": "2026-06-24T23:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 29,
         "awaySquadId": 22,
@@ -2163,23 +2163,49 @@
         "awaySquadName": "Haiti",
         "homeSquadAbbr": "MAR",
         "awaySquadAbbr": "HAI",
-        "homeScore": 0,
+        "homeScore": 4,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
-        "awayScore": 1,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 2012,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 792,
+            "assistId": 2012,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 2023,
+            "assistId": 2013,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 782,
+            "assistId": 2023,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 2,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [
           {
             "playerId": 2010,
             "assistId": null,
             "isOwnGoal": true
+          },
+          {
+            "playerId": 582,
+            "assistId": 574,
+            "isOwnGoal": false
           }
         ]
       },
       {
         "id": 51,
-        "period": "first_half",
-        "minutes": 38,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
@@ -2187,7 +2213,7 @@
         "venueCityTranslationKey": null,
         "venueId": 15,
         "date": "2026-06-24T23:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 38,
         "awaySquadId": 7,
@@ -2198,12 +2224,22 @@
         "homeScore": 0,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": 1,
+        "awayScore": 3,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [
           {
             "playerId": 173,
             "assistId": 179,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 173,
+            "assistId": 1361,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 174,
+            "assistId": 1361,
             "isOwnGoal": false
           }
         ]
