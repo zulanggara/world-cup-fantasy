@@ -2320,8 +2320,8 @@
       },
       {
         "id": 56,
-        "period": "first_half",
-        "minutes": 21,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Lincoln Financial Field",
         "venueCity": "Philadelphia, Pennsylvania",
@@ -2329,7 +2329,7 @@
         "venueCityTranslationKey": null,
         "venueId": 11,
         "date": "2026-06-25T21:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 14,
         "awaySquadId": 12,
@@ -2340,20 +2340,25 @@
         "homeScore": 0,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": 1,
+        "awayScore": 2,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [
           {
             "playerId": 308,
             "assistId": 307,
             "isOwnGoal": false
+          },
+          {
+            "playerId": 308,
+            "assistId": 321,
+            "isOwnGoal": false
           }
         ]
       },
       {
         "id": 55,
-        "period": "first_half",
-        "minutes": 21,
+        "period": "full_time",
+        "minutes": 98,
         "extraMinutes": 0,
         "venueName": "Metlife Stadium",
         "venueCity": "East Rutherford, New Jersey",
@@ -2361,7 +2366,7 @@
         "venueCityTranslationKey": null,
         "venueId": 6,
         "date": "2026-06-25T21:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 16,
         "awaySquadId": 20,
@@ -2369,12 +2374,17 @@
         "awaySquadName": "Germany",
         "homeSquadAbbr": "ECU",
         "awaySquadAbbr": "GER",
-        "homeScore": 1,
+        "homeScore": 2,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": [
           {
             "playerId": 1947,
             "assistId": 429,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 413,
+            "assistId": 415,
             "isOwnGoal": false
           }
         ],

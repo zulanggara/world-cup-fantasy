@@ -52,10 +52,10 @@
   {
     "roundId": 3,
     "tournamentId": 55,
-    "points": 2,
+    "points": 3,
     "stats": {
       "SXI": 0,
-      "MP": 23,
+      "MP": 90,
       "AS": 0,
       "YC": 0,
       "RC": 0,
@@ -66,8 +66,8 @@
       "GS": 0,
       "GC": 1,
       "PS": 0,
-      "T": 3,
-      "CC": 0,
+      "T": 4,
+      "CC": 1,
       "ST": 0,
       "FK": 0,
       "S": 0,
