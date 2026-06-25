@@ -2320,8 +2320,8 @@
       },
       {
         "id": 56,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 21,
         "extraMinutes": 0,
         "venueName": "Lincoln Financial Field",
         "venueCity": "Philadelphia, Pennsylvania",
@@ -2329,7 +2329,7 @@
         "venueCityTranslationKey": null,
         "venueId": 11,
         "date": "2026-06-25T21:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 14,
         "awaySquadId": 12,
@@ -2337,17 +2337,23 @@
         "awaySquadName": "Côte d'Ivoire",
         "homeSquadAbbr": "CUW",
         "awaySquadAbbr": "CIV",
-        "homeScore": null,
-        "homePenaltyScore": null,
+        "homeScore": 0,
+        "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 308,
+            "assistId": 307,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 55,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 21,
         "extraMinutes": 0,
         "venueName": "Metlife Stadium",
         "venueCity": "East Rutherford, New Jersey",
@@ -2355,7 +2361,7 @@
         "venueCityTranslationKey": null,
         "venueId": 6,
         "date": "2026-06-25T21:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 16,
         "awaySquadId": 20,
@@ -2363,12 +2369,24 @@
         "awaySquadName": "Germany",
         "homeSquadAbbr": "ECU",
         "awaySquadAbbr": "GER",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "homeScore": 1,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1947,
+            "assistId": 429,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 529,
+            "assistId": 543,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 57,
