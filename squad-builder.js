@@ -77,9 +77,9 @@ window.SquadBuilder = (function () {
     return { starters: curStarters, bench: curBench, fitted: price <= budget };
   }
 
-  function buildVariants(players, metricKey, formation, posOrder, maxPerSquad) {
+  function buildVariants(players, metricKey, formation, posOrder, maxPerSquad, budget = BUDGET) {
     const premium = selectByMetric(players, metricKey, formation, posOrder, maxPerSquad);
-    const budgetFit = fitToBudget(premium.starters, premium.bench, metricKey, maxPerSquad, BUDGET);
+    const budgetFit = fitToBudget(premium.starters, premium.bench, metricKey, maxPerSquad, budget);
 
     const valuePlayers = players.map((p) => ({
       ...p,

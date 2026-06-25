@@ -120,12 +120,15 @@
       <select id="mdSelect">
         <option value="0">MD1</option>
         <option value="1">MD2</option>
-        <option value="2" selected>MD3</option>
+        <option value="2">MD3</option>
+        <option value="r32" selected data-i18n="nextround.r32Option">Round of 32</option>
       </select>
     </label>
     <span class="spacer"></span>
     <span class="empty-msg" id="unmatchedNote"></span>
   </div>
+
+  <div class="disclaimer" id="r32Note" data-i18n-html="nextround.r32Disclaimer" style="display:none;"></div>
 
   <div class="variant-tabs" id="variantTabs"></div>
 
@@ -150,6 +153,12 @@ let squads = [];
 let teamProjections = {};
 let tournaments = [];
 let eloFixtures = [];
+let matchesGames = [];
+let polymarket = { teams: {} };
+// Flat +$5M from R32 onward — a one-time bump that stays +5 for every
+// knockout round (R16, QF, SF, F too, once those get their own projection),
+// not an additional +5 per round.
+const KNOCKOUT_BUDGET_BONUS = 5;
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -219,12 +228,14 @@ function matchdayOpponent(squadId, mdIndex) {
 async function loadData() {
   const panelEl = document.getElementById('panel');
   try {
-    const [playersRes, squadsRes, projRes, roundsRes, eloRes] = await Promise.all([
+    const [playersRes, squadsRes, projRes, roundsRes, eloRes, matchesRes, polyRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/team_projections.json'),
       fetch('data/rounds.json'),
       fetch('data/elo.json'),
+      fetch('data/matches.json'),
+      fetch('data/polymarket.json'),
     ]);
     if (!playersRes.ok) throw new Error(`players.json HTTP ${playersRes.status}`);
     const playersJson = await playersRes.json();
@@ -247,6 +258,13 @@ async function loadData() {
     if (eloRes.ok) {
       const eloJson = await eloRes.json();
       eloFixtures = eloJson?.fixtures ?? [];
+    }
+    if (matchesRes.ok) {
+      const matchesJson = await matchesRes.json();
+      matchesGames = matchesJson?.games ?? [];
+    }
+    if (polyRes.ok) {
+      polymarket = await polyRes.json();
     }
   } catch (e) {
     panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json, data/squads.json, data/team_projections.json. ${I18N.t('common.errHttpServerHint')}</div>`;
@@ -313,16 +331,284 @@ function computeScores(mdIndex) {
 
 const MAX_PER_SQUAD = 3;
 
+function squadById(id) {
+  return squads.find((s) => s.id === id);
+}
+
+function findEloFixture(homeSquadId, awaySquadId, isoDate) {
+  if (!isoDate) return null;
+  const days = nearbyDays(isoDate);
+  return eloFixtures.find((f) => days.includes(f.date)
+    && ((f.homeSquadId === homeSquadId && f.awaySquadId === awaySquadId)
+      || (f.homeSquadId === awaySquadId && f.awaySquadId === homeSquadId)));
+}
+
+// "MM/DD/YYYY HH:mm" (data/matches.json's local_date) -> "YYYY-MM-DD".
+function matchesDateToIso(localDate) {
+  if (!localDate) return null;
+  const [datePart] = localDate.split(' ');
+  const [mm, dd, yyyy] = datePart.split('/');
+  if (!mm || !dd || !yyyy) return null;
+  return `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
+}
+
+// Same group-standings logic as groups.html's bracket tab — duplicated here
+// (not shared) per this site's existing pattern of small per-page helpers.
+function buildStandings() {
+  const groups = {};
+  for (const s of squads) {
+    const g = (s.group ?? '?').toLowerCase();
+    groups[g] = groups[g] || {};
+    groups[g][s.id] = { squadId: s.id, name: s.name, abbr: s.abbr, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0 };
+  }
+  for (const t of tournaments) {
+    if (t.status !== 'complete' || t.homeScore == null || t.awayScore == null) continue;
+    const hSquad = squadById(t.homeSquadId), aSquad = squadById(t.awaySquadId);
+    if (!hSquad || !aSquad) continue;
+    const g = (hSquad.group ?? '?').toLowerCase();
+    const h = groups[g]?.[t.homeSquadId], a = groups[g]?.[t.awaySquadId];
+    if (!h || !a) continue;
+    h.P += 1; a.P += 1;
+    h.GF += t.homeScore; h.GA += t.awayScore;
+    a.GF += t.awayScore; a.GA += t.homeScore;
+    if (t.homeScore > t.awayScore) { h.W += 1; a.L += 1; }
+    else if (t.homeScore < t.awayScore) { a.W += 1; h.L += 1; }
+    else { h.D += 1; a.D += 1; }
+  }
+  const standings = {};
+  for (const g of Object.keys(groups)) {
+    const teams = Object.values(groups[g]).map((t) => ({ ...t, GD: t.GF - t.GA, Pts: t.W * 3 + t.D }));
+    teams.sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF);
+    standings[g] = teams;
+  }
+  return standings;
+}
+
+function computeBestThirds(standings) {
+  const thirds = Object.keys(standings)
+    .map((g) => ({ group: g, team: standings[g][2] }))
+    .filter((x) => x.team)
+    .map((x) => ({ ...x.team, group: x.group }));
+  thirds.sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF);
+  return thirds;
+}
+
+const THIRD_PLACE_SLOTS = [
+  { matchId: '74', groups: ['A', 'B', 'C', 'D', 'F'] },
+  { matchId: '77', groups: ['C', 'D', 'F', 'G', 'H'] },
+  { matchId: '79', groups: ['C', 'E', 'F', 'H', 'I'] },
+  { matchId: '80', groups: ['E', 'H', 'I', 'J', 'K'] },
+  { matchId: '81', groups: ['B', 'E', 'F', 'I', 'J'] },
+  { matchId: '82', groups: ['A', 'E', 'H', 'I', 'J'] },
+  { matchId: '85', groups: ['E', 'F', 'G', 'I', 'J'] },
+  { matchId: '87', groups: ['D', 'E', 'I', 'J', 'L'] },
+];
+
+function assignThirdPlaceSlots(bestThirds) {
+  const usedSquadIds = new Set();
+  return THIRD_PLACE_SLOTS.map((slot) => {
+    const groupSet = new Set(slot.groups.map((g) => g.toLowerCase()));
+    const eligible = bestThirds.filter((t) => groupSet.has(t.group));
+    const rep = eligible.find((t) => !usedSquadIds.has(t.squadId));
+    if (rep) usedSquadIds.add(rep.squadId);
+    const label = `3rd Group ${slot.groups.join('/')}`;
+    return { ...slot, label, eligible, rep };
+  });
+}
+
+function resolveGroupSlot(label, standings, bestThirds, thirdAssignments) {
+  if (!label) return null;
+  let m = label.match(/^Winner Group ([A-L])$/i);
+  if (m) {
+    const g = m[1].toLowerCase();
+    const team = standings[g]?.[0];
+    return team ? { ...team, confirmed: team.P === 3 } : { pending: true, text: label };
+  }
+  m = label.match(/^Runner-up Group ([A-L])$/i);
+  if (m) {
+    const g = m[1].toLowerCase();
+    const team = standings[g]?.[1];
+    return team ? { ...team, confirmed: team.P === 3 } : { pending: true, text: label };
+  }
+  m = label.match(/^3rd Group ([A-L\/]+)$/i);
+  if (m) {
+    const letters = m[1].toUpperCase().split('/');
+    const slot = thirdAssignments?.find((s) => s.label === label);
+    const best = slot?.rep;
+    if (!best) return { pending: true, text: label };
+    const letterGroups = letters.map((l) => l.toLowerCase());
+    const allGroupsComplete = letterGroups.every((l) => (standings[l] || []).every((t) => t.P === 3));
+    const isConfirmedTop8 = allGroupsComplete && bestThirds.slice(0, 8).some((t) => t.squadId === best.squadId);
+    return { ...best, confirmed: isConfirmedTop8 };
+  }
+  return { pending: true, text: label };
+}
+
+// Projected (not just confirmed) Round of 32 matchups, resolved from current
+// group standings — same approach as groups.html's "R32 Projection" bracket
+// tab, since most R32 pairings aren't officially fixed yet while groups are
+// still being played.
+function buildR32Matches() {
+  const standings = buildStandings();
+  const bestThirds = computeBestThirds(standings);
+  const thirdAssignments = assignThirdPlaceSlots(bestThirds);
+  return matchesGames
+    .filter((g) => g.type === 'r32')
+    .map((g) => ({
+      id: g.id,
+      date: g.local_date,
+      home: resolveGroupSlot(g.home_team_label, standings, bestThirds, thirdAssignments),
+      away: resolveGroupSlot(g.away_team_label, standings, bestThirds, thirdAssignments),
+    }));
+}
+
+// squadId -> { oppSquadId, oppAbbr, ownConfirmed, oppConfirmed, isoDate } for
+// every team that currently has a resolved (confirmed or projected) R32 slot.
+// Teams with no resolved slot yet are left out entirely — they're not part
+// of the R32 player pool.
+function buildR32OpponentMap() {
+  const map = {};
+  for (const m of buildR32Matches()) {
+    const isoDate = matchesDateToIso(m.date);
+    const home = m.home && !m.home.pending ? m.home : null;
+    const away = m.away && !m.away.pending ? m.away : null;
+    if (home) {
+      map[home.squadId] = {
+        oppSquadId: away?.squadId ?? null,
+        oppAbbr: away?.abbr ?? null,
+        ownConfirmed: !!home.confirmed,
+        oppConfirmed: !!away?.confirmed,
+        isoDate,
+      };
+    }
+    if (away) {
+      map[away.squadId] = {
+        oppSquadId: home?.squadId ?? null,
+        oppAbbr: home?.abbr ?? null,
+        ownConfirmed: !!away.confirmed,
+        oppConfirmed: !!home?.confirmed,
+        isoDate,
+      };
+    }
+  }
+  return map;
+}
+
+// Real-results team strength (avg goals for/against from completed
+// matches) — same approach as best15-research.html, used here since
+// data/team_projections.json (SBOBET/Betfair market charts) only covers
+// MD1-3 group fixtures, not the knockout stage.
+function buildTeamStrength() {
+  const stats = {};
+  for (const t of tournaments) {
+    if (t.status !== 'complete' || t.homeScore == null || t.awayScore == null) continue;
+    const hId = t.homeSquadId, aId = t.awaySquadId;
+    stats[hId] = stats[hId] || { played: 0, GF: 0, GA: 0 };
+    stats[hId].played += 1; stats[hId].GF += t.homeScore; stats[hId].GA += t.awayScore;
+    stats[aId] = stats[aId] || { played: 0, GF: 0, GA: 0 };
+    stats[aId].played += 1; stats[aId].GF += t.awayScore; stats[aId].GA += t.homeScore;
+  }
+  for (const id of Object.keys(stats)) {
+    const s = stats[id];
+    s.avgGF = s.played ? s.GF / s.played : null;
+    s.avgGA = s.played ? s.GA / s.played : null;
+  }
+  return stats;
+}
+
+function computeScoresR32() {
+  const oppMap = buildR32OpponentMap();
+  const teamStrength = buildTeamStrength();
+  const teamsWithData = Object.values(teamStrength).filter((s) => s.played > 0);
+  const leagueAvgGF = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGF, 0) / teamsWithData.length : 1;
+  const leagueAvgGA = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGA, 0) / teamsWithData.length : 1;
+
+  // Polymarket's "make R16" probability as a third, independent opponent-
+  // strength signal (real-money market, continuously updated) — a team the
+  // market rates highly to get past R32 is a tougher opponent regardless of
+  // this tournament's goals-for/against so far.
+  const polyTeams = polymarket.teams || {};
+  const r16Probs = Object.values(polyTeams).map((t) => t.makeR16).filter((v) => v != null);
+  const leagueAvgMakeR16 = r16Probs.length ? r16Probs.reduce((s, v) => s + v, 0) / r16Probs.length : 0.5;
+
+  // Only players from teams that currently have a resolved R32 slot
+  // (confirmed or projected) — teams not on track to qualify per current
+  // standings are excluded from the pool entirely.
+  const pool = players.filter((p) => p.squadId != null && oppMap[p.squadId]);
+
+  const withFixture = pool.map((p) => {
+    const opp = oppMap[p.squadId];
+    const oppStrength = opp.oppSquadId != null ? teamStrength[opp.oppSquadId] : null;
+    const winPct = opp.oppSquadId != null ? (() => {
+      const fx = findEloFixture(p.squadId, opp.oppSquadId, opp.isoDate);
+      if (!fx) return null;
+      return fx.homeSquadId === p.squadId ? fx.homeWinPct : fx.awayWinPct;
+    })() : null;
+    const oppMakeR16 = opp.oppSquadId != null ? (polyTeams[opp.oppSquadId]?.makeR16 ?? null) : null;
+    const ownMakeR32Pct = polyTeams[p.squadId]?.makeR32 ?? null;
+
+    const factors = [];
+    if (oppStrength && oppStrength.played > 0) {
+      factors.push((p.position === 'GK' || p.position === 'DEF')
+        ? clamp(1 + 0.5 * ((leagueAvgGF - oppStrength.avgGF) / leagueAvgGF), 0.5, 1.8)
+        : clamp(1 + 0.5 * ((oppStrength.avgGA - leagueAvgGA) / leagueAvgGA), 0.5, 1.8));
+    }
+    if (winPct != null) {
+      factors.push(clamp(1 + (winPct - 50) / 50 * 0.5, 0.5, 1.8));
+    }
+    if (oppMakeR16 != null && leagueAvgMakeR16 > 0) {
+      factors.push(clamp(1 + 0.5 * ((leagueAvgMakeR16 - oppMakeR16) / leagueAvgMakeR16), 0.5, 1.8));
+    }
+    const hasFixtureData = factors.length > 0;
+    const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
+
+    const projectedPoints = Math.round(p.avgPoints * multiplier * 10) / 10;
+    return {
+      ...p,
+      fixtureIndex: multiplier,
+      hasFixtureData,
+      projectedPoints,
+      oppAbbr: opp.oppAbbr,
+      winPct,
+      ownConfirmed: opp.ownConfirmed,
+      oppConfirmed: opp.oppConfirmed,
+      ownMakeR32Pct,
+    };
+  });
+
+  for (const pos of POS_ORDER) {
+    const group = withFixture.filter((p) => p.position === pos);
+    const forms = group.map((p) => p.form);
+    const fixtures = group.map((p) => p.fixtureIndex);
+    const formMin = Math.min(...forms, 0);
+    const formMax = Math.max(...forms, 1);
+    const fixMin = Math.min(...fixtures, 0.5);
+    const fixMax = Math.max(...fixtures, 1.8);
+    for (const p of group) {
+      const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
+      const normFix = fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50;
+      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+    }
+  }
+
+  return withFixture;
+}
+
 function render() {
-  const mdIndex = Number(document.getElementById('mdSelect').value);
-  const scored = computeScores(mdIndex);
+  const mdValue = document.getElementById('mdSelect').value;
+  const isR32 = mdValue === 'r32';
+  const mdIndex = isR32 ? null : Number(mdValue);
+  const scored = isR32 ? computeScoresR32() : computeScores(mdIndex);
+
+  document.getElementById('r32Note').style.display = isR32 ? 'block' : 'none';
 
   const unmatchedCount = scored.filter((p) => !p.hasFixtureData).length;
   document.getElementById('unmatchedNote').textContent = unmatchedCount
     ? I18N.t('nextround.unmatchedNote', null, { n: unmatchedCount })
     : '';
 
-  const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER, MAX_PER_SQUAD);
+  const budget = SquadBuilder.BUDGET + (isR32 ? KNOCKOUT_BUDGET_BONUS : 0);
+  const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER, MAX_PER_SQUAD, budget);
 
   document.getElementById('variantTabs').innerHTML = variants.map((v) => `
     <button class="variant-tab ${v.key === currentVariant ? 'active' : ''}" data-key="${v.key}">${escapeHtml(v.label)}</button>
@@ -332,30 +618,50 @@ function render() {
   });
 
   const variant = variants.find((v) => v.key === currentVariant) || variants[0];
-  renderVariant(variant, mdIndex);
+  renderVariant(variant, mdValue, budget);
 }
 
-function renderVariant(variant, mdIndex) {
+function renderVariant(variant, mdValue, budget) {
+  const isR32 = mdValue === 'r32';
+  const mdIndex = isR32 ? null : Number(mdValue);
   const { starters, bench } = variant;
   const totalScore = Math.round((starters.reduce((sum, p) => sum + p.score, 0) / starters.length) * 10) / 10;
   const totalProjectedPoints = SquadBuilder.totalMetric(starters, 'projectedPoints');
   const totalPriceVal = SquadBuilder.totalPrice(starters);
-  const overBudget = totalPriceVal > SquadBuilder.BUDGET;
+  const overBudget = totalPriceVal > budget;
   const scoreLabel = escapeHtml(I18N.t('nextround.scoreLabel'));
   const estimateSuffix = escapeHtml(I18N.t('nextround.estimateSuffix'));
 
+  function winLabelFor(p) {
+    if (isR32) {
+      if (!p.oppAbbr) return I18N.t('nextround.opponentTBD', 'lawan R32 belum ditentukan');
+      const winPctHtml = p.winPct != null
+        ? ` · <b style="color:#4a9eff;">${p.winPct}%</b> ${escapeHtml(I18N.t('modal.winChance', 'win chance'))}`
+        : '';
+      return `vs ${escapeHtml(p.oppAbbr)}${p.oppConfirmed ? '' : ` (${escapeHtml(I18N.t('nextround.opponentProjected', 'proyeksi'))})`}${winPctHtml}`;
+    }
+    const opp = p.squadId != null ? matchdayOpponent(p.squadId, mdIndex) : null;
+    return opp?.winPct != null
+      ? `vs ${escapeHtml(opp.oppAbbr ?? '?')} · <b style="color:#4a9eff;">${opp.winPct}%</b> ${escapeHtml(I18N.t('modal.winChance', 'win chance'))}`
+      : (opp ? `vs ${escapeHtml(opp.oppAbbr ?? '?')}` : '');
+  }
+
   const rows = POS_ORDER.map((pos) => {
     const chips = starters.filter((p) => p.position === pos).map((p) => {
-      const opp = p.squadId != null ? matchdayOpponent(p.squadId, mdIndex) : null;
-      const winLabel = opp?.winPct != null
-        ? `vs ${escapeHtml(opp.oppAbbr ?? '?')} · <b style="color:#4a9eff;">${opp.winPct}%</b> ${escapeHtml(I18N.t('modal.winChance', 'win chance'))}`
-        : (opp ? `vs ${escapeHtml(opp.oppAbbr ?? '?')}` : '');
+      const winLabel = winLabelFor(p);
+      const marketPctSuffix = p.ownMakeR32Pct != null ? ` (${Math.round(p.ownMakeR32Pct * 100)}%)` : '';
+      const qualBadge = isR32
+        ? `<div class="psquad" style="opacity:.75;">${(p.ownConfirmed
+            ? '✓ ' + escapeHtml(I18N.t('nextround.qualifiedConfirmed', 'pasti lolos'))
+            : '~ ' + escapeHtml(I18N.t('nextround.qualifiedProjected', 'diproyeksikan lolos'))) + marketPctSuffix}</div>`
+        : '';
       return `
       <div class="player-chip">
         <div class="pname" onclick="DetailModal.openPlayer(${p.id}, { mdIndex: ${mdIndex} })" style="cursor:pointer;">${escapeHtml(p.name)}</div>
         <div class="psquad"><span onclick="DetailModal.openTeam(${p.squadId})" style="cursor:pointer; text-decoration:underline;">${FLAGS.flagFor(squadAbbr(p.squadId))} ${escapeHtml(squadAbbr(p.squadId) ?? '?')}</span> · ${p.position}</div>
         <div class="pprice">$${Number(p.price).toFixed(1)} · ${scoreLabel} ${p.score}</div>
         ${winLabel ? `<div class="pwinexp">${winLabel}</div>` : ''}
+        ${qualBadge}
         <div class="pproj">~${p.projectedPoints} pts ${estimateSuffix}</div>
       </div>
     `;
@@ -383,7 +689,7 @@ function renderVariant(variant, mdIndex) {
         <span class="tname">${escapeHtml(I18N.t('nextround.projectedSquadTitle'))}</span>
         <span>
           <span class="ttotal">~${totalProjectedPoints} pts ${estimateSuffix}</span>
-          <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / 100</span>
+          <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / ${budget}</span>
         </span>
       </div>
       <div class="formation-label">${escapeHtml(I18N.t('nextround.formationLabel', null, { formation: '2-5-5-3', avg: totalScore }))}</div>

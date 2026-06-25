@@ -22,6 +22,7 @@ window.NAV = (function () {
       ],
     },
     { type: 'link', href: 'groups.html', i18nKey: 'nav.groups', fallback: 'Standings & Fixtures' },
+    { type: 'link', href: 'market-odds.html', i18nKey: 'nav.marketOdds', fallback: 'Market Odds' },
     { type: 'link', href: 'my-squad.html', i18nKey: 'nav.mysquad', fallback: 'Build Squad' },
     { type: 'link', href: 'donate.html', i18nKey: 'nav.donate', fallback: '❤ Donate', cta: true },
   ];

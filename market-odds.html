@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9RBLB7E6DS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9RBLB7E6DS');
+</script>
+
+<meta name="google-site-verification" content="w7UVsL-EEp8JpqBuAqFGtzbYK8g6dE_1QhKyMvC2aTU" />
+<meta name="google-adsense-account" content="ca-pub-5174001289240468">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>World Cup 2026 Market Odds | Polymarket Win Probabilities</title>
+<meta name="description" content="Live FIFA World Cup 2026 win probabilities per team — group winner, Round of 32 through Final, and championship odds, sourced from Polymarket prediction markets." />
+<meta name="keywords" content="World Cup 2026 odds, Polymarket World Cup, World Cup win probability, World Cup 2026 prediction market" />
+<link rel="canonical" href="https://world-cup-fantasy-kappa.vercel.app/market-odds.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="World Cup 2026 Market Odds" />
+<meta property="og:description" content="Live per-team win probabilities through every World Cup 2026 stage, sourced from Polymarket prediction markets." />
+<meta property="og:url" content="https://world-cup-fantasy-kappa.vercel.app/market-odds.html" />
+<meta name="twitter:card" content="summary" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 20px; margin: 0; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 28px 24px; margin-bottom: 22px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, var(--pitch-line) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero-kicker { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+  .hero-kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .hero h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 6px; display: block; }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0; max-width: 720px; }
+
+  .disclaimer { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--text-dim); margin-bottom: 18px; }
+  .disclaimer b { color: var(--text); }
+
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 22px; }
+  .panel-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .panel-sub { font-size: 11.5px; color: var(--text-dim); margin-bottom: 14px; }
+
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; font-size: 12px; }
+  .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .chart-legend .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .chart-legend b { font-variant-numeric: tabular-nums; }
+  .chart-wrap { overflow-x: auto; }
+  .chart-wrap svg { width: 100%; min-width: 640px; height: 320px; display: block; }
+  .chart-axis-label { font-size: 10px; fill: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .chart-gridline { stroke: var(--border); stroke-width: 1; }
+
+  table.odds { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.odds th, table.odds td { padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.odds th { text-align: left; color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; user-select: none; position: sticky; top: 0; background: var(--panel); }
+  table.odds th:hover { color: var(--text); }
+  table.odds th.sorted::after { content: ' ▾'; }
+  table.odds td.team-cell { font-weight: 600; cursor: pointer; }
+  table.odds td.num { text-align: center; font-variant-numeric: tabular-nums; color: #14180a; }
+  :root[data-theme="dark"] table.odds td.num { color: #04130a; }
+  table.odds td.group-cell { text-align: center; color: var(--text-dim); }
+  .odds-table-wrap { overflow-x: auto; }
+  .empty-msg { color: var(--text-dim); font-size: 13px; padding: 8px 2px; }
+  .fetched-note { font-size: 11px; color: var(--text-dim); margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-header">
+    <nav class="top-nav"></nav>
+    <button class="toggle" id="themeToggle">☀ / ☾</button>
+  </div>
+
+  <div class="hero">
+    <span class="hero-kicker" data-i18n="marketOdds.kicker">Prediction Market</span>
+    <h1 data-i18n="marketOdds.heroTitle">Market Odds</h1>
+    <p data-i18n="marketOdds.heroSubtitle">Peluang menang tiap tim di setiap babak World Cup 2026, dari pasar prediksi Polymarket — diperbarui otomatis setiap kali data disinkronkan.</p>
+  </div>
+
+  <div class="disclaimer" data-i18n-html="marketOdds.disclaimer">
+    Data dari <b>Polymarket</b> (<a href="https://polymarket.com" target="_blank" rel="noopener noreferrer">polymarket.com</a>), pasar prediksi berbasis uang sungguhan — bukan odds resmi FIFA maupun garansi hasil. Tim yang sudah pasti tersingkir/lolos secara matematis ditampilkan 0%/100%. Digunakan sebagai sinyal tambahan (selain Elo eloratings.net dan data gol nyata) untuk proyeksi Best 15 ronde berikutnya.
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="marketOdds.chartTitle">Win World Cup — Odds History (Top 8)</div>
+    <div class="panel-sub" data-i18n="marketOdds.chartSub">Harga harian pasar "Win World Cup" Polymarket untuk 8 tim teratas saat ini.</div>
+    <div class="chart-legend" id="chartLegend"></div>
+    <div class="chart-wrap"><svg id="oddsChart" viewBox="0 0 960 320" preserveAspectRatio="none"></svg></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="marketOdds.tableTitle">All Teams</div>
+    <div class="panel-sub" data-i18n="marketOdds.tableSub">Klik header kolom untuk urutkan. Klik nama tim untuk detail.</div>
+    <div class="odds-table-wrap" id="oddsTableWrap"></div>
+    <div class="fetched-note" id="fetchedNote"></div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="flags.js"></script>
+<script src="brand.js"></script>
+<script src="detail-modal.js"></script>
+<script src="footer.js"></script>
+<script>
+const root = document.documentElement;
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('fifa-fantasy-theme', t);
+}
+setTheme(localStorage.getItem('fifa-fantasy-theme') || 'dark');
+document.getElementById('themeToggle').addEventListener('click', () => {
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+let squads = [];
+let polymarket = { teams: {}, history: {} };
+let sortKey = 'winWC';
+let sortDir = -1;
+
+const COLS = [
+  { key: 'winGroup', titleKey: 'marketOdds.colWinGroup', fallback: 'Win Group' },
+  { key: 'makeR32', titleKey: 'marketOdds.colMakeR32', fallback: 'Make R32' },
+  { key: 'makeR16', titleKey: 'marketOdds.colMakeR16', fallback: 'Make R16' },
+  { key: 'makeQF', titleKey: 'marketOdds.colMakeQF', fallback: 'Make QF' },
+  { key: 'makeSF', titleKey: 'marketOdds.colMakeSF', fallback: 'Make SF' },
+  { key: 'makeFinal', titleKey: 'marketOdds.colMakeFinal', fallback: 'Make Final' },
+  { key: 'winWC', titleKey: 'marketOdds.colWinWC', fallback: 'Win WC' },
+];
+
+const CHART_COLORS = ['#4a9eff', '#e9c400', '#ff6b6b', '#00e639', '#b388ff', '#ff9f43', '#36cfc9', '#f06292'];
+
+function squadById(id) {
+  return squads.find((s) => s.id === Number(id));
+}
+
+async function loadData() {
+  const wrapEl = document.getElementById('oddsTableWrap');
+  try {
+    const [squadsRes, polyRes] = await Promise.all([
+      fetch('data/squads.json'),
+      fetch('data/polymarket.json'),
+    ]);
+    squads = squadsRes.ok ? await squadsRes.json() : [];
+    if (!Array.isArray(squads)) squads = [];
+    if (!polyRes.ok) throw new Error(`polymarket.json HTTP ${polyRes.status}`);
+    polymarket = await polyRes.json();
+  } catch (e) {
+    wrapEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/polymarket.json — jalankan "node scraper.js" dulu.</div>`;
+    return;
+  }
+  renderChart();
+  renderTable();
+  const fetched = polymarket.fetchedAt ? new Date(polymarket.fetchedAt).toLocaleString() : '—';
+  document.getElementById('fetchedNote').textContent = `${I18N.t('marketOdds.lastFetched', 'Last fetched:')} ${fetched}`;
+}
+
+function renderChart() {
+  const svg = document.getElementById('oddsChart');
+  const legendEl = document.getElementById('chartLegend');
+  const entries = Object.entries(polymarket.history || {});
+  if (!entries.length) {
+    svg.innerHTML = '';
+    legendEl.innerHTML = `<span class="empty-msg">${I18N.t('common.noData')}</span>`;
+    return;
+  }
+
+  const W = 960, H = 320, PAD_L = 36, PAD_R = 16, PAD_T = 14, PAD_B = 24;
+  const plotW = W - PAD_L - PAD_R, plotH = H - PAD_T - PAD_B;
+
+  let minT = Infinity, maxT = -Infinity, maxP = 0;
+  for (const [, pts] of entries) {
+    for (const pt of pts) {
+      if (pt.t < minT) minT = pt.t;
+      if (pt.t > maxT) maxT = pt.t;
+      if (pt.p > maxP) maxP = pt.p;
+    }
+  }
+  const yMax = Math.min(1, Math.ceil((maxP * 1.15) * 20) / 20) || 0.1;
+  const x = (t) => PAD_L + ((t - minT) / (maxT - minT || 1)) * plotW;
+  const y = (p) => PAD_T + (1 - p / yMax) * plotH;
+
+  const sorted = entries
+    .map(([squadId, pts]) => ({ squadId, pts, last: pts.length ? pts[pts.length - 1].p : 0 }))
+    .sort((a, b) => b.last - a.last);
+
+  const gridSteps = 5;
+  let gridHtml = '';
+  for (let i = 0; i <= gridSteps; i++) {
+    const py = PAD_T + (plotH / gridSteps) * i;
+    const pct = Math.round((yMax * (1 - i / gridSteps)) * 100);
+    gridHtml += `<line class="chart-gridline" x1="${PAD_L}" y1="${py}" x2="${W - PAD_R}" y2="${py}" />`;
+    gridHtml += `<text class="chart-axis-label" x="${W - PAD_R + 2}" y="${py + 3}">${pct}%</text>`;
+  }
+
+  const lines = sorted.map((s, i) => {
+    const color = CHART_COLORS[i % CHART_COLORS.length];
+    const d = s.pts.map((pt, idx) => `${idx === 0 ? 'M' : 'L'}${x(pt.t).toFixed(1)},${y(pt.p).toFixed(1)}`).join(' ');
+    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2" />`;
+  }).join('');
+
+  svg.innerHTML = `${gridHtml}${lines}`;
+
+  legendEl.innerHTML = sorted.map((s, i) => {
+    const sq = squadById(s.squadId);
+    const color = CHART_COLORS[i % CHART_COLORS.length];
+    return `<span onclick="DetailModal.openTeam(${s.squadId})" style="cursor:pointer;">
+      <span class="swatch" style="background:${color};"></span>
+      ${FLAGS.flagFor(sq?.abbr)} ${escapeHtml(sq?.name ?? '?')} <b>${(s.last * 100).toFixed(1)}%</b>
+    </span>`;
+  }).join('');
+}
+
+function heatStyle(p) {
+  if (p == null) return '';
+  const alpha = Math.max(0.04, Math.min(0.9, p));
+  return ` style="background: rgba(0,230,57,${alpha});"`;
+}
+
+function renderTable() {
+  const rows = squads.map((s) => ({ squad: s, odds: polymarket.teams?.[s.id] ?? {} }));
+  rows.sort((a, b) => {
+    const av = a.odds[sortKey] ?? -1, bv = b.odds[sortKey] ?? -1;
+    return (av - bv) * sortDir;
+  });
+
+  const headHtml = `
+    <th data-key="team">${escapeHtml(I18N.t('common.colTeam'))}</th>
+    <th data-key="group">${escapeHtml(I18N.t('common.colGroup', 'Group'))}</th>
+    ${COLS.map((c) => `<th data-key="${c.key}" class="${sortKey === c.key ? 'sorted' : ''}">${escapeHtml(I18N.t(c.titleKey, c.fallback))}</th>`).join('')}
+  `;
+
+  const bodyHtml = rows.map(({ squad, odds }) => `
+    <tr>
+      <td class="team-cell" onclick="DetailModal.openTeam(${squad.id})">${FLAGS.flagFor(squad.abbr)} ${escapeHtml(squad.name)}</td>
+      <td class="group-cell">${escapeHtml((odds.group ?? squad.group ?? '?').toUpperCase())}</td>
+      ${COLS.map((c) => {
+        const v = odds[c.key];
+        const pct = v != null ? `${Math.round(v * 1000) / 10}%` : '—';
+        return `<td class="num"${heatStyle(v)}>${pct}</td>`;
+      }).join('')}
+    </tr>
+  `).join('');
+
+  document.getElementById('oddsTableWrap').innerHTML = rows.length
+    ? `<table class="odds"><thead><tr>${headHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`
+    : `<div class="empty-msg">${I18N.t('common.noData')}</div>`;
+
+  document.querySelectorAll('table.odds th[data-key]').forEach((th) => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.key;
+      if (key === 'team' || key === 'group') return;
+      if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = -1; }
+      renderTable();
+    });
+  });
+}
+
+document.addEventListener('i18n:change', () => { renderChart(); renderTable(); });
+
+loadData();
+</script>
+</body>
+</html>

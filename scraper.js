@@ -390,6 +390,164 @@ async function fetchEloData() {
   log(`[elo] saved ${Object.keys(ratings).length} team ratings, ${fixtures.length} fixtures, ${results.length} results -> ${outPath}`);
 }
 
+// Polymarket prediction-market odds — a second, independent signal (real
+// money, continuously updated) alongside eloratings.net's Elo-based win%,
+// used as extra consideration for knockout-stage Best 15 projections.
+// gamma-api.polymarket.com needs no auth/key; each of these is one fixed
+// multi-outcome event covering all 48 teams for that single tournament
+// stage, found by browsing polymarket.com's World Cup 2026 markets.
+const POLY_GAMMA = 'https://gamma-api.polymarket.com';
+const POLY_CLOB = 'https://clob.polymarket.com';
+const POLY_EVENTS = {
+  makeR32: 414231,   // "Team to advance to Knockout Stages"
+  makeR16: 550029,   // "Nation To Reach Round of 16"
+  makeQF: 551766,    // "Nation To Reach Quarterfinals"
+  makeSF: 551781,    // "Nation To Reach Semifinals"
+  makeFinal: 414457, // "Nation to Reach Final"
+  winWC: 30615,      // "World Cup Winner"
+};
+const POLY_GROUP_WINNER_EVENTS = {
+  a: 98252, b: 98263, c: 98264, d: 98266, e: 98271, f: 98272,
+  g: 98273, h: 98287, i: 98330, j: 98336, k: 98337, l: 98338,
+};
+
+// Polymarket's own question text isn't internally consistent about team
+// names (e.g. "DR Congo" in the Round-of-16 event, "Congo DR" in the Winner
+// event) — list every variant actually observed, beyond squads.json's name.
+const POLY_NAME_ALIASES = {
+  'Cape Verde': 'Cabo Verde',
+  'South Korea': 'Korea Republic',
+  'Iran': 'IR Iran',
+  'Ivory Coast': "Côte d'Ivoire",
+  'DR Congo': 'Congo DR',
+  'United States': 'USA',
+};
+
+function buildPolySquadResolver(squads) {
+  const byNormName = {};
+  for (const s of squads) byNormName[normTeamName(s.name)] = s.id;
+  for (const [alias, squadName] of Object.entries(POLY_NAME_ALIASES)) {
+    const s = squads.find((x) => x.name === squadName);
+    if (s) byNormName[normTeamName(alias)] = s.id;
+  }
+  return (name) => byNormName[normTeamName(name || '')] ?? null;
+}
+
+async function fetchPolyEvent(eventId) {
+  return httpsGetJson(`${POLY_GAMMA}/events/${eventId}`);
+}
+
+// Each market in these events is a "Will <Team> ...?" Yes/No question;
+// groupItemTitle carries the clean team name (or "Other"/"Field" filler,
+// which resolveSquad naturally fails to match and we skip).
+function extractTeamProbabilities(event, resolveSquad) {
+  const out = {};
+  for (const m of event?.markets || []) {
+    const squadId = resolveSquad(m.groupItemTitle);
+    if (!squadId) continue;
+    let outcomes, prices;
+    try {
+      outcomes = JSON.parse(m.outcomes);
+      prices = JSON.parse(m.outcomePrices);
+    } catch (e) { continue; }
+    const yesIdx = outcomes.indexOf('Yes');
+    const p = Number(prices[yesIdx >= 0 ? yesIdx : 0]);
+    if (Number.isFinite(p)) out[squadId] = p;
+  }
+  return out;
+}
+
+async function fetchPolymarketData() {
+  log('[polymarket] fetching gamma-api.polymarket.com World Cup odds...');
+  let squads;
+  try {
+    squads = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'squads.json'), 'utf8'));
+  } catch (e) {
+    log(`[polymarket] squads.json not found, skipping (run players/squads fetch first): ${e.message}`);
+    return;
+  }
+  const resolveSquad = buildPolySquadResolver(squads);
+
+  let stageEvents, winnerEvent, groupEvents;
+  try {
+    const stageKeys = Object.keys(POLY_EVENTS).filter((k) => k !== 'winWC');
+    const [stageResults, winner, groupResults] = await Promise.all([
+      Promise.all(stageKeys.map((k) => fetchPolyEvent(POLY_EVENTS[k]))),
+      fetchPolyEvent(POLY_EVENTS.winWC),
+      Promise.all(Object.values(POLY_GROUP_WINNER_EVENTS).map((id) => fetchPolyEvent(id))),
+    ]);
+    stageEvents = Object.fromEntries(stageKeys.map((k, i) => [k, stageResults[i]]));
+    winnerEvent = winner;
+    groupEvents = Object.fromEntries(Object.keys(POLY_GROUP_WINNER_EVENTS).map((g, i) => [g, groupResults[i]]));
+  } catch (e) {
+    log(`[polymarket] could not fetch event data: ${e.message} (continuing without market odds)`);
+    return;
+  }
+
+  const teams = {};
+  function applyProb(stageKey, event) {
+    for (const [squadId, p] of Object.entries(extractTeamProbabilities(event, resolveSquad))) {
+      teams[squadId] = teams[squadId] || {};
+      teams[squadId][stageKey] = p;
+    }
+  }
+  for (const [stageKey, event] of Object.entries(stageEvents)) applyProb(stageKey, event);
+  applyProb('winWC', winnerEvent);
+  for (const [group, event] of Object.entries(groupEvents)) {
+    for (const [squadId, p] of Object.entries(extractTeamProbabilities(event, resolveSquad))) {
+      teams[squadId] = teams[squadId] || {};
+      teams[squadId].winGroup = p;
+      teams[squadId].group = group;
+    }
+  }
+
+  const matched = Object.keys(teams).length;
+  if (matched === 0) {
+    log('[polymarket] ERROR: matched 0 squads to Polymarket markets — leaving existing data/polymarket.json untouched.');
+    return;
+  }
+
+  // Historical "win World Cup" daily price series, top 8 contenders only —
+  // keeps the file small instead of pulling ~1 year of history for all 48
+  // teams (most of which are already mathematically at 0%).
+  const topSquadIds = Object.entries(teams)
+    .filter(([, t]) => t.winWC != null)
+    .sort((a, b) => b[1].winWC - a[1].winWC)
+    .slice(0, 8)
+    .map(([id]) => id);
+
+  const winnerTokenBySquadId = {};
+  for (const m of winnerEvent.markets || []) {
+    const squadId = resolveSquad(m.groupItemTitle);
+    if (!squadId) continue;
+    try {
+      winnerTokenBySquadId[squadId] = JSON.parse(m.clobTokenIds)[0]; // "Yes" token
+    } catch (e) { /* skip unparsable */ }
+  }
+
+  const history = {};
+  for (const squadId of topSquadIds) {
+    const token = winnerTokenBySquadId[squadId];
+    if (!token) continue;
+    try {
+      const hist = await httpsGetJson(`${POLY_CLOB}/prices-history?market=${token}&interval=max&fidelity=1440`);
+      history[squadId] = (hist?.history || []).map((pt) => ({ t: pt.t, p: pt.p }));
+    } catch (e) {
+      log(`[polymarket] could not fetch price history for squad ${squadId}: ${e.message}`);
+    }
+    await sleep(150);
+  }
+
+  const outPath = path.join(DATA_DIR, 'polymarket.json');
+  fs.writeFileSync(outPath, JSON.stringify({
+    fetchedAt: new Date().toISOString(),
+    source: 'Polymarket (gamma-api.polymarket.com) — aggregated prediction-market odds, not an official forecast',
+    teams,
+    history,
+  }, null, 2));
+  log(`[polymarket] saved odds for ${matched} teams, price history for ${Object.keys(history).length} teams -> ${outPath}`);
+}
+
 async function fetchRounds() {
   log('[rounds] fetching rounds.json (FIFA official fixtures)...');
   for (let attempt = 1; attempt <= 2; attempt++) {
@@ -539,6 +697,7 @@ async function main() {
   await fetchMatches();
   await fetchStadiums();
   await fetchEloData();
+  await fetchPolymarketData();
   const roundsFetched = await fetchRounds();
 
   let headful = args.headful;

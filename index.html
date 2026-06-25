@@ -94,6 +94,21 @@
   .lb-vis-group-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); margin-bottom: 2px; }
   .lb-vis-item { display: flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; }
   .lb-vis-item input { accent-color: var(--accent); cursor: pointer; }
+
+  .market-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+  .market-panel-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .market-panel-title { font-size: 14px; font-weight: 700; }
+  .market-panel-link { font-size: 12px; color: var(--accent); text-decoration: none; }
+  .market-panel-link:hover { text-decoration: underline; }
+  .market-panel-sub { font-size: 11.5px; color: var(--text-dim); margin-bottom: 12px; }
+  .market-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; font-size: 11.5px; }
+  .market-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .market-legend .swatch { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .market-legend b { font-variant-numeric: tabular-nums; }
+  .market-chart-wrap { overflow-x: auto; }
+  .market-chart-wrap svg { width: 100%; min-width: 560px; height: 200px; display: block; }
+  .market-axis-label { font-size: 9.5px; fill: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .market-gridline { stroke: var(--border); stroke-width: 1; }
 </style>
 </head>
 <body>
@@ -108,6 +123,16 @@
     <h1 data-i18n="index.heroTitle">FIFA Fantasy Dashboard</h1>
     <p data-i18n="index.heroSubtitle">Pemuncak statistik turnamen sekilas — poin, gol, dan statistik bertahan ter-update dari data scrape. Klik nama pemain atau tim untuk detail lengkap. Cari daftar lengkap pemain? Buka menu Pemain.</p>
     <div class="hero-stats" id="heroStats"></div>
+  </div>
+
+  <div class="market-panel" id="marketPanel" style="display:none;">
+    <div class="market-panel-head">
+      <span class="market-panel-title" data-i18n="index.marketPanelTitle">Win World Cup — Market Odds (Top 8)</span>
+      <a class="market-panel-link" href="market-odds.html" data-i18n="index.marketPanelLink">Full breakdown by stage →</a>
+    </div>
+    <div class="market-panel-sub" data-i18n="index.marketPanelSub">Sourced from Polymarket prediction markets, refreshed with every data sync.</div>
+    <div class="market-legend" id="marketLegend"></div>
+    <div class="market-chart-wrap"><svg id="marketChart" viewBox="0 0 960 200" preserveAspectRatio="none"></svg></div>
   </div>
 
   <details class="lb-vis-panel">
@@ -180,26 +205,90 @@ function flatten(p) {
   };
 }
 
+let polymarket = { teams: {}, history: {} };
+
 async function loadData() {
   const lbGrid = document.getElementById('lbGrid');
   try {
-    const [playersRes, squadsRes, aggRes] = await Promise.all([
+    const [playersRes, squadsRes, aggRes, polyRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/player_aggregates.json'),
+      fetch('data/polymarket.json'),
     ]);
     if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
     const json = await playersRes.json();
     squads = squadsRes.ok ? await squadsRes.json() : [];
     aggregates = aggRes.ok ? await aggRes.json() : {};
     players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
+    if (polyRes.ok) polymarket = await polyRes.json();
   } catch (e) {
     lbGrid.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
     return;
   }
   renderHeroStats();
+  renderMarketPanel();
   renderVisibilityControls();
   renderLeaderboards();
+}
+
+const MARKET_CHART_COLORS = ['#4a9eff', '#e9c400', '#ff6b6b', '#00e639', '#b388ff', '#ff9f43', '#36cfc9', '#f06292'];
+
+function renderMarketPanel() {
+  const panel = document.getElementById('marketPanel');
+  const entries = Object.entries(polymarket.history || {});
+  if (!entries.length) {
+    panel.style.display = 'none';
+    return;
+  }
+  panel.style.display = 'block';
+
+  const svg = document.getElementById('marketChart');
+  const legendEl = document.getElementById('marketLegend');
+
+  const W = 960, H = 200, PAD_L = 32, PAD_R = 16, PAD_T = 10, PAD_B = 18;
+  const plotW = W - PAD_L - PAD_R, plotH = H - PAD_T - PAD_B;
+
+  let minT = Infinity, maxT = -Infinity, maxP = 0;
+  for (const [, pts] of entries) {
+    for (const pt of pts) {
+      if (pt.t < minT) minT = pt.t;
+      if (pt.t > maxT) maxT = pt.t;
+      if (pt.p > maxP) maxP = pt.p;
+    }
+  }
+  const yMax = Math.min(1, Math.ceil((maxP * 1.15) * 20) / 20) || 0.1;
+  const x = (t) => PAD_L + ((t - minT) / (maxT - minT || 1)) * plotW;
+  const y = (p) => PAD_T + (1 - p / yMax) * plotH;
+
+  const sorted = entries
+    .map(([squadId, pts]) => ({ squadId, pts, last: pts.length ? pts[pts.length - 1].p : 0 }))
+    .sort((a, b) => b.last - a.last);
+
+  const gridSteps = 4;
+  let gridHtml = '';
+  for (let i = 0; i <= gridSteps; i++) {
+    const py = PAD_T + (plotH / gridSteps) * i;
+    const pct = Math.round((yMax * (1 - i / gridSteps)) * 100);
+    gridHtml += `<line class="market-gridline" x1="${PAD_L}" y1="${py}" x2="${W - PAD_R}" y2="${py}" />`;
+    gridHtml += `<text class="market-axis-label" x="${W - PAD_R + 2}" y="${py + 3}">${pct}%</text>`;
+  }
+
+  const lines = sorted.map((s, i) => {
+    const color = MARKET_CHART_COLORS[i % MARKET_CHART_COLORS.length];
+    const d = s.pts.map((pt, idx) => `${idx === 0 ? 'M' : 'L'}${x(pt.t).toFixed(1)},${y(pt.p).toFixed(1)}`).join(' ');
+    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2" />`;
+  }).join('');
+
+  svg.innerHTML = `${gridHtml}${lines}`;
+
+  legendEl.innerHTML = sorted.map((s, i) => {
+    const color = MARKET_CHART_COLORS[i % MARKET_CHART_COLORS.length];
+    return `<span onclick="DetailModal.openTeam(${s.squadId})" style="cursor:pointer;">
+      <span class="swatch" style="background:${color};"></span>
+      ${FLAGS.flagFor(squadAbbr(Number(s.squadId)))} ${escapeHtml(squadAbbr(Number(s.squadId)))} <b>${(s.last * 100).toFixed(1)}%</b>
+    </span>`;
+  }).join('');
 }
 
 function renderHeroStats() {
