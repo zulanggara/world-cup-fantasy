@@ -40,11 +40,12 @@ const STATS_DIR = path.join(DATA_DIR, 'stats');
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
 function parseArgs(argv) {
-  const args = { withStats: false, headful: false, ids: null };
+  const args = { withStats: false, headful: false, ids: null, rebuildAggregatesOnly: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--with-stats') args.withStats = true;
     else if (a === '--headful') args.headful = true;
+    else if (a === '--rebuild-aggregates-only') args.rebuildAggregatesOnly = true;
     else if (a === '--ids') {
       const v = argv[++i] || '';
       args.ids = v.split(',').map((s) => s.trim()).filter(Boolean).map(Number);
@@ -634,8 +635,24 @@ function buildAggregates() {
     }
     if (!Array.isArray(rounds) || !rounds.length) continue;
 
-    const sum = { GS: 0, CS: 0, AS: 0, T: 0, CC: 0, ST: 0, S: 0, YC: 0, RC: 0, OG: 0, PW: 0, PC: 0, PS: 0, MP: 0, FK: 0, SXI: 0, roundsPlayed: 0 };
-    for (const r of rounds) {
+    const sum = {
+      GS: 0, CS: 0, AS: 0, T: 0, CC: 0, ST: 0, S: 0, YC: 0, RC: 0, OG: 0, PW: 0, PC: 0, PS: 0, MP: 0, FK: 0, SXI: 0,
+      roundsPlayed: 0, startedCount: 0, suspendedNextMatch: false, recentFormPoints: null,
+    };
+
+    // FIFA's source data needs to be processed in chronological round order
+    // for the rotation/suspension simulation below — files aren't always
+    // already sorted that way.
+    const sortedRounds = rounds.slice().sort((a, b) => (a?.roundId ?? 0) - (b?.roundId ?? 0));
+
+    // Simulates the FIFA disciplinary rule (auto one-match ban on a 2nd
+    // yellow card, counter resets once that ban is served) round by round,
+    // so the *final* state reflects whether the player is suspended
+    // entering whatever round comes next — used to exclude them from next-
+    // round Best 15 pools entirely rather than just scoring them lower.
+    let cardCount = 0;
+    const playedPoints = []; // chronological points for rounds actually played (MP > 0)
+    for (const r of sortedRounds) {
       const s = r?.stats ?? {};
       sum.GS += s.GS ?? 0;
       sum.CS += s.CS ?? 0;
@@ -653,8 +670,36 @@ function buildAggregates() {
       sum.MP += s.MP ?? 0;
       sum.FK += s.FK ?? 0;
       sum.SXI += s.SXI ?? 0;
-      if ((s.MP ?? 0) > 0) sum.roundsPlayed += 1;
+      if ((s.MP ?? 0) > 0) {
+        sum.roundsPlayed += 1;
+        playedPoints.push(r.points ?? 0);
+      }
+      // FIFA's own SXI stat code is never populated (always 0 — same gap
+      // documented on the dashboard), so minutes >= 60 is used as the
+      // "started / heavily involved" proxy for rotation-risk instead.
+      if ((s.MP ?? 0) >= 60) sum.startedCount += 1;
+
+      cardCount += s.YC ?? 0;
+      if (cardCount >= 2) {
+        sum.suspendedNextMatch = true;
+        cardCount = 0; // ban served — counter resets toward the next threshold
+      } else {
+        sum.suspendedNextMatch = false;
+      }
     }
+
+    // Recency-weighted form for the most recently played rounds (60/40 split
+    // on the last two), so a player heating up or cooling off in their last
+    // couple of matches moves the projection faster than the season-long
+    // avgPoints from players.json does.
+    if (playedPoints.length >= 2) {
+      const last = playedPoints[playedPoints.length - 1];
+      const prev = playedPoints[playedPoints.length - 2];
+      sum.recentFormPoints = Math.round((last * 0.6 + prev * 0.4) * 10) / 10;
+    } else if (playedPoints.length === 1) {
+      sum.recentFormPoints = playedPoints[0];
+    }
+
     aggregates[id] = sum;
   }
 
@@ -693,6 +738,14 @@ async function fetchStatsForIds(page, ids) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   ensureDirs();
+
+  // Recomputes data/player_aggregates.json (rotation/suspension/recent-form
+  // fields) from the existing data/stats/ files only — no network calls.
+  // Useful after changing buildAggregates()'s logic without re-scraping.
+  if (args.rebuildAggregatesOnly) {
+    buildAggregates();
+    return;
+  }
 
   await fetchMatches();
   await fetchStadiums();

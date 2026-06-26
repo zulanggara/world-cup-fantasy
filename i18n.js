@@ -202,6 +202,8 @@ window.I18N = (function () {
       },
       matchdayLabel: { en: 'Projection matchday:', id: 'Matchday proyeksi:', ar: 'جولة التوقع:', ms: 'Matchday unjuran:' },
       unmatchedNote: { en: '{n} players with no team projection data (scored neutral 50)', id: '{n} pemain tanpa data proyeksi tim (dihitung netral 50)', ar: '{n} لاعب بدون بيانات توقع للفريق (يُحسب محايداً 50)', ms: '{n} pemain tanpa data unjuran pasukan (dikira neutral 50)' },
+      suspendedNote: { en: '{n} players excluded — suspended next match (2nd yellow card)', id: '{n} pemain dikecualikan — suspend laga depan (kartu kuning ke-2)', ar: '{n} لاعب مستثنى — موقوف للمباراة القادمة (البطاقة الصفراء الثانية)', ms: '{n} pemain dikecualikan — digantung perlawanan seterusnya (kad kuning ke-2)' },
+      rotationRiskTip: { en: 'Rotation risk: started {started}/{total} of team\'s completed matches', id: 'Risiko rotasi: starter {started}/{total} pertandingan tim yang sudah selesai', ar: 'خطر التدوير: شارك أساسياً في {started}/{total} من مباريات الفريق المكتملة', ms: 'Risiko putaran: starter {started}/{total} perlawanan pasukan yang selesai' },
       scoreLabel: { en: 'Score', id: 'Skor', ar: 'النتيجة', ms: 'Skor' },
       estimateSuffix: { en: '(estimate)', id: '(estimasi)', ar: '(تقديري)', ms: '(anggaran)' },
       projectedSquadTitle: { en: 'Projected Best 15', id: 'Best 15 Proyeksi', ar: 'أفضل 15 المتوقع', ms: '15 Terbaik Unjuran' },
