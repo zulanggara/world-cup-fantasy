@@ -2486,8 +2486,8 @@
       },
       {
         "id": 60,
-        "period": "first_half",
-        "minutes": 4,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Levi's Stadium",
         "venueCity": "Santa Clara, California",
@@ -2495,7 +2495,7 @@
         "venueCityTranslationKey": null,
         "venueId": 5,
         "date": "2026-06-26T03:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 34,
         "awaySquadId": 3,
@@ -2512,8 +2512,8 @@
       },
       {
         "id": 59,
-        "period": "first_half",
-        "minutes": 4,
+        "period": "full_time",
+        "minutes": 99,
         "extraMinutes": 0,
         "venueName": "Sofi Stadium",
         "venueCity": "Inglewood, California",
@@ -2521,7 +2521,7 @@
         "venueCityTranslationKey": null,
         "venueId": 4,
         "date": "2026-06-26T03:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 45,
         "awaySquadId": 47,
@@ -2529,15 +2529,36 @@
         "awaySquadName": "USA",
         "homeSquadAbbr": "TUR",
         "awaySquadAbbr": "USA",
-        "homeScore": 0,
+        "homeScore": 3,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
-        "awayScore": 1,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1215,
+            "assistId": 1206,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1206,
+            "assistId": 1192,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1193,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 2,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [
           {
             "playerId": 1263,
             "assistId": 1250,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1250,
+            "assistId": null,
             "isOwnGoal": false
           }
         ]
