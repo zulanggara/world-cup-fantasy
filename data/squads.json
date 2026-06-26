@@ -165,7 +165,7 @@
     "name": "Iraq",
     "group": "i",
     "abbr": "IRQ",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 25,
