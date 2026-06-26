@@ -95,14 +95,14 @@
     "name": "Curaçao",
     "group": "e",
     "abbr": "CUW",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 15,
     "name": "Czechia",
     "group": "a",
     "abbr": "CZE",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 16,
@@ -151,7 +151,7 @@
     "name": "Haiti",
     "group": "c",
     "abbr": "HAI",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 23,
@@ -249,7 +249,7 @@
     "name": "Qatar",
     "group": "b",
     "abbr": "QAT",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 37,
@@ -305,14 +305,14 @@
     "name": "Tunisia",
     "group": "f",
     "abbr": "TUN",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 45,
     "name": "Türkiye",
     "group": "d",
     "abbr": "TUR",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 46,
