@@ -6097,7 +6097,7 @@
     "GS": 0,
     "CS": 2,
     "AS": 0,
-    "T": 2,
+    "T": 3,
     "CC": 0,
     "ST": 0,
     "S": 0,
@@ -6210,7 +6210,7 @@
     "T": 0,
     "CC": 0,
     "ST": 0,
-    "S": 10,
+    "S": 9,
     "YC": 0,
     "RC": 0,
     "OG": 0,
@@ -6223,7 +6223,7 @@
     "roundsPlayed": 3,
     "startedCount": 3,
     "suspendedNextMatch": false,
-    "recentFormPoints": 6
+    "recentFormPoints": 5.4
   },
   "455": {
     "GS": 0,
@@ -7902,7 +7902,7 @@
     "CS": 2,
     "AS": 0,
     "T": 1,
-    "CC": 0,
+    "CC": 1,
     "ST": 0,
     "S": 0,
     "YC": 0,
