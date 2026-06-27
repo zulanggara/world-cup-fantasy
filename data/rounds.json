@@ -2145,48 +2145,6 @@
         ]
       },
       {
-        "id": 51,
-        "period": "full_time",
-        "minutes": 97,
-        "extraMinutes": 0,
-        "venueName": "Hard Rock Stadium",
-        "venueCity": "Miami Gardens, Florida",
-        "venueNameTranslationKey": null,
-        "venueCityTranslationKey": null,
-        "venueId": 15,
-        "date": "2026-06-24T23:00:00+01:00",
-        "status": "complete",
-        "isSuspended": false,
-        "homeSquadId": 38,
-        "awaySquadId": 7,
-        "homeSquadName": "Scotland",
-        "awaySquadName": "Brazil",
-        "homeSquadAbbr": "SCO",
-        "awaySquadAbbr": "BRA",
-        "homeScore": 0,
-        "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
-        "awayScore": 3,
-        "awayPenaltyScore": 0,
-        "awayGoalScorersAssists": [
-          {
-            "playerId": 173,
-            "assistId": 179,
-            "isOwnGoal": false
-          },
-          {
-            "playerId": 173,
-            "assistId": 1361,
-            "isOwnGoal": false
-          },
-          {
-            "playerId": 174,
-            "assistId": 1361,
-            "isOwnGoal": false
-          }
-        ]
-      },
-      {
         "id": 52,
         "period": "full_time",
         "minutes": 99,
@@ -2240,6 +2198,48 @@
           {
             "playerId": 582,
             "assistId": 574,
+            "isOwnGoal": false
+          }
+        ]
+      },
+      {
+        "id": 51,
+        "period": "full_time",
+        "minutes": 97,
+        "extraMinutes": 0,
+        "venueName": "Hard Rock Stadium",
+        "venueCity": "Miami Gardens, Florida",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 15,
+        "date": "2026-06-24T23:00:00+01:00",
+        "status": "complete",
+        "isSuspended": false,
+        "homeSquadId": 38,
+        "awaySquadId": 7,
+        "homeSquadName": "Scotland",
+        "awaySquadName": "Brazil",
+        "homeSquadAbbr": "SCO",
+        "awaySquadAbbr": "BRA",
+        "homeScore": 0,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": null,
+        "awayScore": 3,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 173,
+            "assistId": 179,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 173,
+            "assistId": 1361,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 174,
+            "assistId": 1361,
             "isOwnGoal": false
           }
         ]
@@ -2319,43 +2319,6 @@
         ]
       },
       {
-        "id": 56,
-        "period": "full_time",
-        "minutes": 97,
-        "extraMinutes": 0,
-        "venueName": "Lincoln Financial Field",
-        "venueCity": "Philadelphia, Pennsylvania",
-        "venueNameTranslationKey": null,
-        "venueCityTranslationKey": null,
-        "venueId": 11,
-        "date": "2026-06-25T21:00:00+01:00",
-        "status": "complete",
-        "isSuspended": false,
-        "homeSquadId": 14,
-        "awaySquadId": 12,
-        "homeSquadName": "Curaçao",
-        "awaySquadName": "Côte d'Ivoire",
-        "homeSquadAbbr": "CUW",
-        "awaySquadAbbr": "CIV",
-        "homeScore": 0,
-        "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
-        "awayScore": 2,
-        "awayPenaltyScore": 0,
-        "awayGoalScorersAssists": [
-          {
-            "playerId": 308,
-            "assistId": 307,
-            "isOwnGoal": false
-          },
-          {
-            "playerId": 308,
-            "assistId": 321,
-            "isOwnGoal": false
-          }
-        ]
-      },
-      {
         "id": 55,
         "period": "full_time",
         "minutes": 98,
@@ -2394,6 +2357,43 @@
           {
             "playerId": 529,
             "assistId": 543,
+            "isOwnGoal": false
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "period": "full_time",
+        "minutes": 97,
+        "extraMinutes": 0,
+        "venueName": "Lincoln Financial Field",
+        "venueCity": "Philadelphia, Pennsylvania",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 11,
+        "date": "2026-06-25T21:00:00+01:00",
+        "status": "complete",
+        "isSuspended": false,
+        "homeSquadId": 14,
+        "awaySquadId": 12,
+        "homeSquadName": "Curaçao",
+        "awaySquadName": "Côte d'Ivoire",
+        "homeSquadAbbr": "CUW",
+        "awaySquadAbbr": "CIV",
+        "homeScore": 0,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": null,
+        "awayScore": 2,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 308,
+            "assistId": 307,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 308,
+            "assistId": 321,
             "isOwnGoal": false
           }
         ]
@@ -2670,8 +2670,8 @@
       },
       {
         "id": 63,
-        "period": "first_half",
-        "minutes": 17,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Estadio Akron",
         "venueCity": "Guadalajara",
@@ -2679,7 +2679,7 @@
         "venueCityTranslationKey": null,
         "venueId": 2,
         "date": "2026-06-27T01:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 46,
         "awaySquadId": 41,
@@ -2690,14 +2690,20 @@
         "homeScore": 0,
         "homePenaltyScore": 0,
         "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "awayScore": 1,
         "awayPenaltyScore": 0,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1082,
+            "assistId": 1102,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 64,
-        "period": "first_half",
-        "minutes": 18,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -2705,7 +2711,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-06-27T01:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 8,
         "awaySquadId": 37,
@@ -2722,8 +2728,8 @@
       },
       {
         "id": 66,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "full_time",
+        "minutes": 99,
         "extraMinutes": 0,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
@@ -2731,7 +2737,7 @@
         "venueCityTranslationKey": null,
         "venueId": 14,
         "date": "2026-06-27T04:00:00+01:00",
-        "status": "scheduled",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 17,
         "awaySquadId": 23,
@@ -2739,17 +2745,29 @@
         "awaySquadName": "IR Iran",
         "homeSquadAbbr": "EGY",
         "awaySquadAbbr": "IRN",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "homeScore": 1,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 436,
+            "assistId": 447,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 597,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 65,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "full_time",
+        "minutes": 96,
         "extraMinutes": 0,
         "venueName": "Bc Place",
         "venueCity": "Vancouver",
@@ -2757,7 +2775,7 @@
         "venueCityTranslationKey": null,
         "venueId": 8,
         "date": "2026-06-27T04:00:00+01:00",
-        "status": "scheduled",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 31,
         "awaySquadId": 5,
@@ -2765,12 +2783,44 @@
         "awaySquadName": "Belgium",
         "homeSquadAbbr": "NZL",
         "awaySquadAbbr": "BEL",
-        "homeScore": null,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "homeScore": 1,
+        "homePenaltyScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 832,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 5,
+        "awayPenaltyScore": 0,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1526,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1526,
+            "assistId": 1524,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 138,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 124,
+            "assistId": 135,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 128,
+            "assistId": 124,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 68,
@@ -2991,6 +3041,32 @@
         "awayGoalScorersAssists": null
       },
       {
+        "id": 78,
+        "period": "pre_match",
+        "minutes": 0,
+        "extraMinutes": 0,
+        "venueName": "Gillette Stadium",
+        "venueCity": "Foxborough, Massachusetts",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 7,
+        "date": "2026-06-29T21:30:00+01:00",
+        "status": "scheduled",
+        "isSuspended": false,
+        "homeSquadId": 20,
+        "awaySquadId": 34,
+        "homeSquadName": "Germany",
+        "awaySquadName": "Paraguay",
+        "homeSquadAbbr": "GER",
+        "awaySquadAbbr": "PAR",
+        "homeScore": null,
+        "homePenaltyScore": null,
+        "homeGoalScorersAssists": null,
+        "awayScore": null,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": null
+      },
+      {
         "id": 75,
         "period": "pre_match",
         "minutes": 0,
@@ -3043,6 +3119,32 @@
         "awayGoalScorersAssists": null
       },
       {
+        "id": 79,
+        "period": "pre_match",
+        "minutes": 0,
+        "extraMinutes": 0,
+        "venueName": "Metlife Stadium",
+        "venueCity": "East Rutherford, New Jersey",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 6,
+        "date": "2026-06-30T22:00:00+01:00",
+        "status": "scheduled",
+        "isSuspended": false,
+        "homeSquadId": 19,
+        "awaySquadId": 42,
+        "homeSquadName": "France",
+        "awaySquadName": "Sweden",
+        "homeSquadAbbr": "FRA",
+        "awaySquadAbbr": "SWE",
+        "homeScore": null,
+        "homePenaltyScore": null,
+        "homeGoalScorersAssists": null,
+        "awayScore": null,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": null
+      },
+      {
         "id": 76,
         "period": "pre_match",
         "minutes": 0,
@@ -3061,6 +3163,32 @@
         "awaySquadName": "Bosnia and Herzegovina",
         "homeSquadAbbr": "USA",
         "awaySquadAbbr": "BIH",
+        "homeScore": null,
+        "homePenaltyScore": null,
+        "homeGoalScorersAssists": null,
+        "awayScore": null,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": null
+      },
+      {
+        "id": 80,
+        "period": "pre_match",
+        "minutes": 0,
+        "extraMinutes": 0,
+        "venueName": "Hard Rock Stadium",
+        "venueCity": "Miami Gardens, Florida",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 15,
+        "date": "2026-07-03T23:00:00+01:00",
+        "status": "scheduled",
+        "isSuspended": false,
+        "homeSquadId": 2,
+        "awaySquadId": 8,
+        "homeSquadName": "Argentina",
+        "awaySquadName": "Cabo Verde",
+        "homeSquadAbbr": "ARG",
+        "awaySquadAbbr": "CPV",
         "homeScore": null,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
