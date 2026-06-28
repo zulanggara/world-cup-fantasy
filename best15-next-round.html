@@ -107,6 +107,8 @@
   .player-chip .pscore-pill { opacity: .8; }
   .player-chip .pwin-pill { font-weight: 700; padding: 1px 5px; border-radius: 999px; background: rgba(74,158,255,0.18); color: #4a9eff; }
   .player-chip .pproj { font-size: 12.5px; font-variant-numeric: tabular-nums; font-weight: 800; color: var(--accent); margin-top: 4px; }
+  .player-chip .pactual { font-size: 10.5px; font-weight: 700; color: #34c759; }
+  .ttotal-actual { font-size: 14px; font-weight: 700; color: #34c759; font-variant-numeric: tabular-nums; margin-left: 8px; }
 
   .bench-section { margin-top: 14px; }
   .bench-title { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .03em; }
@@ -223,6 +225,7 @@ function flatten(p) {
     suspendedNextMatch: !!a.suspendedNextMatch,
     startedCount: a.startedCount ?? 0,
     recentFormPoints: a.recentFormPoints ?? null,
+    roundPoints: p?.stats?.roundPoints ?? {},
   };
 }
 
@@ -377,7 +380,13 @@ function computeScores(mdIndex) {
     }
     const rotation = rotationFactor(p);
     const projectedPoints = Math.round(effectiveAvgPoints(p) * multiplier * rotation * 10) / 10;
-    return { ...p, fixtureIndex, hasFixtureData: fixtureIndex != null, projectedPoints, rotationFactor: rotation };
+    // roundId is 1-based (mdIndex 0 = round 1) — already-played matchdays
+    // have a real entry here straight from FIFA's own per-round points.
+    const actualPoints = p.roundPoints[String(mdIndex + 1)];
+    return {
+      ...p, fixtureIndex, hasFixtureData: fixtureIndex != null, projectedPoints, rotationFactor: rotation,
+      actualPoints: actualPoints != null ? actualPoints : null,
+    };
   });
 
   for (const pos of POS_ORDER) {
@@ -516,22 +525,55 @@ function resolveGroupSlot(label, standings, bestThirds, thirdAssignments) {
   return { pending: true, text: label };
 }
 
-// Projected (not just confirmed) Round of 32 matchups, resolved from current
-// group standings — same approach as groups.html's "R32 Projection" bracket
-// tab, since most R32 pairings aren't officially fixed yet while groups are
-// still being played.
+// data/matches.json sometimes spells a team differently across feeds (its
+// own r32 rows vs. eloratings.net vs. polymarket) — same alias list as
+// scraper.js's POLY_NAME_ALIASES, kept here too since this is a client-side
+// lookup against our own squads.json.
+const SQUAD_NAME_ALIASES = {
+  'Cape Verde': 'Cabo Verde',
+  'South Korea': 'Korea Republic',
+  Iran: 'IR Iran',
+  'Ivory Coast': "Côte d'Ivoire",
+  'Democratic Republic of the Congo': 'Congo DR',
+  'DR Congo': 'Congo DR',
+  'United States': 'USA',
+};
+
+function squadByName(name) {
+  if (!name) return null;
+  const direct = squads.find((s) => s.name === name);
+  if (direct) return direct;
+  const alias = SQUAD_NAME_ALIASES[name];
+  return alias ? squads.find((s) => s.name === alias) : null;
+}
+
+// Round of 32 matchups. Once the group stage is fully played, data/matches.json's
+// r32 rows already carry the real, fixed team names (home_team_name_en /
+// away_team_name_en) straight from FIFA's own fixture feed — that's used as
+// the source of truth here. Only while groups are still being played (those
+// name fields not resolved yet) does this fall back to projecting the slot
+// from current standings, same approach as groups.html's "R32 Projection"
+// bracket tab.
 function buildR32Matches() {
   const standings = buildStandings();
   const bestThirds = computeBestThirds(standings);
   const thirdAssignments = assignThirdPlaceSlots(bestThirds);
   return matchesGames
     .filter((g) => g.type === 'r32')
-    .map((g) => ({
-      id: g.id,
-      date: g.local_date,
-      home: resolveGroupSlot(g.home_team_label, standings, bestThirds, thirdAssignments),
-      away: resolveGroupSlot(g.away_team_label, standings, bestThirds, thirdAssignments),
-    }));
+    .map((g) => {
+      const homeSquad = squadByName(g.home_team_name_en);
+      const awaySquad = squadByName(g.away_team_name_en);
+      return {
+        id: g.id,
+        date: g.local_date,
+        home: homeSquad
+          ? { squadId: homeSquad.id, name: homeSquad.name, abbr: homeSquad.abbr, confirmed: true }
+          : resolveGroupSlot(g.home_team_label, standings, bestThirds, thirdAssignments),
+        away: awaySquad
+          ? { squadId: awaySquad.id, name: awaySquad.name, abbr: awaySquad.abbr, confirmed: true }
+          : resolveGroupSlot(g.away_team_label, standings, bestThirds, thirdAssignments),
+      };
+    });
 }
 
 // squadId -> { oppSquadId, oppAbbr, ownConfirmed, oppConfirmed, isoDate } for
@@ -619,6 +661,12 @@ function computeScoresR32() {
     })() : null;
     const oppMakeR16 = opp.oppSquadId != null ? (polyTeams[opp.oppSquadId]?.makeR16 ?? null) : null;
     const ownMakeR32Pct = polyTeams[p.squadId]?.makeR32 ?? null;
+    // Transfers are unlimited going into R32 but limited again from R16
+    // onward — a player whose own team is also a good bet to make R16 needs
+    // no transfer when that round opens, so this is carried through as a
+    // separate "longevity" signal (kept apart from opponent strength) rather
+    // than folded into the points multiplier.
+    const ownMakeR16Pct = polyTeams[p.squadId]?.makeR16 ?? null;
 
     const factors = [];
     if (oppStrength && oppStrength.played > 0) {
@@ -647,6 +695,7 @@ function computeScoresR32() {
       ownConfirmed: opp.ownConfirmed,
       oppConfirmed: opp.oppConfirmed,
       ownMakeR32Pct,
+      ownMakeR16Pct,
       rotationFactor: rotation,
     };
   });
@@ -655,14 +704,23 @@ function computeScoresR32() {
     const group = withFixture.filter((p) => p.position === pos);
     const forms = group.map((p) => p.form);
     const fixtures = group.map((p) => p.fixtureIndex);
+    const longevities = group.map((p) => p.ownMakeR16Pct ?? leagueAvgMakeR16);
     const formMin = Math.min(...forms, 0);
     const formMax = Math.max(...forms, 1);
     const fixMin = Math.min(...fixtures, 0.5);
     const fixMax = Math.max(...fixtures, 1.8);
+    const longMin = Math.min(...longevities, 0);
+    const longMax = Math.max(...longevities, 1);
     for (const p of group) {
       const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
       const normFix = fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50;
-      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+      const longevity = p.ownMakeR16Pct ?? leagueAvgMakeR16;
+      const normLong = longMax > longMin ? ((longevity - longMin) / (longMax - longMin)) * 100 : 50;
+      // 55% form + 35% fixture + 10% longevity — a small nudge toward players
+      // whose team is also likely to make R16, so this R32 squad (built with
+      // unlimited transfers) needs fewer changes once transfers are limited
+      // again from R16 onward.
+      p.score = Math.round((0.55 * normForm + 0.35 * normFix + 0.1 * normLong) * 10) / 10;
     }
   }
 
@@ -776,12 +834,18 @@ function renderVariant(variant, mdValue, budget) {
           <span class="pscore-pill" title="${escapeHtml(scoreLabel)}">★${p.score}</span>
           ${winPillHtml(opp)}
         </div>
-        <div class="pproj" title="${escapeHtml(estimateSuffix)}">~${p.projectedPoints} pts</div>
+        <div class="pproj" title="${escapeHtml(estimateSuffix)}">~${p.projectedPoints} pts${p.actualPoints != null ? ` <span class="pactual" title="${escapeHtml(I18N.t('nextround.actualPointsTip', 'actual points scored this round'))}">(${p.actualPoints} ${escapeHtml(I18N.t('nextround.actualSuffix', 'actual'))})</span>` : ''}</div>
       </div>
     `;
     }).join('');
     return `<div class="pitch-row">${chips || `<div class="empty-msg">${I18N.t('common.noPlayers')}</div>`}</div>`;
   }).join('');
+
+  const playedCount = starters.filter((p) => p.actualPoints != null).length;
+  const totalActualPoints = playedCount ? starters.reduce((s, p) => s + (p.actualPoints ?? 0), 0) : null;
+  const actualTotalHtml = totalActualPoints != null
+    ? `<span class="ttotal-actual" title="${escapeHtml(I18N.t('nextround.actualTotalTip', null, { n: playedCount }))}">${totalActualPoints} ${escapeHtml(I18N.t('nextround.actualSuffix', 'actual'))}</span>`
+    : '';
 
   const benchRows = bench
     .sort((a, b) => b.score - a.score)
@@ -803,6 +867,7 @@ function renderVariant(variant, mdValue, budget) {
         <span class="tname">${escapeHtml(I18N.t('nextround.projectedSquadTitle'))}</span>
         <span>
           <span class="ttotal">~${totalProjectedPoints} pts ${estimateSuffix}</span>
+          ${actualTotalHtml}
           <span class="budget-badge ${overBudget ? 'over' : 'ok'}">$${totalPriceVal.toFixed(1)} / ${budget}</span>
         </span>
       </div>

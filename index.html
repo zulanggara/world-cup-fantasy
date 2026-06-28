@@ -109,6 +109,33 @@
   .market-chart-wrap svg { width: 100%; min-width: 560px; height: 200px; display: block; }
   .market-axis-label { font-size: 9.5px; fill: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
   .market-gridline { stroke: var(--border); stroke-width: 1; }
+
+  .proj-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    background: linear-gradient(135deg, rgba(74,158,255,0.16) 0%, rgba(0,230,57,0.08) 100%);
+    border: 1px solid var(--accent); border-radius: 14px; padding: 16px 20px; margin-bottom: 18px;
+  }
+  .proj-cta-text { font-size: 14px; }
+  .proj-cta-text b { font-size: 16px; display: block; margin-bottom: 2px; }
+  .proj-cta-text span { color: var(--text-dim); font-size: 12.5px; }
+  .proj-cta-btn {
+    background: var(--accent); color: #14180a; font-weight: 800; font-size: 13.5px;
+    border-radius: 9px; padding: 10px 18px; text-decoration: none; white-space: nowrap;
+    box-shadow: 0 0 0 0 rgba(0,230,57,0.5); animation: ctaPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes ctaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,230,57,0.35); } 50% { box-shadow: 0 0 0 6px rgba(0,230,57,0); } }
+
+  .recap-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-top: 22px; }
+  .recap-head { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .recap-sub { font-size: 11.5px; color: var(--text-dim); margin-bottom: 14px; }
+  .recap-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .recap-col { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; text-align: center; cursor: pointer; }
+  .recap-col:hover { border-color: var(--accent); }
+  .recap-col .recap-md { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .recap-col .recap-proj { font-size: 13px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .recap-col .recap-actual { font-size: 18px; font-weight: 800; color: #34c759; font-variant-numeric: tabular-nums; }
+  .recap-chart-wrap { overflow-x: auto; }
+  .recap-chart-wrap svg { width: 100%; min-width: 360px; height: 160px; display: block; }
 </style>
 </head>
 <body>
@@ -124,6 +151,14 @@
     <p data-i18n="index.heroSubtitle">Pemuncak statistik turnamen sekilas — poin, gol, dan statistik bertahan ter-update dari data scrape. Klik nama pemain atau tim untuk detail lengkap. Cari daftar lengkap pemain? Buka menu Pemain.</p>
     <div class="hero-stats" id="heroStats"></div>
   </div>
+
+  <a class="proj-cta" href="best15-next-round.html">
+    <div class="proj-cta-text">
+      <b data-i18n="index.projCtaTitle">Next Round Projection: who to pick for Round of 32</b>
+      <span data-i18n="index.projCtaSub">Best 15 squad forecast with budget, qualifier status, and rotation risk — updated live.</span>
+    </div>
+    <span class="proj-cta-btn" data-i18n="index.projCtaBtn">Build squad →</span>
+  </a>
 
   <div class="market-panel" id="marketPanel" style="display:none;">
     <div class="market-panel-head">
@@ -141,8 +176,16 @@
   </details>
 
   <div class="lb-grid" id="lbGrid"></div>
+
+  <div class="recap-panel" id="recapPanel" style="display:none;">
+    <div class="recap-head" data-i18n="index.recapTitle">Best 15 Recap — Projection vs Actual</div>
+    <div class="recap-sub" data-i18n="index.recapSub">For each round already played, the Best 15 squad the index would have picked (same rules: 2-5-5-3, max 3/country) — projected points vs what those 15 players actually scored.</div>
+    <div class="recap-cols" id="recapCols"></div>
+    <div class="recap-chart-wrap"><svg id="recapChart" viewBox="0 0 360 160" preserveAspectRatio="none"></svg></div>
+  </div>
 </div>
 
+<script src="squad-builder.js"></script>
 <script src="i18n.js"></script>
 <script src="nav.js"></script>
 <script src="flags.js"></script>
@@ -202,19 +245,28 @@ function flatten(p) {
     yellowCards: agg.YC ?? 0,
     redCards: agg.RC ?? 0,
     startingXI: agg.SXI ?? 0,
+    price: p?.price ?? 0,
+    suspendedNextMatch: !!agg.suspendedNextMatch,
+    startedCount: agg.startedCount ?? 0,
+    recentFormPoints: agg.recentFormPoints ?? null,
+    roundPoints: p?.stats?.roundPoints ?? {},
   };
 }
 
 let polymarket = { teams: {}, history: {} };
+let teamProjections = {};
+let tournaments = [];
 
 async function loadData() {
   const lbGrid = document.getElementById('lbGrid');
   try {
-    const [playersRes, squadsRes, aggRes, polyRes] = await Promise.all([
+    const [playersRes, squadsRes, aggRes, polyRes, projRes, roundsRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/player_aggregates.json'),
       fetch('data/polymarket.json'),
+      fetch('data/team_projections.json'),
+      fetch('data/rounds.json'),
     ]);
     if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
     const json = await playersRes.json();
@@ -222,6 +274,11 @@ async function loadData() {
     aggregates = aggRes.ok ? await aggRes.json() : {};
     players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
     if (polyRes.ok) polymarket = await polyRes.json();
+    if (projRes.ok) teamProjections = (await projRes.json())?.teams ?? {};
+    if (roundsRes.ok) {
+      const roundsJson = await roundsRes.json();
+      tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
+    }
   } catch (e) {
     lbGrid.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
     return;
@@ -230,6 +287,123 @@ async function loadData() {
   renderMarketPanel();
   renderVisibilityControls();
   renderLeaderboards();
+  renderRecap();
+}
+
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
+}
+
+function effectiveAvgPoints(p) {
+  if (p.recentFormPoints == null) return p.avgPoints;
+  return Math.round((p.avgPoints * 0.5 + p.recentFormPoints * 0.5) * 10) / 10;
+}
+
+function completedRoundsForSquad(squadId) {
+  return tournaments.filter((t) => (t.homeSquadId === squadId || t.awaySquadId === squadId) && t.status === 'complete').length;
+}
+
+function rotationFactor(p) {
+  const teamRounds = completedRoundsForSquad(p.squadId);
+  if (!teamRounds) return 1;
+  const rate = p.startedCount / teamRounds;
+  return clamp(0.6 + 0.4 * rate, 0.6, 1);
+}
+
+// Same Best-15 selection used by best15-next-round.html's group-stage mode
+// (duplicated here per this site's existing per-page convention), re-run
+// against an already-played round so the dashboard can show what the index
+// would have picked vs what those 15 players actually scored.
+function computeRoundScores(mdIndex) {
+  const teams = Object.values(teamProjections);
+  const avgGoals = teams.reduce((s, t) => s + (t.projectedGoals?.[mdIndex] ?? 0), 0) / (teams.length || 1);
+  const avgCS = teams.reduce((s, t) => s + (t.cleanSheetPct?.[mdIndex] ?? 0), 0) / (teams.length || 1);
+
+  const pool = players.filter((p) => !p.suspendedNextMatch);
+  const withFixture = pool.map((p) => {
+    const abbr = squadAbbr(p.squadId);
+    const proj = abbr && abbr !== '?' ? teamProjections[abbr] : null;
+    const goals = proj?.projectedGoals?.[mdIndex] ?? null;
+    const cs = proj?.cleanSheetPct?.[mdIndex] ?? null;
+    let fixtureIndex, multiplier = 1;
+    if (p.position === 'GK' || p.position === 'DEF') {
+      fixtureIndex = cs != null ? cs : null;
+      if (cs != null && avgCS > 0) multiplier = clamp(1 + 0.5 * ((cs - avgCS) / avgCS), 0.5, 1.8);
+    } else {
+      fixtureIndex = goals != null ? goals : null;
+      if (goals != null && avgGoals > 0) multiplier = clamp(1 + 0.5 * ((goals - avgGoals) / avgGoals), 0.5, 1.8);
+    }
+    const rotation = rotationFactor(p);
+    const projectedPoints = Math.round(effectiveAvgPoints(p) * multiplier * rotation * 10) / 10;
+    const actualPoints = p.roundPoints[String(mdIndex + 1)];
+    return { ...p, fixtureIndex, hasFixtureData: fixtureIndex != null, projectedPoints, rotationFactor: rotation, actualPoints: actualPoints != null ? actualPoints : null };
+  });
+
+  const POS_ORDER_LOCAL = ['GK', 'DEF', 'MID', 'FWD'];
+  for (const pos of POS_ORDER_LOCAL) {
+    const group = withFixture.filter((p) => p.position === pos);
+    const forms = group.map((p) => p.form);
+    const fixtures = group.filter((p) => p.hasFixtureData).map((p) => p.fixtureIndex);
+    const formMin = Math.min(...forms, 0);
+    const formMax = Math.max(...forms, 1);
+    const fixMin = fixtures.length ? Math.min(...fixtures) : 0;
+    const fixMax = fixtures.length ? Math.max(...fixtures) : 1;
+    for (const p of group) {
+      const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
+      const normFix = p.hasFixtureData ? (fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50) : 50;
+      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+    }
+  }
+  return withFixture;
+}
+
+function renderRecap() {
+  const panel = document.getElementById('recapPanel');
+  if (!tournaments.length || !Object.keys(teamProjections).length) { panel.style.display = 'none'; return; }
+
+  const FORMATION = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
+  const POS_ORDER_LOCAL = ['GK', 'DEF', 'MID', 'FWD'];
+  const rounds = [];
+  for (let mdIndex = 0; mdIndex < 3; mdIndex++) {
+    const scored = computeRoundScores(mdIndex);
+    const anyPlayed = scored.some((p) => p.actualPoints != null);
+    if (!anyPlayed) continue;
+    const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER_LOCAL, 3, SquadBuilder.BUDGET);
+    const variant = variants.find((v) => v.key === 'budget') || variants[0];
+    if (!variant) continue;
+    const totalProjected = SquadBuilder.totalMetric(variant.starters, 'projectedPoints');
+    const totalActual = variant.starters.reduce((s, p) => s + (p.actualPoints ?? 0), 0);
+    rounds.push({ mdIndex, label: `MD${mdIndex + 1}`, totalProjected, totalActual });
+  }
+
+  if (!rounds.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+
+  document.getElementById('recapCols').innerHTML = rounds.map((r) => `
+    <div class="recap-col" onclick="location.href='best15-next-round.html'">
+      <div class="recap-md">${escapeHtml(r.label)}</div>
+      <div class="recap-actual">${r.totalActual}</div>
+      <div class="recap-proj">~${r.totalProjected} ${escapeHtml(I18N.t('nextround.estimateSuffix', '(estimate)'))}</div>
+    </div>
+  `).join('');
+
+  const W = 360, H = 160, PAD_L = 30, PAD_R = 10, PAD_T = 10, PAD_B = 22;
+  const plotW = W - PAD_L - PAD_R, plotH = H - PAD_T - PAD_B;
+  const maxVal = Math.max(1, ...rounds.flatMap((r) => [r.totalProjected, r.totalActual])) * 1.1;
+  const groupW = plotW / rounds.length;
+  const barW = Math.min(34, groupW / 3);
+  const y = (v) => PAD_T + (1 - v / maxVal) * plotH;
+
+  let bars = '';
+  rounds.forEach((r, i) => {
+    const cx = PAD_L + groupW * i + groupW / 2;
+    const xProj = cx - barW - 3, xActual = cx + 3;
+    bars += `<rect x="${xProj}" y="${y(r.totalProjected)}" width="${barW}" height="${plotH - (y(r.totalProjected) - PAD_T)}" fill="#4a9eff" rx="2" />`;
+    bars += `<rect x="${xActual}" y="${y(r.totalActual)}" width="${barW}" height="${plotH - (y(r.totalActual) - PAD_T)}" fill="#34c759" rx="2" />`;
+    bars += `<text class="market-axis-label" x="${cx}" y="${H - 6}" text-anchor="middle">${escapeHtml(r.label)}</text>`;
+  });
+  bars += `<line class="market-gridline" x1="${PAD_L}" y1="${PAD_T + plotH}" x2="${W - PAD_R}" y2="${PAD_T + plotH}" />`;
+  document.getElementById('recapChart').innerHTML = bars;
 }
 
 const MARKET_CHART_COLORS = ['#4a9eff', '#e9c400', '#ff6b6b', '#00e639', '#b388ff', '#ff9f43', '#36cfc9', '#f06292'];
