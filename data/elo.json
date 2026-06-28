@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-28T21:19:36.684Z",
+  "fetchedAt": "2026-06-28T23:18:06.954Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -94,8 +94,8 @@
     },
     "9": {
       "eloCode": "CA",
-      "rank": 32,
-      "rating": 1748
+      "rank": 31,
+      "rating": 1764
     },
     "10": {
       "eloCode": "CO",
@@ -169,7 +169,7 @@
     },
     "24": {
       "eloCode": "IQ",
-      "rank": 73,
+      "rank": 72,
       "rating": 1561
     },
     "25": {
@@ -249,8 +249,8 @@
     },
     "40": {
       "eloCode": "ZA",
-      "rank": 68,
-      "rating": 1575
+      "rank": 73,
+      "rating": 1559
     },
     "41": {
       "eloCode": "ES",
@@ -269,7 +269,7 @@
     },
     "44": {
       "eloCode": "TN",
-      "rank": 72,
+      "rank": 71,
       "rating": 1562
     },
     "45": {
@@ -294,43 +294,6 @@
     }
   },
   "fixtures": [
-    {
-      "date": "2026-06-28",
-      "hostCountry": "US",
-      "homeSquadId": 9,
-      "awaySquadId": 40,
-      "homeEloCode": "CA",
-      "awayEloCode": "ZA",
-      "homeRank": 32,
-      "awayRank": 68,
-      "homeRating": 1748,
-      "awayRating": 1575,
-      "homeWinPct": 73,
-      "awayWinPct": 27,
-      "eloPointsAtStake": {
-        "draw": -14,
-        "winMargin1": [
-          16,
-          44
-        ],
-        "winMargin2": [
-          24,
-          66
-        ],
-        "winMargin3": [
-          28,
-          77
-        ],
-        "winMargin4": [
-          30,
-          82
-        ],
-        "winMargin5": [
-          32,
-          88
-        ]
-      }
-    },
     {
       "date": "2026-06-29",
       "hostCountry": "US",
@@ -1264,7 +1227,7 @@
       "homeEloCode": "SA",
       "awayEloCode": "IQ",
       "homeRank": 65,
-      "awayRank": 73,
+      "awayRank": 72,
       "homeRating": 1596,
       "awayRating": 1561,
       "homeWinPct": 69,
@@ -1966,7 +1929,7 @@
       "awaySquadId": 3,
       "homeEloCode": "IQ",
       "awayEloCode": "AU",
-      "homeRank": 73,
+      "homeRank": 72,
       "awayRank": 25,
       "homeRating": 1561,
       "awayRating": 1800,
@@ -2072,6 +2035,21 @@
     }
   ],
   "results": [
+    {
+      "date": "2026-06-28",
+      "hostCountry": "US",
+      "homeSquadId": 9,
+      "awaySquadId": 40,
+      "homeEloCode": "CA",
+      "awayEloCode": "ZA",
+      "homeScore": 1,
+      "awayScore": 0,
+      "eloChangeHome": 16,
+      "homeRatingAfter": 1764,
+      "awayRatingAfter": 1559,
+      "homeRankAfter": 31,
+      "awayRankAfter": 73
+    },
     {
       "date": "2026-06-27",
       "hostCountry": "US",
