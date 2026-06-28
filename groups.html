@@ -109,9 +109,9 @@
   .bracket-legend span { display: inline-flex; align-items: center; gap: 6px; }
   .bracket-legend .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
   .bracket-scroll { overflow-x: auto; padding-bottom: 12px; }
-  .bracket-tree { position: relative; display: flex; gap: 56px; min-width: 1320px; padding: 10px 4px; }
+  .bracket-tree { position: relative; display: flex; gap: 34px; min-width: 1980px; padding: 10px 4px; }
   .bracket-tree svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-  .bracket-col { display: flex; flex-direction: column; justify-content: space-around; gap: 14px; position: relative; z-index: 1; min-width: 240px; }
+  .bracket-col { display: flex; flex-direction: column; justify-content: space-around; gap: 14px; position: relative; z-index: 1; min-width: 200px; }
   .bracket-col-label { position: absolute; top: -28px; left: 0; right: 0; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
   .bracket-match-box { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .bmatch-venue { padding: 5px 9px; font-size: 10.5px; color: var(--text-dim); background: var(--panel2); border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; }
@@ -612,6 +612,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
     return { pending: true, text: label };
   }
 
+  const matchResultById = {};
   const roundsOut = {};
   for (const round of KO_ROUNDS) {
     const matches = Object.values(byId)
@@ -621,7 +622,12 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
       const home = resolveSlot(m.home_team_label);
       const away = resolveSlot(m.away_team_label);
       resolved[m.id] = { home, away };
-      return { id: m.id, date: m.local_date, stadiumId: m.stadium_id, home, away };
+      const rec = {
+        id: m.id, type: m.type, date: m.local_date, stadiumId: m.stadium_id, home, away,
+        homeLabel: m.home_team_label, awayLabel: m.away_team_label,
+      };
+      matchResultById[m.id] = rec;
+      return rec;
     });
   }
 
@@ -629,9 +635,53 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
   let thirdPlace = null;
   if (thirdMatch) {
     thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label), away: resolveSlot(thirdMatch.away_team_label) };
+    matchResultById[thirdMatch.id] = { ...thirdPlace, type: 'third', homeLabel: thirdMatch.home_team_label, awayLabel: thirdMatch.away_team_label };
   }
 
-  return { rounds: roundsOut, thirdPlace };
+  return { rounds: roundsOut, thirdPlace, matchResultById };
+}
+
+// "Winner Match 97" / "Loser Match 97" -> "97", so we can walk the real
+// bracket topology (which R16/QF/SF match feeds which) the same way the
+// official FIFA wall chart does, instead of just listing rounds flat.
+function parseRefMatchId(label) {
+  const m = label && label.match(/^(?:Winner|Loser) Match (\d+)$/i);
+  return m ? m[1] : null;
+}
+
+// Split the draw into its two mirrored halves by walking down from the
+// Final through "Winner Match N" labels: Final -> 2 SF -> 4 QF -> 8 R16 ->
+// 16 R32. Each half's `rounds` is ordered [SF, QF, R16, R32] (closest to
+// the Final first) so the FIFA-style bracket can render it mirrored
+// outward from the centre, same as the official tournament wall chart.
+function buildBracketHalves(matchResultById) {
+  const final = Object.values(matchResultById).find((m) => m.type === 'final');
+  if (!final) return null;
+
+  function collectHalf(startId) {
+    let frontier = startId ? [startId] : [];
+    const rounds = [];
+    while (frontier.length) {
+      rounds.push(frontier);
+      const next = [];
+      for (const id of frontier) {
+        const rec = matchResultById[id];
+        if (!rec) continue;
+        const h = parseRefMatchId(rec.homeLabel);
+        const a = parseRefMatchId(rec.awayLabel);
+        if (h) next.push(h);
+        if (a) next.push(a);
+      }
+      frontier = next;
+    }
+    return rounds;
+  }
+
+  return {
+    final,
+    left: collectHalf(parseRefMatchId(final.homeLabel)),
+    right: collectHalf(parseRefMatchId(final.awayLabel)),
+  };
 }
 
 function matchVenueLabel(dateStr, stadiumId) {
@@ -679,8 +729,19 @@ function bracketTeamHtml(side) {
   </div>`;
 }
 
+function bracketMatchBoxHtml(m) {
+  return `
+    <div class="bracket-match-box" data-match-id="${m.id}">
+      <div class="bmatch-venue">${escapeHtml(matchVenueLabel(m.date, m.stadiumId))}</div>
+      ${bracketTeamHtml(m.home)}
+      ${bracketTeamHtml(m.away)}
+      ${bracketWinExpHtml(m.home, m.away, m.date)}
+    </div>
+  `;
+}
+
 function renderBracket(standings, bestThirds, thirdAssignments) {
-  const { rounds, thirdPlace } = buildKnockoutTree(standings, bestThirds, thirdAssignments);
+  const { rounds, thirdPlace, matchResultById } = buildKnockoutTree(standings, bestThirds, thirdAssignments);
   const treeEl = document.getElementById('bracketTree');
 
   if (!rounds.r32.length) {
@@ -689,24 +750,51 @@ function renderBracket(standings, bestThirds, thirdAssignments) {
     return;
   }
 
-  const colsHtml = KO_ROUNDS.map((round) => {
-    const matches = rounds[round.key];
-    const isFinal = round.key === 'final';
-    const matchesHtml = matches.map((m) => `
-      <div class="bracket-match-box" data-match-id="${m.id}">
-        <div class="bmatch-venue">${escapeHtml(matchVenueLabel(m.date, m.stadiumId))}</div>
-        ${bracketTeamHtml(m.home)}
-        ${bracketTeamHtml(m.away)}
-        ${bracketWinExpHtml(m.home, m.away, m.date)}
-      </div>
-    `).join('');
-    return `<div class="bracket-col ${isFinal ? 'bracket-final-col' : ''}" data-round="${round.key}" style="position:relative;">
-      <div class="bracket-col-label">${escapeHtml(round.label)}</div>
-      ${matchesHtml}
-    </div>`;
-  }).join('');
+  const halves = buildBracketHalves(matchResultById);
 
-  treeEl.innerHTML = `<svg id="bracketSvg"></svg>${colsHtml}`;
+  // Fall back to the old flat left-to-right layout if the data doesn't
+  // carry the "Winner Match N" topology (e.g. a future tournament with a
+  // different label scheme) — mirrored rendering needs that to find which
+  // R32 matches belong to which side of the draw.
+  if (!halves || !halves.left.length || !halves.right.length) {
+    const colsHtml = KO_ROUNDS.map((round) => {
+      const matches = rounds[round.key];
+      const isFinal = round.key === 'final';
+      const matchesHtml = matches.map(bracketMatchBoxHtml).join('');
+      return `<div class="bracket-col ${isFinal ? 'bracket-final-col' : ''}" data-round="${round.key}" style="position:relative;">
+        <div class="bracket-col-label">${escapeHtml(round.label)}</div>
+        ${matchesHtml}
+      </div>`;
+    }).join('');
+    treeEl.innerHTML = `<svg id="bracketSvg"></svg>${colsHtml}`;
+  } else {
+    // halves.left/right rounds are ordered [SF, QF, R16, R32] (closest to
+    // the Final first). Render the left half outward-in (R32..SF), the
+    // Final in the centre, then the right half mirrored inward-out
+    // (SF..R32) — matching the official FIFA wall chart.
+    const roundLabelByType = Object.fromEntries(KO_ROUNDS.map((r) => [r.type, r.label]));
+    const leftColsHtml = [...halves.left].reverse().map((ids) => {
+      const matches = ids.map((id) => matchResultById[id]).filter(Boolean);
+      const type = matches[0]?.type || '';
+      return `<div class="bracket-col" data-round="${type}" style="position:relative;">
+        <div class="bracket-col-label">${escapeHtml(roundLabelByType[type] || '')}</div>
+        ${matches.map(bracketMatchBoxHtml).join('')}
+      </div>`;
+    }).join('');
+    const finalColHtml = `<div class="bracket-col bracket-final-col" data-round="final" style="position:relative;">
+      <div class="bracket-col-label">${escapeHtml(roundLabelByType.final || 'Final')}</div>
+      ${bracketMatchBoxHtml(halves.final)}
+    </div>`;
+    const rightColsHtml = halves.right.map((ids) => {
+      const matches = ids.map((id) => matchResultById[id]).filter(Boolean);
+      const type = matches[0]?.type || '';
+      return `<div class="bracket-col" data-round="${type}" style="position:relative;">
+        <div class="bracket-col-label">${escapeHtml(roundLabelByType[type] || '')}</div>
+        ${matches.map(bracketMatchBoxHtml).join('')}
+      </div>`;
+    }).join('');
+    treeEl.innerHTML = `<svg id="bracketSvg"></svg>${leftColsHtml}${finalColHtml}${rightColsHtml}`;
+  }
 
   // Draw connector lines once boxes are laid out (need real positions).
   // Redraw again once webfonts finish loading — text reflow after the
@@ -726,6 +814,15 @@ function renderBracket(standings, bestThirds, thirdAssignments) {
   }
 }
 
+function connectorPath(fromRect, toRect, treeRect, forward) {
+  const x1 = (forward ? fromRect.right : fromRect.left) - treeRect.left;
+  const y1 = fromRect.top + fromRect.height / 2 - treeRect.top;
+  const x2 = (forward ? toRect.left : toRect.right) - treeRect.left;
+  const y2 = toRect.top + toRect.height / 2 - treeRect.top;
+  const midX = x1 + (x2 - x1) / 2;
+  return `<path d="M${x1},${y1} L${midX},${y1} L${midX},${y2} L${x2},${y2}" style="stroke:var(--text-dim); stroke-width:2; fill:none; stroke-linecap:round;" />`;
+}
+
 function drawBracketConnectors() {
   const svg = document.getElementById('bracketSvg');
   const tree = document.getElementById('bracketTree');
@@ -737,19 +834,25 @@ function drawBracketConnectors() {
   const cols = Array.from(tree.querySelectorAll('.bracket-col'));
   let lines = '';
   for (let c = 0; c < cols.length - 1; c++) {
-    const curBoxes = Array.from(cols[c].querySelectorAll('.bracket-match-box'));
-    const nextBoxes = Array.from(cols[c + 1].querySelectorAll('.bracket-match-box'));
-    for (let i = 0; i < curBoxes.length; i++) {
-      const fromRect = curBoxes[i].getBoundingClientRect();
-      const toBox = nextBoxes[Math.floor(i / 2)];
-      if (!toBox) continue;
-      const toRect = toBox.getBoundingClientRect();
-      const x1 = fromRect.right - treeRect.left;
-      const y1 = fromRect.top + fromRect.height / 2 - treeRect.top;
-      const x2 = toRect.left - treeRect.left;
-      const y2 = toRect.top + toRect.height / 2 - treeRect.top;
-      const midX = x1 + (x2 - x1) / 2;
-      lines += `<path d="M${x1},${y1} L${midX},${y1} L${midX},${y2} L${x2},${y2}" style="stroke:var(--text-dim); stroke-width:2; fill:none; stroke-linecap:round;" />`;
+    const aBoxes = Array.from(cols[c].querySelectorAll('.bracket-match-box'));
+    const bBoxes = Array.from(cols[c + 1].querySelectorAll('.bracket-match-box'));
+    if (!aBoxes.length || !bBoxes.length) continue;
+    if (aBoxes.length >= bBoxes.length) {
+      // Normal left-to-right feed: column c's winners go into column c+1
+      // (also covers the 1:1 Final<-SF-left edge, where direction is moot).
+      for (let i = 0; i < aBoxes.length; i++) {
+        const toBox = bBoxes[Math.floor(i / 2)];
+        if (!toBox) continue;
+        lines += connectorPath(aBoxes[i].getBoundingClientRect(), toBox.getBoundingClientRect(), treeRect, true);
+      }
+    } else {
+      // Mirrored right half: column c+1 (further from the Final, more
+      // matches) feeds back left into column c (e.g. QF-right -> SF-right).
+      for (let j = 0; j < bBoxes.length; j++) {
+        const toBox = aBoxes[Math.floor(j / 2)];
+        if (!toBox) continue;
+        lines += connectorPath(bBoxes[j].getBoundingClientRect(), toBox.getBoundingClientRect(), treeRect, false);
+      }
     }
   }
   svg.innerHTML = lines;
