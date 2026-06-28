@@ -19,13 +19,13 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>World Cup 2026 Group Standings & Fixtures | Round of 32 Bracket</title>
-<meta name="description" content="Live FIFA World Cup 2026 group standings, third-place qualifier rankings, a real-time Round-of-32 bracket projection, and upcoming fixtures in your local time." />
+<meta name="description" content="Live FIFA World Cup 2026 group standings, third-place qualifier rankings, the real Round-of-32 knockout bracket, and upcoming fixtures in your local time." />
 <meta name="keywords" content="World Cup 2026 standings, World Cup 2026 group tables, World Cup 2026 fixtures, Round of 32 bracket, World Cup 2026 schedule WIB" />
 <link rel="canonical" href="https://world-cup-fantasy-kappa.vercel.app/groups.html" />
 <meta name="robots" content="index, follow" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="World Cup 2026 Group Standings & Fixtures" />
-<meta property="og:description" content="Live group standings, qualifier rankings, and Round-of-32 bracket projection for the FIFA World Cup 2026." />
+<meta property="og:description" content="Live group standings, qualifier rankings, and the real Round-of-32 knockout bracket for the FIFA World Cup 2026." />
 <meta property="og:url" content="https://world-cup-fantasy-kappa.vercel.app/groups.html" />
 <meta name="twitter:card" content="summary" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,7 +190,7 @@
   </div>
 
   <div class="section-pane" id="pane-bracket">
-    <h2 class="section-title" data-i18n="groups.bracketTitle">Proyeksi Bracket Babak Gugur</h2>
+    <h2 class="section-title" data-i18n="groups.bracketTitle">Bagan Babak Gugur</h2>
     <div class="bracket-legend">
       <span><span class="swatch" style="background:var(--accent);"></span> <span data-i18n="groups.legendConfirmed">Tim pasti (klasemen final / hasil resmi)</span></span>
       <span><span class="swatch" style="background:var(--accent2);"></span> <span data-i18n="groups.legendLive">Posisi saat ini (klasemen belum final, bisa berubah)</span></span>
@@ -246,6 +246,27 @@ function squadById(id) {
   return squads.find((s) => s.id === id);
 }
 
+// data/matches.json sometimes spells a team differently across feeds (its
+// own r32 rows vs. eloratings.net vs. polymarket) — same alias list as
+// scraper.js's POLY_NAME_ALIASES / best15-next-round.html's SQUAD_NAME_ALIASES.
+const SQUAD_NAME_ALIASES = {
+  'Cape Verde': 'Cabo Verde',
+  'South Korea': 'Korea Republic',
+  Iran: 'IR Iran',
+  'Ivory Coast': "Côte d'Ivoire",
+  'Democratic Republic of the Congo': 'Congo DR',
+  'DR Congo': 'Congo DR',
+  'United States': 'USA',
+};
+
+function squadByName(name) {
+  if (!name) return null;
+  const direct = squads.find((s) => s.name === name);
+  if (direct) return direct;
+  const alias = SQUAD_NAME_ALIASES[name];
+  return alias ? squads.find((s) => s.name === alias) : null;
+}
+
 // Match a fixture/result from data/elo.json (eloratings.net) to a real-world
 // match by team pair + calendar day — the two sources don't share a common
 // match id. rounds.json's ISO date is in a fixed +01:00 offset while
@@ -272,7 +293,7 @@ function findEloFixture(homeSquadId, awaySquadId, isoDate) {
 const SECTIONS = [
   { key: 'standings', i18nKey: 'groups.tabStandings', label: 'Klasemen' },
   { key: 'thirds', i18nKey: 'groups.tabThirds', label: 'Ranking Peringkat 3' },
-  { key: 'bracket', i18nKey: 'groups.tabBracket', label: 'Proyeksi 32 Besar' },
+  { key: 'bracket', i18nKey: 'groups.tabBracket', label: 'Bagan Babak Gugur' },
   { key: 'fixtures', i18nKey: 'groups.tabFixtures', label: 'Jadwal Mendatang' },
 ];
 let currentSection = 'standings';
@@ -576,7 +597,19 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
 
   const resolved = {}; // matchId -> { home, away }
 
-  function resolveSlot(label) {
+  // Once FIFA's own fixture feed has slotted a real team into a match
+  // (home_team_name_en/away_team_name_en populated), trust that over our
+  // own standings tie-break — our ranking doesn't account for head-to-head,
+  // so it can disagree with FIFA's official qualifier for a tied group.
+  function resolveTeamName(name, label) {
+    const squad = squadByName(name);
+    if (!squad) return null;
+    return { squadId: squad.id, name: squad.name, abbr: squad.abbr, confirmed: true, slotDesc: label };
+  }
+
+  function resolveSlot(label, realName) {
+    const real = resolveTeamName(realName, label);
+    if (real) return real;
     const direct = resolveGroupSlot(label, standings, bestThirds, thirdAssignments);
     if (direct) return direct;
 
@@ -619,8 +652,8 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
       .filter((m) => m.type === round.type)
       .sort((a, b) => Number(a.id) - Number(b.id));
     roundsOut[round.key] = matches.map((m) => {
-      const home = resolveSlot(m.home_team_label);
-      const away = resolveSlot(m.away_team_label);
+      const home = resolveSlot(m.home_team_label, m.home_team_name_en);
+      const away = resolveSlot(m.away_team_label, m.away_team_name_en);
       resolved[m.id] = { home, away };
       const rec = {
         id: m.id, type: m.type, date: m.local_date, stadiumId: m.stadium_id, home, away,
@@ -634,7 +667,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
   const thirdMatch = Object.values(byId).find((m) => m.type === 'third');
   let thirdPlace = null;
   if (thirdMatch) {
-    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label), away: resolveSlot(thirdMatch.away_team_label) };
+    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label, thirdMatch.home_team_name_en), away: resolveSlot(thirdMatch.away_team_label, thirdMatch.away_team_name_en) };
     matchResultById[thirdMatch.id] = { ...thirdPlace, type: 'third', homeLabel: thirdMatch.home_team_label, awayLabel: thirdMatch.away_team_label };
   }
 
