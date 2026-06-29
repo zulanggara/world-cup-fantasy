@@ -77,10 +77,10 @@
   {
     "roundId": 4,
     "tournamentId": 78,
-    "points": 1,
+    "points": 4,
     "stats": {
       "SXI": 0,
-      "MP": 54,
+      "MP": 120,
       "AS": 0,
       "YC": 0,
       "RC": 0,
@@ -95,7 +95,7 @@
       "CC": 0,
       "ST": 0,
       "FK": 0,
-      "S": 0,
+      "S": 6,
       "SB": 0
     }
   }

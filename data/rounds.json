@@ -3169,9 +3169,9 @@
       },
       {
         "id": 78,
-        "period": "second_half",
-        "minutes": 50,
-        "extraMinutes": 0,
+        "period": "full_time_penalty",
+        "minutes": 123,
+        "extraMinutes": 33,
         "venueName": "Gillette Stadium",
         "venueCity": "Foxborough, Massachusetts",
         "venueNameTranslationKey": null,
@@ -3186,9 +3186,15 @@
         "awaySquadName": "Paraguay",
         "homeSquadAbbr": "GER",
         "awaySquadAbbr": "PAR",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 528,
+            "assistId": 543,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 1,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [

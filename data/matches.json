@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-29T21:44:49.493Z",
+  "fetchedAt": "2026-06-29T23:16:06.905Z",
   "games": [
     {
       "_id": "679c9c8a5749c4077500e006",
@@ -1960,9 +1960,9 @@
       "id": "74",
       "home_team_id": "17",
       "away_team_id": "14",
-      "home_score": "0",
+      "home_score": "1",
       "away_score": "1",
-      "home_scorers": "null",
+      "home_scorers": "{\"Kai Havertz 54'\"}",
       "away_scorers": "{\"Khvliv Ansisv 42'\"}",
       "group": "R32",
       "matchday": "4",
