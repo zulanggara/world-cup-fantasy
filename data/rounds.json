@@ -3126,8 +3126,8 @@
       },
       {
         "id": 74,
-        "period": "first_half",
-        "minutes": 48,
+        "period": "full_time",
+        "minutes": 101,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -3135,7 +3135,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-06-29T18:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 7,
         "awaySquadId": 25,
@@ -3143,9 +3143,20 @@
         "awaySquadName": "Japan",
         "homeSquadAbbr": "BRA",
         "awaySquadAbbr": "JPN",
-        "homeScore": 0,
+        "homeScore": 2,
         "homePenaltyScore": 0,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 188,
+            "assistId": 164,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 176,
+            "assistId": 1361,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 1,
         "awayPenaltyScore": 0,
         "awayGoalScorersAssists": [
