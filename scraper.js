@@ -34,18 +34,37 @@ const ELO_NAME_OVERRIDES = {
   'USA': 'United States',
 };
 
+const FIFA_TEAMS_PAGE_URL = 'https://inside.fifa.com/data-centre/teams';
+const FIFA_H2H_URL = (teamA, teamB) =>
+  `https://inside.fifa.com/api/data-centre/head-to-head/head-to-head?teamA=${teamA}&teamB=${teamB}&language=en`;
+
+// matches.json's home_team_name_en/away_team_name_en (worldcup26.ir) sometimes
+// spells a team differently than squads.json (FIFA's own naming) — same alias
+// list as groups.html's/best15-next-round.html's SQUAD_NAME_ALIASES.
+const SQUAD_NAME_ALIASES = {
+  'Cape Verde': 'Cabo Verde',
+  'South Korea': 'Korea Republic',
+  Iran: 'IR Iran',
+  'Ivory Coast': "Côte d'Ivoire",
+  'Democratic Republic of the Congo': 'Congo DR',
+  'DR Congo': 'Congo DR',
+  'United States': 'USA',
+  Turkey: 'Türkiye',
+};
+
 const DATA_DIR = path.join(__dirname, 'data');
 const STATS_DIR = path.join(DATA_DIR, 'stats');
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
 function parseArgs(argv) {
-  const args = { withStats: false, headful: false, ids: null, rebuildAggregatesOnly: false };
+  const args = { withStats: false, headful: false, ids: null, rebuildAggregatesOnly: false, h2hOnly: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--with-stats') args.withStats = true;
     else if (a === '--headful') args.headful = true;
     else if (a === '--rebuild-aggregates-only') args.rebuildAggregatesOnly = true;
+    else if (a === '--h2h-only') args.h2hOnly = true;
     else if (a === '--ids') {
       const v = argv[++i] || '';
       args.ids = v.split(',').map((s) => s.trim()).filter(Boolean).map(Number);
@@ -238,6 +257,123 @@ async function fetchStadiums() {
       }
     }
   }
+}
+
+// inside.fifa.com/data-centre/teams embeds a full list of every FIFA
+// national-team association in its Next.js __NEXT_DATA__ payload, keyed by
+// the same 3-letter associationId we already store as squads.json's `abbr`
+// (e.g. GER, PAR) — so no manual id-collection or fuzzy name matching is
+// needed, just an exact abbr lookup.
+async function fetchFifaTeamIds() {
+  log('[fifa-teams] fetching inside.fifa.com/data-centre/teams...');
+  let html;
+  try {
+    html = await httpsGetText(FIFA_TEAMS_PAGE_URL);
+  } catch (e) {
+    log(`[fifa-teams] could not fetch teams page: ${e.message}`);
+    return null;
+  }
+  const m = html.match(/__NEXT_DATA__" type="application\/json">(.*?)<\/script>/);
+  if (!m) {
+    log('[fifa-teams] __NEXT_DATA__ not found in page, skipping head-to-head fetch.');
+    return null;
+  }
+  let data;
+  try {
+    data = JSON.parse(m[1]);
+  } catch (e) {
+    log(`[fifa-teams] failed to parse __NEXT_DATA__: ${e.message}`);
+    return null;
+  }
+  const associations = data?.props?.pageProps?.pageData?.content?.[0]?.associations ?? {};
+  const byAbbr = {};
+  for (const letter of Object.keys(associations)) {
+    for (const team of associations[letter]) {
+      byAbbr[team.associationId] = { id: team.id, name: team.name };
+    }
+  }
+  log(`[fifa-teams] parsed ${Object.keys(byAbbr).length} associations.`);
+  return byAbbr;
+}
+
+function squadByNameForH2H(squads, name) {
+  if (!name) return null;
+  const direct = squads.find((s) => s.name === name);
+  if (direct) return direct;
+  const alias = SQUAD_NAME_ALIASES[name];
+  return alias ? squads.find((s) => s.name === alias) : null;
+}
+
+// Only fetches head-to-head for R32-onward matches where FIFA's own fixture
+// feed has already confirmed both teams (home_team_name_en/away_team_name_en
+// populated) — group-stage slots are still "Winner Group X" placeholders and
+// have no real team to look up yet.
+async function fetchHeadToHead() {
+  log('[h2h] checking for confirmed R32+ matches...');
+  let matches, squads;
+  try {
+    matches = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'matches.json'), 'utf8'));
+    squads = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'squads.json'), 'utf8'));
+  } catch (e) {
+    log(`[h2h] matches.json/squads.json not found, skipping: ${e.message}`);
+    return;
+  }
+
+  const knockoutTypes = new Set(['r32', 'r16', 'qf', 'sf', 'final', 'third']);
+  const confirmed = (matches.games ?? []).filter(
+    (g) => knockoutTypes.has(g.type) && g.home_team_name_en && g.away_team_name_en
+  );
+  if (!confirmed.length) {
+    log('[h2h] no confirmed knockout matches yet, skipping.');
+    return;
+  }
+
+  const teamIds = await fetchFifaTeamIds();
+  if (!teamIds) return;
+
+  const outPath = path.join(DATA_DIR, 'head_to_head.json');
+  let existing = {};
+  try {
+    existing = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+  } catch (e) {
+    // no previous file yet, start fresh
+  }
+
+  const result = {};
+  for (const g of confirmed) {
+    const home = squadByNameForH2H(squads, g.home_team_name_en);
+    const away = squadByNameForH2H(squads, g.away_team_name_en);
+    const fifaA = home && teamIds[home.abbr];
+    const fifaB = away && teamIds[away.abbr];
+    if (!fifaA || !fifaB) {
+      log(`[h2h] skipping match ${g.id}: no FIFA team id for ${g.home_team_name_en} / ${g.away_team_name_en}`);
+      continue;
+    }
+
+    try {
+      const data = await httpsGetJson(FIFA_H2H_URL(fifaA.id, fifaB.id));
+      result[g.id] = {
+        teamA: { squadId: home.id, abbr: home.abbr, name: home.name, ...data.teamA },
+        teamB: { squadId: away.id, abbr: away.abbr, name: away.name, ...data.teamB },
+        matches: (data.matchesList ?? []).map((mt) => ({
+          date: mt.date,
+          competition: mt.competitionName?.description ?? '',
+          home: mt.home?.teamName?.description ?? '',
+          homeScore: mt.home?.score,
+          away: mt.away?.teamName?.description ?? '',
+          awayScore: mt.away?.score,
+        })),
+      };
+      log(`[h2h] fetched ${g.home_team_name_en} vs ${g.away_team_name_en} (match ${g.id})`);
+    } catch (e) {
+      log(`[h2h] failed for match ${g.id} (${g.home_team_name_en} vs ${g.away_team_name_en}): ${e.message}`);
+    }
+    await sleep(400 + Math.random() * 400);
+  }
+
+  const merged = { ...existing, ...result };
+  fs.writeFileSync(outPath, JSON.stringify(merged, null, 2));
+  log(`[h2h] saved head-to-head for ${Object.keys(merged).length} match(es) -> ${outPath}`);
 }
 
 function normTeamName(s) {
@@ -747,10 +883,18 @@ async function main() {
     return;
   }
 
+  // Refetches data/head_to_head.json only — no other network calls. Useful
+  // for picking up newly confirmed knockout fixtures without a full rescrape.
+  if (args.h2hOnly) {
+    await fetchHeadToHead();
+    return;
+  }
+
   await fetchMatches();
   await fetchStadiums();
   await fetchEloData();
   await fetchPolymarketData();
+  await fetchHeadToHead();
   const roundsFetched = await fetchRounds();
 
   let headful = args.headful;

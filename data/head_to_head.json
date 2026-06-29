@@ -1,0 +1,1485 @@
+{
+  "73": {
+    "teamA": {
+      "squadId": 40,
+      "abbr": "RSA",
+      "name": "South Africa",
+      "cleanSheets": 1,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 1,
+      "losses": 1,
+      "goalsScored": 2,
+      "goalsAgainst": 1,
+      "idTeam": "43883",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "South Africa",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 9,
+      "abbr": "CAN",
+      "name": "Canada",
+      "cleanSheets": 1,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 1,
+      "losses": 1,
+      "goalsScored": 1,
+      "goalsAgainst": 2,
+      "idTeam": "43899",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Canada",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2026-06-28",
+        "competition": "FIFA World Cup™",
+        "home": "South Africa",
+        "homeScore": 0,
+        "away": "Canada",
+        "awayScore": 1
+      },
+      {
+        "date": "2007-11-20",
+        "competition": "Friendly",
+        "home": "South Africa",
+        "homeScore": 2,
+        "away": "Canada",
+        "awayScore": 0
+      }
+    ]
+  },
+  "74": {
+    "teamA": {
+      "squadId": 20,
+      "abbr": "GER",
+      "name": "Germany",
+      "cleanSheets": 1,
+      "draws": 1,
+      "matchesPlayed": 2,
+      "wins": 1,
+      "losses": 0,
+      "goalsScored": 4,
+      "goalsAgainst": 3,
+      "idTeam": "43948",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Germany",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 34,
+      "abbr": "PAR",
+      "name": "Paraguay",
+      "cleanSheets": 0,
+      "draws": 1,
+      "matchesPlayed": 2,
+      "wins": 0,
+      "losses": 1,
+      "goalsScored": 3,
+      "goalsAgainst": 4,
+      "idTeam": "43928",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Paraguay",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2013-08-14",
+        "competition": "Friendly",
+        "home": "Germany",
+        "homeScore": 3,
+        "away": "Paraguay",
+        "awayScore": 3
+      },
+      {
+        "date": "2002-06-15",
+        "competition": "FIFA World Cup™",
+        "home": "Germany",
+        "homeScore": 1,
+        "away": "Paraguay",
+        "awayScore": 0
+      }
+    ]
+  },
+  "75": {
+    "teamA": {
+      "squadId": 30,
+      "abbr": "NED",
+      "name": "Netherlands",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 3,
+      "wins": 2,
+      "losses": 1,
+      "goalsScored": 5,
+      "goalsAgainst": 4,
+      "idTeam": "43960",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Netherlands",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 29,
+      "abbr": "MAR",
+      "name": "Morocco",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 3,
+      "wins": 1,
+      "losses": 2,
+      "goalsScored": 4,
+      "goalsAgainst": 5,
+      "idTeam": "43872",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Morocco",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2017-05-31",
+        "competition": "Friendly",
+        "home": "Morocco",
+        "homeScore": 1,
+        "away": "Netherlands",
+        "awayScore": 2
+      },
+      {
+        "date": "1999-04-28",
+        "competition": "Friendly",
+        "home": "Netherlands",
+        "homeScore": 1,
+        "away": "Morocco",
+        "awayScore": 2
+      },
+      {
+        "date": "1994-06-29",
+        "competition": "FIFA World Cup™",
+        "home": "Morocco",
+        "homeScore": 1,
+        "away": "Netherlands",
+        "awayScore": 2
+      }
+    ]
+  },
+  "76": {
+    "teamA": {
+      "squadId": 7,
+      "abbr": "BRA",
+      "name": "Brazil",
+      "cleanSheets": 9,
+      "draws": 2,
+      "matchesPlayed": 14,
+      "wins": 11,
+      "losses": 1,
+      "goalsScored": 37,
+      "goalsAgainst": 8,
+      "idTeam": "43924",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Brazil",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 25,
+      "abbr": "JPN",
+      "name": "Japan",
+      "cleanSheets": 1,
+      "draws": 2,
+      "matchesPlayed": 14,
+      "wins": 1,
+      "losses": 11,
+      "goalsScored": 8,
+      "goalsAgainst": 37,
+      "idTeam": "43819",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Japan",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2025-10-14",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 3,
+        "away": "Brazil",
+        "awayScore": 2
+      },
+      {
+        "date": "2022-06-06",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 0,
+        "away": "Brazil",
+        "awayScore": 1
+      },
+      {
+        "date": "2017-11-10",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 1,
+        "away": "Brazil",
+        "awayScore": 3
+      },
+      {
+        "date": "2014-10-14",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 0,
+        "away": "Brazil",
+        "awayScore": 4
+      },
+      {
+        "date": "2013-06-15",
+        "competition": "FIFA Confederations Cup™",
+        "home": "Brazil",
+        "homeScore": 3,
+        "away": "Japan",
+        "awayScore": 0
+      },
+      {
+        "date": "2012-10-16",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 0,
+        "away": "Brazil",
+        "awayScore": 4
+      },
+      {
+        "date": "2006-06-22",
+        "competition": "FIFA World Cup™",
+        "home": "Japan",
+        "homeScore": 1,
+        "away": "Brazil",
+        "awayScore": 4
+      },
+      {
+        "date": "2005-06-22",
+        "competition": "FIFA Confederations Cup™",
+        "home": "Japan",
+        "homeScore": 2,
+        "away": "Brazil",
+        "awayScore": 2
+      },
+      {
+        "date": "2001-06-04",
+        "competition": "FIFA Confederations Cup™",
+        "home": "Brazil",
+        "homeScore": 0,
+        "away": "Japan",
+        "awayScore": 0
+      },
+      {
+        "date": "1999-03-31",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 0,
+        "away": "Brazil",
+        "awayScore": 2
+      },
+      {
+        "date": "1997-08-13",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 0,
+        "away": "Brazil",
+        "awayScore": 3
+      },
+      {
+        "date": "1995-08-09",
+        "competition": "Friendly",
+        "home": "Japan",
+        "homeScore": 1,
+        "away": "Brazil",
+        "awayScore": 5
+      },
+      {
+        "date": "1995-06-06",
+        "competition": "Friendly",
+        "home": "Brazil",
+        "homeScore": 3,
+        "away": "Japan",
+        "awayScore": 0
+      },
+      {
+        "date": "1989-07-23",
+        "competition": "Friendly",
+        "home": "Brazil",
+        "homeScore": 1,
+        "away": "Japan",
+        "awayScore": 0
+      }
+    ]
+  },
+  "77": {
+    "teamA": {
+      "squadId": 19,
+      "abbr": "FRA",
+      "name": "France",
+      "cleanSheets": 7,
+      "draws": 5,
+      "matchesPlayed": 23,
+      "wins": 12,
+      "losses": 6,
+      "goalsScored": 34,
+      "goalsAgainst": 23,
+      "idTeam": "43946",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "France",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 42,
+      "abbr": "SWE",
+      "name": "Sweden",
+      "cleanSheets": 6,
+      "draws": 5,
+      "matchesPlayed": 23,
+      "wins": 6,
+      "losses": 12,
+      "goalsScored": 23,
+      "goalsAgainst": 34,
+      "idTeam": "43970",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Sweden",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2020-11-17",
+        "competition": "Nations League",
+        "home": "France",
+        "homeScore": 4,
+        "away": "Sweden",
+        "awayScore": 2
+      },
+      {
+        "date": "2020-09-05",
+        "competition": "Nations League",
+        "home": "Sweden",
+        "homeScore": 0,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "2017-06-09",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Sweden",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "2016-11-11",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Sweden",
+        "awayScore": 1
+      },
+      {
+        "date": "2014-11-18",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Sweden",
+        "awayScore": 0
+      },
+      {
+        "date": "2012-06-19",
+        "competition": "Continental Final",
+        "home": "Sweden",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "2008-08-20",
+        "competition": "Friendly",
+        "home": "Sweden",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 3
+      },
+      {
+        "date": "2005-02-09",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Sweden",
+        "awayScore": 1
+      },
+      {
+        "date": "1998-04-22",
+        "competition": "Friendly",
+        "home": "Sweden",
+        "homeScore": 0,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1997-04-02",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Sweden",
+        "awayScore": 0
+      },
+      {
+        "date": "1993-08-22",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Sweden",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "1993-04-28",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Sweden",
+        "awayScore": 1
+      },
+      {
+        "date": "1992-06-10",
+        "competition": "Continental Final",
+        "home": "Sweden",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "1989-08-16",
+        "competition": "Friendly",
+        "home": "Sweden",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 4
+      },
+      {
+        "date": "1979-09-05",
+        "competition": "Continental Qualifier",
+        "home": "Sweden",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 3
+      },
+      {
+        "date": "1978-09-01",
+        "competition": "Continental Qualifier",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Sweden",
+        "awayScore": 2
+      },
+      {
+        "date": "1969-11-01",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "France",
+        "homeScore": 3,
+        "away": "Sweden",
+        "awayScore": 0
+      },
+      {
+        "date": "1969-10-15",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Sweden",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1960-10-30",
+        "competition": "Friendly",
+        "home": "Sweden",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1955-04-03",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Sweden",
+        "awayScore": 0
+      },
+      {
+        "date": "1953-06-11",
+        "competition": "Friendly",
+        "home": "Sweden",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1952-03-26",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Sweden",
+        "awayScore": 1
+      },
+      {
+        "date": "1935-11-10",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Sweden",
+        "awayScore": 0
+      }
+    ]
+  },
+  "78": {
+    "teamA": {
+      "squadId": 12,
+      "abbr": "CIV",
+      "name": "Côte d'Ivoire",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43854",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Côte d'Ivoire",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 32,
+      "abbr": "NOR",
+      "name": "Norway",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43961",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Norway",
+        "locale": ""
+      }
+    },
+    "matches": []
+  },
+  "79": {
+    "teamA": {
+      "squadId": 28,
+      "abbr": "MEX",
+      "name": "Mexico",
+      "cleanSheets": 8,
+      "draws": 7,
+      "matchesPlayed": 25,
+      "wins": 14,
+      "losses": 4,
+      "goalsScored": 35,
+      "goalsAgainst": 23,
+      "idTeam": "43911",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Mexico",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 16,
+      "abbr": "ECU",
+      "name": "Ecuador",
+      "cleanSheets": 7,
+      "draws": 7,
+      "matchesPlayed": 25,
+      "wins": 4,
+      "losses": 14,
+      "goalsScored": 23,
+      "goalsAgainst": 35,
+      "idTeam": "43927",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Ecuador",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2025-10-15",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 1,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2024-07-01",
+        "competition": "Continental Final",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "2022-06-05",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "2021-10-28",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "Ecuador",
+        "awayScore": 3
+      },
+      {
+        "date": "2019-06-09",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 3,
+        "away": "Ecuador",
+        "awayScore": 2
+      },
+      {
+        "date": "2015-06-19",
+        "competition": "Continental Final",
+        "home": "Mexico",
+        "homeScore": 1,
+        "away": "Ecuador",
+        "awayScore": 2
+      },
+      {
+        "date": "2015-03-29",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 1,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "2014-05-31",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 3,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2011-05-28",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 1,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2010-09-05",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 1,
+        "away": "Ecuador",
+        "awayScore": 2
+      },
+      {
+        "date": "2010-05-07",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "2008-11-13",
+        "competition": "Friendly",
+        "home": "Ecuador",
+        "homeScore": 1,
+        "away": "Mexico",
+        "awayScore": 2
+      },
+      {
+        "date": "2007-07-01",
+        "competition": "Continental Final",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2007-03-29",
+        "competition": "Friendly",
+        "home": "Ecuador",
+        "homeScore": 2,
+        "away": "Mexico",
+        "awayScore": 4
+      },
+      {
+        "date": "2004-10-28",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2004-07-13",
+        "competition": "Continental Final",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2004-03-10",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2002-06-09",
+        "competition": "FIFA World Cup™",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "2000-09-20",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "1999-10-27",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "1999-04-14",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "Ecuador",
+        "awayScore": 0
+      },
+      {
+        "date": "1997-06-22",
+        "competition": "Continental Final",
+        "home": "Ecuador",
+        "homeScore": 1,
+        "away": "Mexico",
+        "awayScore": 1
+      },
+      {
+        "date": "1997-02-05",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 3,
+        "away": "Ecuador",
+        "awayScore": 1
+      },
+      {
+        "date": "1996-10-24",
+        "competition": "Friendly",
+        "home": "Ecuador",
+        "homeScore": 1,
+        "away": "Mexico",
+        "awayScore": 0
+      },
+      {
+        "date": "1993-06-30",
+        "competition": "Continental Final",
+        "home": "Ecuador",
+        "homeScore": 0,
+        "away": "Mexico",
+        "awayScore": 2
+      }
+    ]
+  },
+  "80": {
+    "teamA": {
+      "squadId": 18,
+      "abbr": "ENG",
+      "name": "England",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43942",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "England",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 11,
+      "abbr": "COD",
+      "name": "Congo DR",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "20014",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Congo DR",
+        "locale": ""
+      }
+    },
+    "matches": []
+  },
+  "81": {
+    "teamA": {
+      "squadId": 47,
+      "abbr": "USA",
+      "name": "USA",
+      "cleanSheets": 2,
+      "draws": 1,
+      "matchesPlayed": 3,
+      "wins": 2,
+      "losses": 0,
+      "goalsScored": 5,
+      "goalsAgainst": 3,
+      "idTeam": "43921",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "USA",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 6,
+      "abbr": "BIH",
+      "name": "Bosnia and Herzegovina",
+      "cleanSheets": 1,
+      "draws": 1,
+      "matchesPlayed": 3,
+      "wins": 0,
+      "losses": 2,
+      "goalsScored": 3,
+      "goalsAgainst": 5,
+      "idTeam": "44037",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Bosnia and Herzegovina",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2021-12-19",
+        "competition": "Friendly",
+        "home": "USA",
+        "homeScore": 1,
+        "away": "Bosnia and Herzegovina",
+        "awayScore": 0
+      },
+      {
+        "date": "2018-01-29",
+        "competition": "Friendly",
+        "home": "USA",
+        "homeScore": 0,
+        "away": "Bosnia and Herzegovina",
+        "awayScore": 0
+      },
+      {
+        "date": "2013-08-14",
+        "competition": "Friendly",
+        "home": "Bosnia and Herzegovina",
+        "homeScore": 3,
+        "away": "USA",
+        "awayScore": 4
+      }
+    ]
+  },
+  "82": {
+    "teamA": {
+      "squadId": 5,
+      "abbr": "BEL",
+      "name": "Belgium",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43935",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Belgium",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 39,
+      "abbr": "SEN",
+      "name": "Senegal",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43879",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Senegal",
+        "locale": ""
+      }
+    },
+    "matches": []
+  },
+  "83": {
+    "teamA": {
+      "squadId": 35,
+      "abbr": "POR",
+      "name": "Portugal",
+      "cleanSheets": 4,
+      "draws": 2,
+      "matchesPlayed": 10,
+      "wins": 7,
+      "losses": 1,
+      "goalsScored": 19,
+      "goalsAgainst": 8,
+      "idTeam": "43963",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Portugal",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 13,
+      "abbr": "CRO",
+      "name": "Croatia",
+      "cleanSheets": 0,
+      "draws": 2,
+      "matchesPlayed": 10,
+      "wins": 1,
+      "losses": 7,
+      "goalsScored": 8,
+      "goalsAgainst": 19,
+      "idTeam": "43938",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Croatia",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2024-11-18",
+        "competition": "Nations League",
+        "home": "Croatia",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "2024-09-05",
+        "competition": "Nations League",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Croatia",
+        "awayScore": 1
+      },
+      {
+        "date": "2024-06-08",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 1,
+        "away": "Croatia",
+        "awayScore": 2
+      },
+      {
+        "date": "2020-11-17",
+        "competition": "Nations League",
+        "home": "Croatia",
+        "homeScore": 2,
+        "away": "Portugal",
+        "awayScore": 3
+      },
+      {
+        "date": "2020-09-05",
+        "competition": "Nations League",
+        "home": "Portugal",
+        "homeScore": 4,
+        "away": "Croatia",
+        "awayScore": 1
+      },
+      {
+        "date": "2018-09-06",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 1,
+        "away": "Croatia",
+        "awayScore": 1
+      },
+      {
+        "date": "2016-06-25",
+        "competition": "Continental Final",
+        "home": "Croatia",
+        "homeScore": 0,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "2013-06-10",
+        "competition": "Friendly",
+        "home": "Croatia",
+        "homeScore": 0,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "2005-11-12",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Croatia",
+        "awayScore": 0
+      },
+      {
+        "date": "1996-06-19",
+        "competition": "Continental Final",
+        "home": "Croatia",
+        "homeScore": 0,
+        "away": "Portugal",
+        "awayScore": 3
+      }
+    ]
+  },
+  "84": {
+    "teamA": {
+      "squadId": 41,
+      "abbr": "ESP",
+      "name": "Spain",
+      "cleanSheets": 6,
+      "draws": 3,
+      "matchesPlayed": 16,
+      "wins": 9,
+      "losses": 4,
+      "goalsScored": 43,
+      "goalsAgainst": 22,
+      "idTeam": "43969",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Spain",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 4,
+      "abbr": "AUT",
+      "name": "Austria",
+      "cleanSheets": 3,
+      "draws": 3,
+      "matchesPlayed": 16,
+      "wins": 4,
+      "losses": 9,
+      "goalsScored": 22,
+      "goalsAgainst": 43,
+      "idTeam": "43934",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Austria",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2009-11-18",
+        "competition": "Friendly",
+        "home": "Austria",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 5
+      },
+      {
+        "date": "2001-09-01",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 4,
+        "away": "Austria",
+        "awayScore": 0
+      },
+      {
+        "date": "2000-10-11",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Austria",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1999-09-04",
+        "competition": "Continental Qualifier",
+        "home": "Austria",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "1999-03-27",
+        "competition": "Continental Qualifier",
+        "home": "Spain",
+        "homeScore": 9,
+        "away": "Austria",
+        "awayScore": 0
+      },
+      {
+        "date": "1990-03-28",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Austria",
+        "awayScore": 3
+      },
+      {
+        "date": "1987-10-14",
+        "competition": "Continental Qualifier",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Austria",
+        "awayScore": 0
+      },
+      {
+        "date": "1987-04-01",
+        "competition": "Continental Qualifier",
+        "home": "Austria",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "1985-11-20",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 0,
+        "away": "Austria",
+        "awayScore": 0
+      },
+      {
+        "date": "1981-09-23",
+        "competition": "Friendly",
+        "home": "Austria",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1978-06-03",
+        "competition": "FIFA World Cup™",
+        "home": "Austria",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1960-10-30",
+        "competition": "Friendly",
+        "home": "Austria",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1959-11-22",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 6,
+        "away": "Austria",
+        "awayScore": 3
+      },
+      {
+        "date": "1936-01-19",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 4,
+        "away": "Austria",
+        "awayScore": 5
+      },
+      {
+        "date": "1925-09-27",
+        "competition": "Friendly",
+        "home": "Austria",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1924-12-21",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Austria",
+        "awayScore": 1
+      }
+    ]
+  },
+  "85": {
+    "teamA": {
+      "squadId": 43,
+      "abbr": "SUI",
+      "name": "Switzerland",
+      "cleanSheets": 1,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 2,
+      "losses": 0,
+      "goalsScored": 4,
+      "goalsAgainst": 1,
+      "idTeam": "43971",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Switzerland",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 1,
+      "abbr": "ALG",
+      "name": "Algeria",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 0,
+      "losses": 2,
+      "goalsScored": 1,
+      "goalsAgainst": 4,
+      "idTeam": "43843",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Algeria",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "1986-05-06",
+        "competition": "Friendly",
+        "home": "Switzerland",
+        "homeScore": 2,
+        "away": "Algeria",
+        "awayScore": 0
+      },
+      {
+        "date": "1983-11-30",
+        "competition": "Friendly",
+        "home": "Algeria",
+        "homeScore": 1,
+        "away": "Switzerland",
+        "awayScore": 2
+      }
+    ]
+  },
+  "86": {
+    "teamA": {
+      "squadId": 2,
+      "abbr": "ARG",
+      "name": "Argentina",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43922",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Argentina",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 8,
+      "abbr": "CPV",
+      "name": "Cabo Verde",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43850",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Cabo Verde",
+        "locale": ""
+      }
+    },
+    "matches": []
+  },
+  "87": {
+    "teamA": {
+      "squadId": 10,
+      "abbr": "COL",
+      "name": "Colombia",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43926",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Colombia",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 21,
+      "abbr": "GHA",
+      "name": "Ghana",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 0,
+      "wins": 0,
+      "losses": 0,
+      "goalsScored": 0,
+      "goalsAgainst": 0,
+      "idTeam": "43860",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Ghana",
+        "locale": ""
+      }
+    },
+    "matches": []
+  },
+  "88": {
+    "teamA": {
+      "squadId": 3,
+      "abbr": "AUS",
+      "name": "Australia",
+      "cleanSheets": 1,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 1,
+      "losses": 1,
+      "goalsScored": 0,
+      "goalsAgainst": 3,
+      "idTeam": "43976",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Australia",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 17,
+      "abbr": "EGY",
+      "name": "Egypt",
+      "cleanSheets": 2,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 1,
+      "losses": 1,
+      "goalsScored": 3,
+      "goalsAgainst": 0,
+      "idTeam": "43855",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Egypt",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2010-11-17",
+        "competition": "Friendly",
+        "home": "Egypt",
+        "homeScore": 3,
+        "away": "Australia",
+        "awayScore": 0
+      },
+      {
+        "date": "1987-06-19",
+        "competition": "Friendly",
+        "home": "Australia",
+        "homeScore": 0,
+        "away": "Egypt",
+        "awayScore": 0
+      }
+    ]
+  }
+}

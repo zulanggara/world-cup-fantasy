@@ -127,6 +127,16 @@
   .bracket-final-col { justify-content: center; }
   .bracket-final-col .bracket-match-box { border-color: var(--accent); }
   .bracket-third-note { margin-top: 10px; font-size: 11.5px; color: var(--text-dim); }
+  .bracket-h2h { border-top: 1px solid var(--border); font-size: 10.5px; }
+  .bracket-h2h summary { padding: 5px 9px; cursor: pointer; color: var(--text-dim); list-style: none; }
+  .bracket-h2h summary::-webkit-details-marker { display: none; }
+  .bracket-h2h summary:hover { background: var(--row-hover); }
+  .bh2h-count { color: var(--text-dim); }
+  .bh2h-list { padding: 2px 9px 8px; display: flex; flex-direction: column; gap: 3px; max-height: 140px; overflow-y: auto; }
+  .bh2h-row { display: flex; gap: 8px; font-size: 10px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .bh2h-row .bh2h-date { flex: 0 0 64px; }
+  .bh2h-row .bh2h-score { flex: 1; color: var(--text); }
+  .bh2h-row .bh2h-comp { flex: 0 0 auto; font-family: 'Inter', sans-serif; opacity: .8; }
   .bracket-time-note { font-size: 11px; color: var(--text-dim); margin-bottom: 14px; opacity: .8; }
 
   table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
@@ -227,6 +237,7 @@ let stadiums = {};
 let eloFixtures = [];
 let eloResults = [];
 let eloRatings = {};
+let headToHead = {};
 const root = document.documentElement;
 
 function setTheme(t) {
@@ -321,12 +332,13 @@ function renderTabs() {
 async function loadData() {
   const gridEl = document.getElementById('groupsGrid');
   try {
-    const [roundsRes, squadsRes, matchesRes, stadiumsRes, eloRes] = await Promise.all([
+    const [roundsRes, squadsRes, matchesRes, stadiumsRes, eloRes, h2hRes] = await Promise.all([
       fetch('data/rounds.json'),
       fetch('data/squads.json'),
       fetch('data/matches.json'),
       fetch('data/stadiums.json'),
       fetch('data/elo.json'),
+      fetch('data/head_to_head.json'),
     ]);
     if (!roundsRes.ok) throw new Error(`rounds.json HTTP ${roundsRes.status}`);
     const roundsJson = await roundsRes.json();
@@ -347,6 +359,9 @@ async function loadData() {
       eloFixtures = eloJson?.fixtures ?? [];
       eloResults = eloJson?.results ?? [];
       eloRatings = eloJson?.ratings ?? {};
+    }
+    if (h2hRes.ok) {
+      headToHead = await h2hRes.json();
     }
   } catch (e) {
     gridEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
@@ -762,6 +777,32 @@ function bracketTeamHtml(side) {
   </div>`;
 }
 
+// data/head_to_head.json is keyed by matches.json's own match id and only
+// populated for R32+ matches once FIFA has confirmed both teams (see
+// scraper.js's fetchHeadToHead) — group-stage / still-undecided slots simply
+// have no entry, which is the normal case, not an error.
+function bracketH2hHtml(matchId, home, away) {
+  const rec = headToHead[matchId];
+  if (!rec || !home || !away) return '';
+  const a = rec.teamA;
+  const b = rec.teamB;
+  const summary = `${a.wins}W-${a.draws}D-${a.losses}L &middot; ${a.abbr} ${a.goalsScored}-${b.goalsScored} ${b.abbr}`;
+  const rows = (rec.matches || [])
+    .slice()
+    .sort((x, y) => new Date(y.date) - new Date(x.date))
+    .map(
+      (mt) =>
+        `<div class="bh2h-row"><span class="bh2h-date">${escapeHtml(mt.date || '')}</span><span class="bh2h-score">${escapeHtml(mt.home)} ${mt.homeScore}-${mt.awayScore} ${escapeHtml(mt.away)}</span><span class="bh2h-comp">${escapeHtml(mt.competition || '')}</span></div>`
+    )
+    .join('');
+  return `
+    <details class="bracket-h2h">
+      <summary>${I18N.t('groups.h2hSummary')}: ${summary} <span class="bh2h-count">(${a.matchesPlayed})</span></summary>
+      <div class="bh2h-list">${rows}</div>
+    </details>
+  `;
+}
+
 function bracketMatchBoxHtml(m) {
   return `
     <div class="bracket-match-box" data-match-id="${m.id}">
@@ -769,6 +810,7 @@ function bracketMatchBoxHtml(m) {
       ${bracketTeamHtml(m.home)}
       ${bracketTeamHtml(m.away)}
       ${bracketWinExpHtml(m.home, m.away, m.date)}
+      ${bracketH2hHtml(m.id, m.home, m.away)}
     </div>
   `;
 }
