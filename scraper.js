@@ -65,6 +65,7 @@ function parseArgs(argv) {
     else if (a === '--headful') args.headful = true;
     else if (a === '--rebuild-aggregates-only') args.rebuildAggregatesOnly = true;
     else if (a === '--h2h-only') args.h2hOnly = true;
+    else if (a === '--elo-only') args.eloOnly = true;
     else if (a === '--ids') {
       const v = argv[++i] || '';
       args.ids = v.split(',').map((s) => s.trim()).filter(Boolean).map(Number);
@@ -516,6 +517,66 @@ async function fetchEloData() {
   }
 
   const outPath = path.join(DATA_DIR, 'elo.json');
+
+  // eloratings.net's own fixtures.tsv only lists matches still to be played —
+  // once a match finishes it drops out of that feed entirely (moves to
+  // results.tsv, which has no pre-match win%). Without this, every match's
+  // win-expectancy bar would disappear from the bracket the moment it's
+  // played. Preserve previously-captured fixture entries that are no longer
+  // in the live feed instead of letting them get silently overwritten.
+  let previousFixtures = [];
+  try {
+    const prevData = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    previousFixtures = Array.isArray(prevData.fixtures) ? prevData.fixtures : [];
+  } catch (e) {
+    // no previous elo.json yet, nothing to preserve
+  }
+
+  function fixtureKey(homeSquadId, awaySquadId, date) {
+    const pair = [homeSquadId, awaySquadId].sort((a, b) => a - b).join('-');
+    return `${date}_${pair}`;
+  }
+
+  const fixtureKeys = new Set(fixtures.map((f) => fixtureKey(f.homeSquadId, f.awaySquadId, f.date)));
+  let preservedCount = 0;
+  for (const f of previousFixtures) {
+    const key = fixtureKey(f.homeSquadId, f.awaySquadId, f.date);
+    if (!fixtureKeys.has(key)) {
+      fixtures.push(f);
+      fixtureKeys.add(key);
+      preservedCount++;
+    }
+  }
+
+  // A match that finished before this caching existed (or was scraped for
+  // the very first time after it already finished) has no captured fixture
+  // to fall back on either. Reconstruct its pre-match win% from the
+  // post-match Elo ratings using eloratings.net's own win-expectancy
+  // formula — verified to reproduce their published homeWinPct exactly on
+  // several live fixtures: W_e = 1 / (10^(-(ratingHome-ratingAway)/400) + 1).
+  let derivedCount = 0;
+  for (const r of results) {
+    const key = fixtureKey(r.homeSquadId, r.awaySquadId, r.date);
+    if (fixtureKeys.has(key)) continue;
+    const homeRatingBefore = r.homeRatingAfter - r.eloChangeHome;
+    const awayRatingBefore = r.awayRatingAfter + r.eloChangeHome;
+    const we = 1 / (Math.pow(10, -(homeRatingBefore - awayRatingBefore) / 400) + 1);
+    const homeWinPct = Math.round(we * 1000) / 10;
+    fixtures.push({
+      date: r.date,
+      hostCountry: r.hostCountry,
+      homeSquadId: r.homeSquadId, awaySquadId: r.awaySquadId,
+      homeEloCode: r.homeEloCode, awayEloCode: r.awayEloCode,
+      homeRank: null, awayRank: null,
+      homeRating: homeRatingBefore, awayRating: awayRatingBefore,
+      homeWinPct, awayWinPct: Math.round((100 - homeWinPct) * 10) / 10,
+      eloPointsAtStake: null,
+      derived: true,
+    });
+    fixtureKeys.add(key);
+    derivedCount++;
+  }
+
   fs.writeFileSync(outPath, JSON.stringify({
     fetchedAt: new Date().toISOString(),
     source: 'eloratings.net (World Football Elo Ratings, 2026 World Cup)',
@@ -524,7 +585,7 @@ async function fetchEloData() {
     fixtures,
     results,
   }, null, 2));
-  log(`[elo] saved ${Object.keys(ratings).length} team ratings, ${fixtures.length} fixtures, ${results.length} results -> ${outPath}`);
+  log(`[elo] saved ${Object.keys(ratings).length} team ratings, ${fixtures.length} fixtures (${preservedCount} preserved, ${derivedCount} derived from results), ${results.length} results -> ${outPath}`);
 }
 
 // Polymarket prediction-market odds — a second, independent signal (real
@@ -887,6 +948,13 @@ async function main() {
   // for picking up newly confirmed knockout fixtures without a full rescrape.
   if (args.h2hOnly) {
     await fetchHeadToHead();
+    return;
+  }
+
+  // Refetches data/elo.json only — no other network calls. Useful for
+  // picking up newly-finished matches' results without a full rescrape.
+  if (args.eloOnly) {
+    await fetchEloData();
     return;
   }
 

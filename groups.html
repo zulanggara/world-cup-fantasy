@@ -124,6 +124,9 @@
   .bracket-team.tbd { color: var(--text-dim); font-style: italic; font-size: 11.5px; }
   .bracket-team .babbr { font-family: 'JetBrains Mono', monospace; }
   .bracket-team .bslot { font-family: 'Inter', sans-serif; font-weight: 400; font-style: normal; color: var(--text-dim); font-size: 11px; }
+  .bracket-team .bscore { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-dim); font-size: 13px; }
+  .bracket-team .bscore-win { color: var(--accent); }
+  .bmatch-ft { color: var(--accent2); font-weight: 700; }
   .bracket-final-col { justify-content: center; }
   .bracket-final-col .bracket-match-box { border-color: var(--accent); }
   .bracket-third-note { margin-top: 10px; font-size: 11.5px; color: var(--text-dim); }
@@ -666,6 +669,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
       const rec = {
         id: m.id, type: m.type, date: m.local_date, stadiumId: m.stadium_id, home, away,
         homeLabel: m.home_team_label, awayLabel: m.away_team_label,
+        finished: m.finished === 'TRUE', homeScore: m.home_score, awayScore: m.away_score,
       };
       matchResultById[m.id] = rec;
       return rec;
@@ -675,7 +679,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
   const thirdMatch = Object.values(byId).find((m) => m.type === 'third');
   let thirdPlace = null;
   if (thirdMatch) {
-    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label, thirdMatch.home_team_name_en), away: resolveSlot(thirdMatch.away_team_label, thirdMatch.away_team_name_en) };
+    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label, thirdMatch.home_team_name_en), away: resolveSlot(thirdMatch.away_team_label, thirdMatch.away_team_name_en), finished: thirdMatch.finished === 'TRUE', homeScore: thirdMatch.home_score, awayScore: thirdMatch.away_score };
     matchResultById[thirdMatch.id] = { ...thirdPlace, type: 'third', homeLabel: thirdMatch.home_team_label, awayLabel: thirdMatch.away_team_label };
   }
 
@@ -760,13 +764,14 @@ function bracketWinExpHtml(home, away, localDate) {
   </div>`;
 }
 
-function bracketTeamHtml(side) {
+function bracketTeamHtml(side, score, isWinner) {
   if (!side) return '<div class="bracket-team tbd">TBD</div>';
   if (side.pending) return `<div class="bracket-team tbd">${escapeHtml(side.text)}</div>`;
   const cls = side.confirmed ? 'resolved' : 'projected';
   const slotNote = side.slotDesc ? ` <span class="bslot">(${escapeHtml(side.slotDesc)})</span>` : '';
+  const scoreHtml = score != null ? `<span class="bscore${isWinner ? ' bscore-win' : ''}">${escapeHtml(score)}</span>` : '';
   return `<div class="bracket-team ${cls}" onclick="DetailModal.openTeam(${side.squadId})">
-    <span class="babbr">${FLAGS.flagFor(side.abbr)} ${escapeHtml(side.name || side.abbr)}</span>${slotNote}
+    <span class="babbr">${FLAGS.flagFor(side.abbr)} ${escapeHtml(side.name || side.abbr)}</span>${slotNote}${scoreHtml}
   </div>`;
 }
 
@@ -817,11 +822,17 @@ function openH2hModal(matchId) {
 }
 
 function bracketMatchBoxHtml(m) {
+  const hasScore = m.finished && m.homeScore != null && m.awayScore != null;
+  const homeWon = hasScore && Number(m.homeScore) > Number(m.awayScore);
+  const awayWon = hasScore && Number(m.awayScore) > Number(m.homeScore);
+  const venueLine = hasScore
+    ? `${escapeHtml(matchVenueLabel(m.date, m.stadiumId))} <span class="bmatch-ft">${I18N.t('groups.matchFinished', 'FT')}</span>`
+    : escapeHtml(matchVenueLabel(m.date, m.stadiumId));
   return `
     <div class="bracket-match-box" data-match-id="${m.id}">
-      <div class="bmatch-venue">${escapeHtml(matchVenueLabel(m.date, m.stadiumId))}</div>
-      ${bracketTeamHtml(m.home)}
-      ${bracketTeamHtml(m.away)}
+      <div class="bmatch-venue">${venueLine}</div>
+      ${bracketTeamHtml(m.home, hasScore ? m.homeScore : null, homeWon)}
+      ${bracketTeamHtml(m.away, hasScore ? m.awayScore : null, awayWon)}
       ${bracketWinExpHtml(m.home, m.away, m.date)}
       ${bracketH2hHtml(m.id, m.home, m.away)}
     </div>

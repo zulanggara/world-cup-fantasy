@@ -297,6 +297,7 @@ window.I18N = (function () {
       h2hGoals: { en: 'Goals', id: 'Gol', ar: 'الأهداف', ms: 'Gol' },
       h2hHistory: { en: 'Match History', id: 'Riwayat Pertandingan', ar: 'سجل المباريات', ms: 'Sejarah Perlawanan' },
       h2hEmpty: { en: 'No match history available.', id: 'Belum ada riwayat pertandingan.', ar: 'لا توجد مباريات سابقة.', ms: 'Tiada sejarah perlawanan.' },
+      matchFinished: { en: 'FT', id: 'SELESAI', ar: 'انتهت', ms: 'TAMAT' },
       thirdPlaceTitle: { en: 'Third Place Play-off', id: 'Perebutan Juara 3', ar: 'مباراة تحديد المركز الثالث', ms: 'Perlawanan Tempat Ketiga' },
       bracketTimeNote: { en: 'Kickoff times shown are as published by the source (venue/organizer timezone), not yet converted to WIB.', id: 'Jam pada bagan ini sesuai sumber data asli (zona waktu venue/penyelenggara), belum dikonversi ke WIB.', ar: 'أوقات بدء المباريات المعروضة هي كما نشرها المصدر (توقيت الملعب/المنظم)، ولم تُحوَّل بعد إلى WIB.', ms: 'Masa baling mula yang dipaparkan adalah seperti yang diterbitkan oleh sumber (zon waktu venue/penganjur), belum ditukar ke WIB.' },
       fixturesTitle: { en: 'Upcoming Fixtures (Group Stage)', id: 'Jadwal Pertandingan Mendatang (Fase Grup)', ar: 'المباريات القادمة (دور المجموعات)', ms: 'Perlawanan Akan Datang (Peringkat Kumpulan)' },
