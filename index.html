@@ -217,6 +217,8 @@ function squadAbbr(squadId) {
   return squads.find((s) => s.id === squadId)?.abbr ?? '?';
 }
 
+const KNOCKOUT_BUDGET_BONUS = 5;
+
 function flatten(p) {
   const agg = aggregates[p?.id] || {};
   return {
@@ -256,17 +258,21 @@ function flatten(p) {
 let polymarket = { teams: {}, history: {} };
 let teamProjections = {};
 let tournaments = [];
+let matchesGames = [];
+let eloFixtures = [];
 
 async function loadData() {
   const lbGrid = document.getElementById('lbGrid');
   try {
-    const [playersRes, squadsRes, aggRes, polyRes, projRes, roundsRes] = await Promise.all([
+    const [playersRes, squadsRes, aggRes, polyRes, projRes, roundsRes, matchesRes, eloRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/player_aggregates.json'),
       fetch('data/polymarket.json'),
       fetch('data/team_projections.json'),
       fetch('data/rounds.json'),
+      fetch('data/matches.json'),
+      fetch('data/elo.json'),
     ]);
     if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
     const json = await playersRes.json();
@@ -279,6 +285,8 @@ async function loadData() {
       const roundsJson = await roundsRes.json();
       tournaments = (Array.isArray(roundsJson) ? roundsJson : []).flatMap((r) => r.tournaments || []);
     }
+    if (matchesRes.ok) matchesGames = (await matchesRes.json())?.games ?? [];
+    if (eloRes.ok) eloFixtures = (await eloRes.json())?.fixtures ?? [];
   } catch (e) {
     lbGrid.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
     return;
@@ -357,6 +365,148 @@ function computeRoundScores(mdIndex) {
   return withFixture;
 }
 
+// data/matches.json sometimes spells a team differently than squads.json
+// (eloratings.net / polymarket feeds) — same alias list as
+// best15-next-round.html's client-side lookup against our own squads.json.
+const SQUAD_NAME_ALIASES = {
+  'Cape Verde': 'Cabo Verde',
+  'South Korea': 'Korea Republic',
+  Iran: 'IR Iran',
+  'Ivory Coast': "Côte d'Ivoire",
+  'Democratic Republic of the Congo': 'Congo DR',
+  'DR Congo': 'Congo DR',
+  'United States': 'USA',
+};
+
+function squadByName(name) {
+  if (!name) return null;
+  const direct = squads.find((s) => s.name === name);
+  if (direct) return direct;
+  const alias = SQUAD_NAME_ALIASES[name];
+  return alias ? squads.find((s) => s.name === alias) : null;
+}
+
+function nearbyDays(isoDate) {
+  const base = new Date(isoDate.slice(0, 10) + 'T00:00:00Z');
+  return [-1, 0, 1].map((offset) => {
+    const d = new Date(base);
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d.toISOString().slice(0, 10);
+  });
+}
+
+function findEloFixture(homeSquadId, awaySquadId, isoDate) {
+  if (!isoDate) return null;
+  const days = nearbyDays(isoDate);
+  return eloFixtures.find((f) => days.includes(f.date)
+    && ((f.homeSquadId === homeSquadId && f.awaySquadId === awaySquadId)
+      || (f.homeSquadId === awaySquadId && f.awaySquadId === homeSquadId)));
+}
+
+// "MM/DD/YYYY HH:mm" (data/matches.json's local_date) -> "YYYY-MM-DD".
+function matchesDateToIso(localDate) {
+  if (!localDate) return null;
+  const [datePart] = localDate.split(' ');
+  const [mm, dd, yyyy] = datePart.split('/');
+  if (!mm || !dd || !yyyy) return null;
+  return `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
+}
+
+// Real-results team strength (avg goals for/against from completed
+// matches) — same approach as best15-next-round.html's R32 mode.
+function buildTeamStrength() {
+  const stats = {};
+  for (const t of tournaments) {
+    if (t.status !== 'complete' || t.homeScore == null || t.awayScore == null) continue;
+    const hId = t.homeSquadId, aId = t.awaySquadId;
+    stats[hId] = stats[hId] || { played: 0, GF: 0, GA: 0 };
+    stats[hId].played += 1; stats[hId].GF += t.homeScore; stats[hId].GA += t.awayScore;
+    stats[aId] = stats[aId] || { played: 0, GF: 0, GA: 0 };
+    stats[aId].played += 1; stats[aId].GF += t.awayScore; stats[aId].GA += t.homeScore;
+  }
+  for (const id of Object.keys(stats)) {
+    const s = stats[id];
+    s.avgGF = s.played ? s.GF / s.played : null;
+    s.avgGA = s.played ? s.GA / s.played : null;
+  }
+  return stats;
+}
+
+// The group stage is fully complete, so every r32 row's home/away names
+// are already FIFA's real, fixed fixture (no standings projection needed).
+function buildR32Matches() {
+  return matchesGames
+    .filter((g) => g.type === 'r32')
+    .map((g) => ({ id: g.id, date: g.local_date, home: squadByName(g.home_team_name_en), away: squadByName(g.away_team_name_en) }));
+}
+
+function buildR32OpponentMap() {
+  const map = {};
+  for (const m of buildR32Matches()) {
+    const isoDate = matchesDateToIso(m.date);
+    if (m.home) map[m.home.id] = { oppSquadId: m.away?.id ?? null, oppAbbr: m.away?.abbr ?? null, isoDate };
+    if (m.away) map[m.away.id] = { oppSquadId: m.home?.id ?? null, oppAbbr: m.home?.abbr ?? null, isoDate };
+  }
+  return map;
+}
+
+// Round of 32 version of computeRoundScores — same Best-15 selection logic
+// as best15-next-round.html's R32 mode, used here so the dashboard recap
+// can show the round currently in progress, not just completed group
+// matchdays. actualPoints comes from p.roundPoints["4"], which is only
+// populated for teams whose R32 match has already been played, so this
+// naturally fills in as more R32 matches finish.
+function computeR32RoundScores() {
+  const oppMap = buildR32OpponentMap();
+  const teamStrength = buildTeamStrength();
+  const teamsWithData = Object.values(teamStrength).filter((s) => s.played > 0);
+  const leagueAvgGF = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGF, 0) / teamsWithData.length : 1;
+  const leagueAvgGA = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGA, 0) / teamsWithData.length : 1;
+
+  const pool = players.filter((p) => p.squadId != null && oppMap[p.squadId] && !p.suspendedNextMatch);
+  const withFixture = pool.map((p) => {
+    const opp = oppMap[p.squadId];
+    const oppStrength = opp.oppSquadId != null ? teamStrength[opp.oppSquadId] : null;
+    const winPct = opp.oppSquadId != null ? (() => {
+      const fx = findEloFixture(p.squadId, opp.oppSquadId, opp.isoDate);
+      if (!fx) return null;
+      return fx.homeSquadId === p.squadId ? fx.homeWinPct : fx.awayWinPct;
+    })() : null;
+
+    const factors = [];
+    if (oppStrength && oppStrength.played > 0) {
+      factors.push((p.position === 'GK' || p.position === 'DEF')
+        ? clamp(1 + 0.5 * ((leagueAvgGF - oppStrength.avgGF) / leagueAvgGF), 0.5, 1.8)
+        : clamp(1 + 0.5 * ((oppStrength.avgGA - leagueAvgGA) / leagueAvgGA), 0.5, 1.8));
+    }
+    if (winPct != null) factors.push(clamp(1 + (winPct - 50) / 50 * 0.5, 0.5, 1.8));
+    const hasFixtureData = factors.length > 0;
+    const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
+
+    const rotation = rotationFactor(p);
+    const projectedPoints = Math.round(effectiveAvgPoints(p) * multiplier * rotation * 10) / 10;
+    const actualPoints = p.roundPoints['4'];
+    return { ...p, fixtureIndex: multiplier, hasFixtureData, projectedPoints, rotationFactor: rotation, actualPoints: actualPoints != null ? actualPoints : null };
+  });
+
+  const POS_ORDER_LOCAL = ['GK', 'DEF', 'MID', 'FWD'];
+  for (const pos of POS_ORDER_LOCAL) {
+    const group = withFixture.filter((p) => p.position === pos);
+    const forms = group.map((p) => p.form);
+    const fixtures = group.map((p) => p.fixtureIndex);
+    const formMin = Math.min(...forms, 0);
+    const formMax = Math.max(...forms, 1);
+    const fixMin = Math.min(...fixtures, 0.5);
+    const fixMax = Math.max(...fixtures, 1.8);
+    for (const p of group) {
+      const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
+      const normFix = fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50;
+      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+    }
+  }
+  return withFixture;
+}
+
 function renderRecap() {
   const panel = document.getElementById('recapPanel');
   if (!tournaments.length || !Object.keys(teamProjections).length) { panel.style.display = 'none'; return; }
@@ -374,6 +524,22 @@ function renderRecap() {
     const totalProjected = SquadBuilder.totalMetric(variant.starters, 'projectedPoints');
     const totalActual = variant.starters.reduce((s, p) => s + (p.actualPoints ?? 0), 0);
     rounds.push({ mdIndex, label: `MD${mdIndex + 1}`, totalProjected, totalActual });
+  }
+
+  // Round of 32 — the round currently in progress. Only teams that have
+  // already played show up with real actualPoints; the rest score 0 until
+  // their match happens, so this bar naturally fills in as the round goes on.
+  if (matchesGames.length) {
+    const r32Scored = computeR32RoundScores();
+    if (r32Scored.length) {
+      const variants = SquadBuilder.buildVariants(r32Scored, 'score', FORMATION, POS_ORDER_LOCAL, 3, SquadBuilder.BUDGET + KNOCKOUT_BUDGET_BONUS);
+      const variant = variants.find((v) => v.key === 'budget') || variants[0];
+      if (variant) {
+        const totalProjected = SquadBuilder.totalMetric(variant.starters, 'projectedPoints');
+        const totalActual = variant.starters.reduce((s, p) => s + (p.actualPoints ?? 0), 0);
+        rounds.push({ mdIndex: 'r32', label: I18N.t('index.recapR32Label', 'R32 (live)'), totalProjected, totalActual });
+      }
+    }
   }
 
   if (!rounds.length) { panel.style.display = 'none'; return; }
