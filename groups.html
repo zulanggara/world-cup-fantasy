@@ -127,16 +127,9 @@
   .bracket-final-col { justify-content: center; }
   .bracket-final-col .bracket-match-box { border-color: var(--accent); }
   .bracket-third-note { margin-top: 10px; font-size: 11.5px; color: var(--text-dim); }
-  .bracket-h2h { border-top: 1px solid var(--border); font-size: 10.5px; }
-  .bracket-h2h summary { padding: 5px 9px; cursor: pointer; color: var(--text-dim); list-style: none; }
-  .bracket-h2h summary::-webkit-details-marker { display: none; }
-  .bracket-h2h summary:hover { background: var(--row-hover); }
-  .bh2h-count { color: var(--text-dim); }
-  .bh2h-list { padding: 2px 9px 8px; display: flex; flex-direction: column; gap: 3px; max-height: 140px; overflow-y: auto; }
-  .bh2h-row { display: flex; gap: 8px; font-size: 10px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
-  .bh2h-row .bh2h-date { flex: 0 0 64px; }
-  .bh2h-row .bh2h-score { flex: 1; color: var(--text); }
-  .bh2h-row .bh2h-comp { flex: 0 0 auto; font-family: 'Inter', sans-serif; opacity: .8; }
+  .bracket-h2h-badge { display: block; width: 100%; margin: 0; padding: 5px 9px; border: none; border-top: 1px solid var(--border); background: var(--panel2); color: var(--accent2); font-size: 10.5px; font-weight: 600; cursor: pointer; text-align: center; font-family: 'Inter', sans-serif; }
+  .bracket-h2h-badge:hover { background: var(--row-hover); }
+  .bh2h-badge-count { color: var(--text-dim); font-weight: 400; }
   .bracket-time-note { font-size: 11px; color: var(--text-dim); margin-bottom: 14px; opacity: .8; }
 
   table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
@@ -785,22 +778,42 @@ function bracketH2hHtml(matchId, home, away) {
   const rec = headToHead[matchId];
   if (!rec || !home || !away) return '';
   const a = rec.teamA;
+  return `<button class="bracket-h2h-badge" onclick="event.stopPropagation(); openH2hModal('${matchId}')">
+    ${I18N.t('groups.h2hSummary')} <span class="bh2h-badge-count">${a.matchesPlayed}</span>
+  </button>`;
+}
+
+function openH2hModal(matchId) {
+  const rec = headToHead[matchId];
+  if (!rec) return;
+  const a = rec.teamA;
   const b = rec.teamB;
-  const summary = `${a.wins}W-${a.draws}D-${a.losses}L &middot; ${a.abbr} ${a.goalsScored}-${b.goalsScored} ${b.abbr}`;
   const rows = (rec.matches || [])
     .slice()
     .sort((x, y) => new Date(y.date) - new Date(x.date))
     .map(
-      (mt) =>
-        `<div class="bh2h-row"><span class="bh2h-date">${escapeHtml(mt.date || '')}</span><span class="bh2h-score">${escapeHtml(mt.home)} ${mt.homeScore}-${mt.awayScore} ${escapeHtml(mt.away)}</span><span class="bh2h-comp">${escapeHtml(mt.competition || '')}</span></div>`
+      (mt) => `<div class="dm-match-row">
+        <span>${escapeHtml(mt.date || '')} &middot; ${escapeHtml(mt.competition || '')}</span>
+        <span class="score">${escapeHtml(mt.home)} ${mt.homeScore}-${mt.awayScore} ${escapeHtml(mt.away)}</span>
+      </div>`
     )
     .join('');
-  return `
-    <details class="bracket-h2h">
-      <summary>${I18N.t('groups.h2hSummary')}: ${summary} <span class="bh2h-count">(${a.matchesPlayed})</span></summary>
-      <div class="bh2h-list">${rows}</div>
-    </details>
+  const html = `
+    <div class="dm-head">
+      <span class="dm-flag">${FLAGS.flagFor(a.abbr)}</span>
+      <h2>${escapeHtml(a.name)} ${I18N.t('groups.h2hVs', 'vs')} ${escapeHtml(b.name)}</h2>
+      <span class="dm-flag">${FLAGS.flagFor(b.abbr)}</span>
+    </div>
+    <div class="dm-sub">${I18N.t('groups.h2hSummary')} &middot; ${a.matchesPlayed} ${I18N.t('groups.h2hMatches', 'pertandingan')}</div>
+    <div class="dm-stat-grid">
+      <div class="dm-stat-item"><span>${escapeHtml(a.abbr)} W-D-L</span><span class="v">${a.wins}-${a.draws}-${a.losses}</span></div>
+      <div class="dm-stat-item"><span>${escapeHtml(b.abbr)} W-D-L</span><span class="v">${b.wins}-${b.draws}-${b.losses}</span></div>
+      <div class="dm-stat-item"><span>${I18N.t('groups.h2hGoals', 'Gol')}</span><span class="v">${a.goalsScored}-${b.goalsScored}</span></div>
+    </div>
+    <div class="dm-section-title">${I18N.t('groups.h2hHistory', 'Riwayat Pertandingan')}</div>
+    ${rows || `<div class="dm-empty">${I18N.t('groups.h2hEmpty', 'Belum ada riwayat pertandingan.')}</div>`}
   `;
+  DetailModal.openHtml(html);
 }
 
 function bracketMatchBoxHtml(m) {

@@ -421,5 +421,5 @@ window.DetailModal = (function () {
     `);
   }
 
-  return { openPlayer, openTeam, close, formatWIB };
+  return { openPlayer, openTeam, openHtml: open, close, formatWIB };
 })();
