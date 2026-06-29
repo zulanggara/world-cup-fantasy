@@ -174,7 +174,7 @@
     "18": {
       "makeR32": 1,
       "makeR16": 0.885,
-      "makeQF": 0.615,
+      "makeQF": 0.62,
       "makeSF": 0.365,
       "makeFinal": 0.215,
       "winWC": 0.1025,
