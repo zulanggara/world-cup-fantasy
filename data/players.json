@@ -15436,13 +15436,13 @@
     "price": 5.3,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 4.2,
+    "percentSelected": 4.1,
     "roundsSelected": {
       "1": 4,
       "2": 5.2,
       "3": 4.9,
       "4": 4.2,
-      "5": 4.2
+      "5": 4.1
     },
     "stats": {
       "totalPoints": 12,
@@ -20434,13 +20434,13 @@
     "price": 7.4,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 1.2,
+    "percentSelected": 1.1,
     "roundsSelected": {
       "1": 2.2,
       "2": 1.6,
       "3": 1.6,
       "4": 1.2,
-      "5": 1.2
+      "5": 1.1
     },
     "stats": {
       "totalPoints": 4,
