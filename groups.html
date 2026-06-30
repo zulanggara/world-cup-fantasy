@@ -126,6 +126,7 @@
   .bracket-team .bslot { font-family: 'Inter', sans-serif; font-weight: 400; font-style: normal; color: var(--text-dim); font-size: 11px; }
   .bracket-team .bscore { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-dim); font-size: 13px; }
   .bracket-team .bscore-win { color: var(--accent); }
+  .bracket-team .bscore-pen { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text-dim); font-size: 11px; }
   .bmatch-ft { color: var(--accent2); font-weight: 700; }
   .bracket-final-col { justify-content: center; }
   .bracket-final-col .bracket-match-box { border-color: var(--accent); }
@@ -600,6 +601,19 @@ const KO_ROUNDS = [
   { type: 'final', key: 'final', label: 'Final' },
 ];
 
+// Knockout draws go to penalties — home_score/away_score stay tied, so the
+// real winner has to fall back to home_penalty_score/away_penalty_score
+// whenever the regular score didn't decide it.
+function matchHomeWon(m) {
+  const homeScore = Number(m.home_score);
+  const awayScore = Number(m.away_score);
+  if (homeScore !== awayScore) return homeScore > awayScore;
+  const homePen = Number(m.home_penalty_score);
+  const awayPen = Number(m.away_penalty_score);
+  if (Number.isFinite(homePen) && Number.isFinite(awayPen) && homePen !== awayPen) return homePen > awayPen;
+  return true; // no penalty data yet — fall back to the old "home advances" default
+}
+
 function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
   const byId = {};
   for (const m of matchesGames) {
@@ -638,7 +652,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
       if (!refMatch || refMatch.finished !== 'TRUE' || !ref || ref.home?.pending || ref.away?.pending) {
         return { pending: true, text: desc };
       }
-      const winner = Number(refMatch.home_score) >= Number(refMatch.away_score) ? ref.home : ref.away;
+      const winner = matchHomeWon(refMatch) ? ref.home : ref.away;
       return { ...winner, confirmed: true };
     }
     m = label.match(/^Loser Match (\d+)$/i);
@@ -650,7 +664,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
       if (!refMatch || refMatch.finished !== 'TRUE' || !ref || ref.home?.pending || ref.away?.pending) {
         return { pending: true, text: desc };
       }
-      const loser = Number(refMatch.home_score) < Number(refMatch.away_score) ? ref.home : ref.away;
+      const loser = matchHomeWon(refMatch) ? ref.away : ref.home;
       return { ...loser, confirmed: true };
     }
     return { pending: true, text: label };
@@ -670,6 +684,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
         id: m.id, type: m.type, date: m.local_date, stadiumId: m.stadium_id, home, away,
         homeLabel: m.home_team_label, awayLabel: m.away_team_label,
         finished: m.finished === 'TRUE', homeScore: m.home_score, awayScore: m.away_score,
+        homePenaltyScore: m.home_penalty_score, awayPenaltyScore: m.away_penalty_score,
       };
       matchResultById[m.id] = rec;
       return rec;
@@ -679,7 +694,7 @@ function buildKnockoutTree(standings, bestThirds, thirdAssignments) {
   const thirdMatch = Object.values(byId).find((m) => m.type === 'third');
   let thirdPlace = null;
   if (thirdMatch) {
-    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label, thirdMatch.home_team_name_en), away: resolveSlot(thirdMatch.away_team_label, thirdMatch.away_team_name_en), finished: thirdMatch.finished === 'TRUE', homeScore: thirdMatch.home_score, awayScore: thirdMatch.away_score };
+    thirdPlace = { id: thirdMatch.id, date: thirdMatch.local_date, stadiumId: thirdMatch.stadium_id, home: resolveSlot(thirdMatch.home_team_label, thirdMatch.home_team_name_en), away: resolveSlot(thirdMatch.away_team_label, thirdMatch.away_team_name_en), finished: thirdMatch.finished === 'TRUE', homeScore: thirdMatch.home_score, awayScore: thirdMatch.away_score, homePenaltyScore: thirdMatch.home_penalty_score, awayPenaltyScore: thirdMatch.away_penalty_score };
     matchResultById[thirdMatch.id] = { ...thirdPlace, type: 'third', homeLabel: thirdMatch.home_team_label, awayLabel: thirdMatch.away_team_label };
   }
 
@@ -764,12 +779,13 @@ function bracketWinExpHtml(home, away, localDate) {
   </div>`;
 }
 
-function bracketTeamHtml(side, score, isWinner) {
+function bracketTeamHtml(side, score, isWinner, penaltyScore) {
   if (!side) return '<div class="bracket-team tbd">TBD</div>';
   if (side.pending) return `<div class="bracket-team tbd">${escapeHtml(side.text)}</div>`;
   const cls = side.confirmed ? 'resolved' : 'projected';
   const slotNote = side.slotDesc ? ` <span class="bslot">(${escapeHtml(side.slotDesc)})</span>` : '';
-  const scoreHtml = score != null ? `<span class="bscore${isWinner ? ' bscore-win' : ''}">${escapeHtml(score)}</span>` : '';
+  const penHtml = penaltyScore != null ? ` <small class="bscore-pen">(${escapeHtml(penaltyScore)})</small>` : '';
+  const scoreHtml = score != null ? `<span class="bscore${isWinner ? ' bscore-win' : ''}">${escapeHtml(score)}${penHtml}</span>` : '';
   return `<div class="bracket-team ${cls}" onclick="DetailModal.openTeam(${side.squadId})">
     <span class="babbr">${FLAGS.flagFor(side.abbr)} ${escapeHtml(side.name || side.abbr)}</span>${slotNote}${scoreHtml}
   </div>`;
@@ -823,16 +839,26 @@ function openH2hModal(matchId) {
 
 function bracketMatchBoxHtml(m) {
   const hasScore = m.finished && m.homeScore != null && m.awayScore != null;
-  const homeWon = hasScore && Number(m.homeScore) > Number(m.awayScore);
-  const awayWon = hasScore && Number(m.awayScore) > Number(m.homeScore);
+  // Knockout draws go to penalties — home_score/away_score stay tied, so the
+  // winner (and the FT highlight) has to fall back to the penalty shootout
+  // score when one's present and the regular score didn't decide it.
+  const hasPenalties = hasScore && Number(m.homeScore) === Number(m.awayScore)
+    && m.homePenaltyScore != null && m.awayPenaltyScore != null
+    && Number(m.homePenaltyScore) !== Number(m.awayPenaltyScore);
+  const homeWon = hasScore && (hasPenalties
+    ? Number(m.homePenaltyScore) > Number(m.awayPenaltyScore)
+    : Number(m.homeScore) > Number(m.awayScore));
+  const awayWon = hasScore && (hasPenalties
+    ? Number(m.awayPenaltyScore) > Number(m.homePenaltyScore)
+    : Number(m.awayScore) > Number(m.homeScore));
   const venueLine = hasScore
-    ? `${escapeHtml(matchVenueLabel(m.date, m.stadiumId))} <span class="bmatch-ft">${I18N.t('groups.matchFinished', 'FT')}</span>`
+    ? `${escapeHtml(matchVenueLabel(m.date, m.stadiumId))} <span class="bmatch-ft">${hasPenalties ? I18N.t('groups.matchPenalties', 'PEN') : I18N.t('groups.matchFinished', 'FT')}</span>`
     : escapeHtml(matchVenueLabel(m.date, m.stadiumId));
   return `
     <div class="bracket-match-box" data-match-id="${m.id}">
       <div class="bmatch-venue">${venueLine}</div>
-      ${bracketTeamHtml(m.home, hasScore ? m.homeScore : null, homeWon)}
-      ${bracketTeamHtml(m.away, hasScore ? m.awayScore : null, awayWon)}
+      ${bracketTeamHtml(m.home, hasScore ? m.homeScore : null, homeWon, hasPenalties ? m.homePenaltyScore : null)}
+      ${bracketTeamHtml(m.away, hasScore ? m.awayScore : null, awayWon, hasPenalties ? m.awayPenaltyScore : null)}
       ${bracketWinExpHtml(m.home, m.away, m.date)}
       ${bracketH2hHtml(m.id, m.home, m.away)}
     </div>
