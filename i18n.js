@@ -78,6 +78,7 @@ window.I18N = (function () {
       lbAvgPoints: { en: 'Best Avg Points', id: 'Rata-rata Poin Terbaik', ar: 'أفضل متوسط نقاط', ms: 'Purata Mata Terbaik' },
       lbForm: { en: 'Highest Form', id: 'Form Terbaik', ar: 'أعلى فورمة', ms: 'Bentuk Terbaik' },
       lbSelected: { en: 'Most Selected', id: 'Paling Banyak Dipilih', ar: 'الأكثر اختياراً', ms: 'Paling Banyak Dipilih' },
+      lbSelectedLeast: { en: 'Least Selected (Hidden Gems)', id: 'Paling Sedikit Dipilih (Pemain Tersembunyi)', ar: 'الأقل اختياراً (جواهر خفية)', ms: 'Paling Sedikit Dipilih (Permata Tersembunyi)' },
       lbGoals: { en: 'Top Scorer', id: 'Top Skor', ar: 'أعلى هداف', ms: 'Penjaring Gol Terbanyak' },
       lbAssists: { en: 'Most Assists', id: 'Assist Terbanyak', ar: 'أكثر التمريرات الحاسمة', ms: 'Bantuan Terbanyak' },
       lbCleanSheets: { en: 'Most Clean Sheets', id: 'Clean Sheet Terbanyak', ar: 'أكثر الشباك النظيفة', ms: 'Clean Sheet Terbanyak' },

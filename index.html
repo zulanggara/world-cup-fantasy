@@ -670,6 +670,7 @@ const LEADERBOARD_GROUPS = [
       { key: 'avgPoints', titleKey: 'index.lbAvgPoints', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
       { key: 'form', titleKey: 'index.lbForm', unitKey: 'index.unitPts', format: (v) => v.toFixed(1) },
       { key: 'percentSelected', titleKey: 'index.lbSelected', unitKey: '', format: (v) => `${v.toFixed(1)}%` },
+      { key: 'percentSelectedLeast', valueKey: 'percentSelected', titleKey: 'index.lbSelectedLeast', unitKey: '', format: (v) => `${v.toFixed(1)}%`, sortDir: 'asc', excludeZero: true },
     ],
   },
   {
@@ -781,10 +782,13 @@ function renderVisibilityControls() {
 function renderLeaderboards() {
   const grid = document.getElementById('lbGrid');
   grid.innerHTML = LEADERBOARDS.filter((lb) => !hiddenCats.has(lb.key)).map((lb) => {
-    const sorted = withRanks(players.slice().sort((a, b) => b[lb.key] - a[lb.key]), lb.key);
+    const valueKey = lb.valueKey || lb.key;
+    const dir = lb.sortDir === 'asc' ? 1 : -1;
+    const pool = lb.excludeZero ? players.filter((p) => p[valueKey] > 0) : players;
+    const sorted = withRanks(pool.slice().sort((a, b) => dir * (a[valueKey] - b[valueKey])), valueKey);
     const top10 = sorted.slice(0, TOP_N);
     const leader = top10[0];
-    if (!leader || leader[lb.key] <= 0) {
+    if (!leader || (!lb.excludeZero && leader[valueKey] <= 0)) {
       return `<div class="lb-card">
         <div class="lb-head">${escapeHtml(I18N.t(lb.titleKey))}</div>
         <div class="empty-msg" style="padding:14px;">${escapeHtml(I18N.t('index.noStatsYet'))}</div>
@@ -795,7 +799,7 @@ function renderLeaderboards() {
       <div class="lb-row${p.rank === 1 ? ' lb-row-tied-leader' : ''}" onclick="DetailModal.openPlayer(${p.id})">
         <span class="lb-rank">${p.rank}</span>
         <span class="lb-name">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.name)}</span>
-        <span class="lb-value">${lb.format(p[lb.key])}</span>
+        <span class="lb-value">${lb.format(p[valueKey])}</span>
       </div>
     `).join('');
     return `<div class="lb-card">
@@ -807,7 +811,7 @@ function renderLeaderboards() {
           <div class="lb-name">${FLAGS.flagFor(leader.squadAbbr)} ${escapeHtml(leader.name)}</div>
           <div class="lb-team">${escapeHtml(leader.squadAbbr)}</div>
         </div>
-        <div class="lb-value">${lb.format(leader[lb.key])}<small>${unit}</small></div>
+        <div class="lb-value">${lb.format(leader[valueKey])}<small>${unit}</small></div>
       </div>
       <div class="lb-rest">${rest}</div>
     </div>`;
