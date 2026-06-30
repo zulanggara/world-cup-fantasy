@@ -711,12 +711,11 @@ const LEADERBOARD_GROUPS = [
 const LEADERBOARDS = LEADERBOARD_GROUPS.flatMap((g) => g.items);
 
 const VISIBILITY_KEY = 'fifa-fantasy-dashboard-hidden-cats';
-// FIFA's source data doesn't populate these two stat codes for any player
-// yet (every player aggregates to 0) — default them to hidden so the
-// dashboard doesn't show a wall of "no data yet" cards. Only applies on a
-// user's first visit; once they've touched the visibility panel at all,
-// their explicit choice (including re-checking these) is respected.
-const DEFAULT_HIDDEN_CATS = ['penaltySaved', 'startingXI'];
+// startingXI is the only category hidden by default — it's a less useful
+// "most starts" ranking compared to the per-stat leaderboards. Only applies
+// on a user's first visit; once they've touched the visibility panel at
+// all, their explicit choice (including re-checking this) is respected.
+const DEFAULT_HIDDEN_CATS = ['startingXI'];
 function getHiddenCats() {
   const raw = localStorage.getItem(VISIBILITY_KEY);
   if (raw == null) return new Set(DEFAULT_HIDDEN_CATS);
