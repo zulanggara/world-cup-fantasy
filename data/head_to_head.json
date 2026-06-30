@@ -592,11 +592,11 @@
       "name": "Côte d'Ivoire",
       "cleanSheets": 0,
       "draws": 0,
-      "matchesPlayed": 0,
+      "matchesPlayed": 1,
       "wins": 0,
-      "losses": 0,
-      "goalsScored": 0,
-      "goalsAgainst": 0,
+      "losses": 1,
+      "goalsScored": 1,
+      "goalsAgainst": 2,
       "idTeam": "43854",
       "pictureUrl": "",
       "score": 0,
@@ -611,11 +611,11 @@
       "name": "Norway",
       "cleanSheets": 0,
       "draws": 0,
-      "matchesPlayed": 0,
-      "wins": 0,
+      "matchesPlayed": 1,
+      "wins": 1,
       "losses": 0,
-      "goalsScored": 0,
-      "goalsAgainst": 0,
+      "goalsScored": 2,
+      "goalsAgainst": 1,
       "idTeam": "43961",
       "pictureUrl": "",
       "score": 0,
@@ -624,7 +624,16 @@
         "locale": ""
       }
     },
-    "matches": []
+    "matches": [
+      {
+        "date": "2026-06-30",
+        "competition": "FIFA World Cup™",
+        "home": "Côte d'Ivoire",
+        "homeScore": 1,
+        "away": "Norway",
+        "awayScore": 2
+      }
+    ]
   },
   "79": {
     "teamA": {
@@ -1577,6 +1586,80 @@
         "homeScore": 3,
         "away": "Canada",
         "awayScore": 2
+      }
+    ]
+  },
+  "91": {
+    "teamA": {
+      "squadId": 7,
+      "abbr": "BRA",
+      "name": "Brazil",
+      "cleanSheets": 0,
+      "draws": 2,
+      "matchesPlayed": 4,
+      "wins": 0,
+      "losses": 2,
+      "goalsScored": 5,
+      "goalsAgainst": 8,
+      "idTeam": "43924",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Brazil",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 32,
+      "abbr": "NOR",
+      "name": "Norway",
+      "cleanSheets": 0,
+      "draws": 2,
+      "matchesPlayed": 4,
+      "wins": 2,
+      "losses": 0,
+      "goalsScored": 8,
+      "goalsAgainst": 5,
+      "idTeam": "43961",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Norway",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2006-08-16",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 1,
+        "away": "Brazil",
+        "awayScore": 1
+      },
+      {
+        "date": "1998-06-23",
+        "competition": "FIFA World Cup™",
+        "home": "Brazil",
+        "homeScore": 1,
+        "away": "Norway",
+        "awayScore": 2
+      },
+      {
+        "date": "1997-05-30",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 4,
+        "away": "Brazil",
+        "awayScore": 2
+      },
+      {
+        "date": "1988-07-28",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 1,
+        "away": "Brazil",
+        "awayScore": 1
       }
     ]
   }
