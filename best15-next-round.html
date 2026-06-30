@@ -412,6 +412,7 @@ function computeScores(mdIndex) {
 }
 
 const MAX_PER_SQUAD = 3;
+const MAX_PER_SQUAD_R16 = 4;
 
 function squadById(id) {
   return squads.find((s) => s.id === id);
@@ -900,7 +901,8 @@ function render() {
   document.getElementById('unmatchedNote').textContent = notes.join(' · ');
 
   const budget = SquadBuilder.BUDGET + ((isR32 || isR16) ? KNOCKOUT_BUDGET_BONUS : 0);
-  const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER, MAX_PER_SQUAD, budget);
+  const maxPerSquad = isR16 ? MAX_PER_SQUAD_R16 : MAX_PER_SQUAD;
+  const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER, maxPerSquad, budget);
 
   document.getElementById('variantTabs').innerHTML = variants.map((v) => `
     <button class="variant-tab ${v.key === currentVariant ? 'active' : ''}" data-key="${v.key}">${escapeHtml(v.label)}</button>

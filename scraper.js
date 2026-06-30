@@ -905,6 +905,56 @@ function buildAggregates() {
   log(`[aggregates] saved aggregates for ${Object.keys(aggregates).length} players -> ${outPath}`);
 }
 
+// Once the group stage ends, an eliminated team's players never score
+// another point — scraping all ~1500 players' stats every run wastes most
+// of those calls on teams that are already out. This narrows --with-stats'
+// default target to only squads still alive: the 32 R32 participants while
+// that round is in progress, then automatically tightening to the 16 R16
+// participants the moment every R32 match has a confirmed winner. Returns
+// null (meaning "no filter, scrape everyone") while the group stage is
+// still in progress and r32 slots aren't all resolved to real teams yet.
+function resolveActiveSquadIds(squads) {
+  let matches;
+  try {
+    matches = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'matches.json'), 'utf8')).games || [];
+  } catch (e) {
+    return null;
+  }
+  const r32Games = matches.filter((g) => g.type === 'r32');
+
+  const r32SquadIds = new Set();
+  for (const g of r32Games) {
+    const home = squadByNameForH2H(squads, g.home_team_name_en);
+    const away = squadByNameForH2H(squads, g.away_team_name_en);
+    if (home) r32SquadIds.add(home.id);
+    if (away) away && r32SquadIds.add(away.id);
+  }
+  if (r32SquadIds.size < 32) return null; // group stage not fully resolved yet
+
+  const allR32Finished = r32Games.length > 0 && r32Games.every((g) => g.finished === 'TRUE');
+  if (!allR32Finished) return r32SquadIds;
+
+  // R32 fully decided -> narrow further to the 16 confirmed R16 teams.
+  const r16SquadIds = new Set();
+  for (const g of r32Games) {
+    const homeScore = Number(g.home_score);
+    const awayScore = Number(g.away_score);
+    let winnerName = null;
+    if (homeScore !== awayScore) {
+      winnerName = homeScore > awayScore ? g.home_team_name_en : g.away_team_name_en;
+    } else {
+      const homePen = Number(g.home_penalty_score);
+      const awayPen = Number(g.away_penalty_score);
+      if (Number.isFinite(homePen) && Number.isFinite(awayPen) && homePen !== awayPen) {
+        winnerName = homePen > awayPen ? g.home_team_name_en : g.away_team_name_en;
+      }
+    }
+    const winner = squadByNameForH2H(squads, winnerName);
+    if (winner) r16SquadIds.add(winner.id);
+  }
+  return r16SquadIds.size === 16 ? r16SquadIds : r32SquadIds;
+}
+
 async function fetchStatsForIds(page, ids) {
   const concurrency = 3;
   let cursor = 0;
@@ -1000,7 +1050,19 @@ async function main() {
     if (args.ids && args.ids.length) {
       targetIds = args.ids;
     } else {
-      targetIds = players.map((p) => p.id);
+      let squads = [];
+      try {
+        squads = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'squads.json'), 'utf8'));
+      } catch (e) {
+        log(`[stats] squads.json not found, scraping all players: ${e.message}`);
+      }
+      const activeSquadIds = resolveActiveSquadIds(squads);
+      if (activeSquadIds) {
+        targetIds = players.filter((p) => activeSquadIds.has(p.squadId)).map((p) => p.id);
+        log(`[stats] narrowed to ${activeSquadIds.size} active squad(s) (${targetIds.length}/${players.length} players)`);
+      } else {
+        targetIds = players.map((p) => p.id);
+      }
     }
     log(`[stats] fetching stats for ${targetIds.length} player(s)...`);
     await fetchStatsForIds(page, targetIds);
