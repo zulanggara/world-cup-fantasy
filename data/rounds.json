@@ -3245,8 +3245,8 @@
       },
       {
         "id": 77,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 55,
         "extraMinutes": 0,
         "venueName": "At&t Stadium",
         "venueCity": "Arlington, Texas",
@@ -3254,7 +3254,7 @@
         "venueCityTranslationKey": null,
         "venueId": 10,
         "date": "2026-06-30T18:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 12,
         "awaySquadId": 32,
@@ -3262,12 +3262,18 @@
         "awaySquadName": "Norway",
         "homeSquadAbbr": "CIV",
         "awaySquadAbbr": "NOR",
-        "homeScore": null,
+        "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "awayScore": 1,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 863,
+            "assistId": 1684,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 79,
