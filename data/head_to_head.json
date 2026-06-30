@@ -1497,5 +1497,79 @@
         "awayScore": 0
       }
     ]
+  },
+  "90": {
+    "teamA": {
+      "squadId": 9,
+      "abbr": "CAN",
+      "name": "Canada",
+      "cleanSheets": 0,
+      "draws": 1,
+      "matchesPlayed": 4,
+      "wins": 0,
+      "losses": 3,
+      "goalsScored": 4,
+      "goalsAgainst": 10,
+      "idTeam": "43899",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Canada",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 29,
+      "abbr": "MAR",
+      "name": "Morocco",
+      "cleanSheets": 1,
+      "draws": 1,
+      "matchesPlayed": 4,
+      "wins": 3,
+      "losses": 0,
+      "goalsScored": 10,
+      "goalsAgainst": 4,
+      "idTeam": "43872",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Morocco",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2022-12-01",
+        "competition": "FIFA World Cup™",
+        "home": "Canada",
+        "homeScore": 1,
+        "away": "Morocco",
+        "awayScore": 2
+      },
+      {
+        "date": "2016-10-11",
+        "competition": "Friendly",
+        "home": "Morocco",
+        "homeScore": 4,
+        "away": "Canada",
+        "awayScore": 0
+      },
+      {
+        "date": "1994-06-01",
+        "competition": "Friendly",
+        "home": "Canada",
+        "homeScore": 1,
+        "away": "Morocco",
+        "awayScore": 1
+      },
+      {
+        "date": "1984-10-24",
+        "competition": "Friendly",
+        "home": "Morocco",
+        "homeScore": 3,
+        "away": "Canada",
+        "awayScore": 2
+      }
+    ]
   }
 }
