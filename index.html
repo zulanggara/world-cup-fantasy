@@ -463,6 +463,15 @@ function computeR32RoundScores() {
   const leagueAvgGF = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGF, 0) / teamsWithData.length : 1;
   const leagueAvgGA = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGA, 0) / teamsWithData.length : 1;
 
+  // Polymarket's "make R16" probability as a third, independent opponent-
+  // strength signal, plus a small "own longevity" score nudge — same as
+  // best15-next-round.html's computeScoresR32, kept identical so the
+  // dashboard recap's "squad the index would have picked" actually matches
+  // the squad shown on the Next Round Projection page.
+  const polyTeams = polymarket.teams || {};
+  const r16Probs = Object.values(polyTeams).map((t) => t.makeR16).filter((v) => v != null);
+  const leagueAvgMakeR16 = r16Probs.length ? r16Probs.reduce((s, v) => s + v, 0) / r16Probs.length : 0.5;
+
   const pool = players.filter((p) => p.squadId != null && oppMap[p.squadId] && !p.suspendedNextMatch);
   const withFixture = pool.map((p) => {
     const opp = oppMap[p.squadId];
@@ -472,6 +481,8 @@ function computeR32RoundScores() {
       if (!fx) return null;
       return fx.homeSquadId === p.squadId ? fx.homeWinPct : fx.awayWinPct;
     })() : null;
+    const oppMakeR16 = opp.oppSquadId != null ? (polyTeams[opp.oppSquadId]?.makeR16 ?? null) : null;
+    const ownMakeR16Pct = polyTeams[p.squadId]?.makeR16 ?? null;
 
     const factors = [];
     if (oppStrength && oppStrength.played > 0) {
@@ -480,13 +491,16 @@ function computeR32RoundScores() {
         : clamp(1 + 0.5 * ((oppStrength.avgGA - leagueAvgGA) / leagueAvgGA), 0.5, 1.8));
     }
     if (winPct != null) factors.push(clamp(1 + (winPct - 50) / 50 * 0.5, 0.5, 1.8));
+    if (oppMakeR16 != null && leagueAvgMakeR16 > 0) {
+      factors.push(clamp(1 + 0.5 * ((leagueAvgMakeR16 - oppMakeR16) / leagueAvgMakeR16), 0.5, 1.8));
+    }
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
 
     const rotation = rotationFactor(p);
     const projectedPoints = Math.round(effectiveAvgPoints(p) * multiplier * rotation * 10) / 10;
     const actualPoints = p.roundPoints['4'];
-    return { ...p, fixtureIndex: multiplier, hasFixtureData, projectedPoints, rotationFactor: rotation, actualPoints: actualPoints != null ? actualPoints : null };
+    return { ...p, fixtureIndex: multiplier, hasFixtureData, projectedPoints, ownMakeR16Pct, rotationFactor: rotation, actualPoints: actualPoints != null ? actualPoints : null };
   });
 
   const POS_ORDER_LOCAL = ['GK', 'DEF', 'MID', 'FWD'];
@@ -494,14 +508,19 @@ function computeR32RoundScores() {
     const group = withFixture.filter((p) => p.position === pos);
     const forms = group.map((p) => p.form);
     const fixtures = group.map((p) => p.fixtureIndex);
+    const longevities = group.map((p) => p.ownMakeR16Pct ?? leagueAvgMakeR16);
     const formMin = Math.min(...forms, 0);
     const formMax = Math.max(...forms, 1);
     const fixMin = Math.min(...fixtures, 0.5);
     const fixMax = Math.max(...fixtures, 1.8);
+    const longMin = Math.min(...longevities, 0);
+    const longMax = Math.max(...longevities, 1);
     for (const p of group) {
       const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
       const normFix = fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50;
-      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+      const longevity = p.ownMakeR16Pct ?? leagueAvgMakeR16;
+      const normLong = longMax > longMin ? ((longevity - longMin) / (longMax - longMin)) * 100 : 50;
+      p.score = Math.round((0.55 * normForm + 0.35 * normFix + 0.1 * normLong) * 10) / 10;
     }
   }
   return withFixture;
