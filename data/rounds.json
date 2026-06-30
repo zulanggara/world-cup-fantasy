@@ -3288,8 +3288,8 @@
       },
       {
         "id": 79,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 80,
         "extraMinutes": 0,
         "venueName": "Metlife Stadium",
         "venueCity": "East Rutherford, New Jersey",
@@ -3297,7 +3297,7 @@
         "venueCityTranslationKey": null,
         "venueId": 6,
         "date": "2026-06-30T22:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 19,
         "awaySquadId": 42,
@@ -3305,10 +3305,26 @@
         "awaySquadName": "Sweden",
         "homeSquadAbbr": "FRA",
         "awaySquadAbbr": "SWE",
-        "homeScore": null,
+        "homeScore": 3,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 500,
+            "assistId": 501,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1431,
+            "assistId": 517,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 500,
+            "assistId": 517,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
       },
