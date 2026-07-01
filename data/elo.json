@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-30T22:39:47.901Z",
+  "fetchedAt": "2026-07-01T00:21:30.617Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -145,7 +145,7 @@
     "19": {
       "eloCode": "FR",
       "rank": 3,
-      "rating": 2123
+      "rating": 2134
     },
     "20": {
       "eloCode": "DE",
@@ -259,8 +259,8 @@
     },
     "42": {
       "eloCode": "SE",
-      "rank": 35,
-      "rating": 1742
+      "rank": 38,
+      "rating": 1731
     },
     "43": {
       "eloCode": "CH",
@@ -294,43 +294,6 @@
     }
   },
   "fixtures": [
-    {
-      "date": "2026-06-30",
-      "hostCountry": "US",
-      "homeSquadId": 19,
-      "awaySquadId": 42,
-      "homeEloCode": "FR",
-      "awayEloCode": "SE",
-      "homeRank": 3,
-      "awayRank": 35,
-      "homeRating": 2123,
-      "awayRating": 1742,
-      "homeWinPct": 90,
-      "awayWinPct": 10,
-      "eloPointsAtStake": {
-        "draw": -24,
-        "winMargin1": [
-          6,
-          54
-        ],
-        "winMargin2": [
-          9,
-          81
-        ],
-        "winMargin3": [
-          11,
-          94
-        ],
-        "winMargin4": [
-          11,
-          101
-        ],
-        "winMargin5": [
-          12,
-          108
-        ]
-      }
-    },
     {
       "date": "2026-06-30",
       "hostCountry": "MX",
@@ -739,6 +702,43 @@
       }
     },
     {
+      "date": "2026-07-04",
+      "hostCountry": "US",
+      "homeSquadId": 19,
+      "awaySquadId": 34,
+      "homeEloCode": "FR",
+      "awayEloCode": "PY",
+      "homeRank": 3,
+      "awayRank": 24,
+      "homeRating": 2134,
+      "awayRating": 1823,
+      "homeWinPct": 86,
+      "awayWinPct": 14,
+      "eloPointsAtStake": {
+        "draw": -21,
+        "winMargin1": [
+          9,
+          51
+        ],
+        "winMargin2": [
+          13,
+          77
+        ],
+        "winMargin3": [
+          15,
+          90
+        ],
+        "winMargin4": [
+          16,
+          96
+        ],
+        "winMargin5": [
+          17,
+          103
+        ]
+      }
+    },
+    {
       "date": "2026-07-05",
       "hostCountry": "US",
       "homeSquadId": 7,
@@ -859,30 +859,30 @@
       "homeRank": 20,
       "awayRank": 3,
       "homeRating": 1852,
-      "awayRating": 2123,
-      "homeWinPct": 27,
-      "awayWinPct": 73,
+      "awayRating": 2134,
+      "homeWinPct": 26,
+      "awayWinPct": 74,
       "eloPointsAtStake": {
-        "draw": 9,
+        "draw": 10,
         "winMargin1": [
-          29,
-          11
+          30,
+          10
         ],
         "winMargin2": [
           44,
           16
         ],
         "winMargin3": [
-          51,
-          19
+          52,
+          18
         ],
         "winMargin4": [
-          55,
-          20
+          56,
+          19
         ],
         "winMargin5": [
-          58,
-          22
+          59,
+          21
         ]
       }
     },
@@ -1044,9 +1044,9 @@
       "homeRank": 17,
       "awayRank": 3,
       "homeRating": 1884,
-      "awayRating": 2123,
-      "homeWinPct": 31,
-      "awayWinPct": 69,
+      "awayRating": 2134,
+      "homeWinPct": 30,
+      "awayWinPct": 70,
       "eloPointsAtStake": {
         "draw": 8,
         "winMargin1": [
@@ -1054,20 +1054,20 @@
           12
         ],
         "winMargin2": [
-          41,
-          19
+          42,
+          18
         ],
         "winMargin3": [
-          48,
-          22
+          49,
+          21
         ],
         "winMargin4": [
-          52,
-          23
+          53,
+          22
         ],
         "winMargin5": [
-          55,
-          25
+          56,
+          24
         ]
       }
     },
@@ -1301,11 +1301,11 @@
       "homeEloCode": "BA",
       "awayEloCode": "SE",
       "homeRank": 58,
-      "awayRank": 35,
+      "awayRank": 38,
       "homeRating": 1622,
-      "awayRating": 1742,
-      "homeWinPct": 47,
-      "awayWinPct": 53,
+      "awayRating": 1731,
+      "homeWinPct": 49,
+      "awayWinPct": 51,
       "eloPointsAtStake": {
         "draw": 1,
         "winMargin1": [
@@ -1313,20 +1313,20 @@
           19
         ],
         "winMargin2": [
-          32,
-          28
+          31,
+          29
         ],
         "winMargin3": [
-          37,
-          33
+          36,
+          34
         ],
         "winMargin4": [
-          40,
-          35
+          38,
+          37
         ],
         "winMargin5": [
-          42,
-          38
+          41,
+          39
         ]
       }
     },
@@ -1450,7 +1450,7 @@
       "awayEloCode": "BE",
       "homeRank": 3,
       "awayRank": 17,
-      "homeRating": 2123,
+      "homeRating": 2134,
       "awayRating": 1884,
       "homeWinPct": 88,
       "awayWinPct": 12,
@@ -1465,16 +1465,16 @@
           53
         ],
         "winMargin3": [
-          9,
-          61
+          8,
+          62
         ],
         "winMargin4": [
           9,
           66
         ],
         "winMargin5": [
-          10,
-          70
+          9,
+          71
         ]
       }
     },
@@ -1670,12 +1670,12 @@
       "awaySquadId": 6,
       "homeEloCode": "SE",
       "awayEloCode": "BA",
-      "homeRank": 35,
+      "homeRank": 38,
       "awayRank": 58,
-      "homeRating": 1742,
+      "homeRating": 1731,
       "awayRating": 1622,
-      "homeWinPct": 78,
-      "awayWinPct": 22,
+      "homeWinPct": 77,
+      "awayWinPct": 23,
       "eloPointsAtStake": {
         "draw": -11,
         "winMargin1": [
@@ -1683,16 +1683,16 @@
           31
         ],
         "winMargin2": [
-          13,
-          47
+          14,
+          46
         ],
         "winMargin3": [
-          15,
-          55
+          16,
+          54
         ],
         "winMargin4": [
-          16,
-          59
+          17,
+          58
         ],
         "winMargin5": [
           18,
@@ -1746,10 +1746,10 @@
       "awayEloCode": "TR",
       "homeRank": 3,
       "awayRank": 20,
-      "homeRating": 2123,
+      "homeRating": 2134,
       "awayRating": 1852,
-      "homeWinPct": 89,
-      "awayWinPct": 11,
+      "homeWinPct": 90,
+      "awayWinPct": 10,
       "eloPointsAtStake": {
         "draw": -16,
         "winMargin1": [
@@ -1765,8 +1765,8 @@
           63
         ],
         "winMargin4": [
-          8,
-          67
+          7,
+          68
         ],
         "winMargin5": [
           8,
@@ -2030,6 +2030,43 @@
         "winMargin5": [
           46,
           34
+        ]
+      }
+    },
+    {
+      "date": "2026-06-30",
+      "hostCountry": "US",
+      "homeSquadId": 19,
+      "awaySquadId": 42,
+      "homeEloCode": "FR",
+      "awayEloCode": "SE",
+      "homeRank": 3,
+      "awayRank": 35,
+      "homeRating": 2123,
+      "awayRating": 1742,
+      "homeWinPct": 90,
+      "awayWinPct": 10,
+      "eloPointsAtStake": {
+        "draw": -24,
+        "winMargin1": [
+          6,
+          54
+        ],
+        "winMargin2": [
+          9,
+          81
+        ],
+        "winMargin3": [
+          11,
+          94
+        ],
+        "winMargin4": [
+          11,
+          101
+        ],
+        "winMargin5": [
+          12,
+          108
         ]
       }
     },
@@ -4231,6 +4268,21 @@
     }
   ],
   "results": [
+    {
+      "date": "2026-06-30",
+      "hostCountry": "US",
+      "homeSquadId": 19,
+      "awaySquadId": 42,
+      "homeEloCode": "FR",
+      "awayEloCode": "SE",
+      "homeScore": 3,
+      "awayScore": 0,
+      "eloChangeHome": 11,
+      "homeRatingAfter": 2134,
+      "awayRatingAfter": 1731,
+      "homeRankAfter": 3,
+      "awayRankAfter": 38
+    },
     {
       "date": "2026-06-30",
       "hostCountry": "US",

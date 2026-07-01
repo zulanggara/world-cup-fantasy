@@ -364,12 +364,12 @@
       "squadId": 19,
       "abbr": "FRA",
       "name": "France",
-      "cleanSheets": 7,
+      "cleanSheets": 8,
       "draws": 5,
-      "matchesPlayed": 23,
-      "wins": 12,
+      "matchesPlayed": 24,
+      "wins": 13,
       "losses": 6,
-      "goalsScored": 34,
+      "goalsScored": 37,
       "goalsAgainst": 23,
       "idTeam": "43946",
       "pictureUrl": "",
@@ -385,11 +385,11 @@
       "name": "Sweden",
       "cleanSheets": 6,
       "draws": 5,
-      "matchesPlayed": 23,
+      "matchesPlayed": 24,
       "wins": 6,
-      "losses": 12,
+      "losses": 13,
       "goalsScored": 23,
-      "goalsAgainst": 34,
+      "goalsAgainst": 37,
       "idTeam": "43970",
       "pictureUrl": "",
       "score": 0,
@@ -399,6 +399,14 @@
       }
     },
     "matches": [
+      {
+        "date": "2026-06-30",
+        "competition": "FIFA World Cup™",
+        "home": "France",
+        "homeScore": 3,
+        "away": "Sweden",
+        "awayScore": 0
+      },
       {
         "date": "2020-11-17",
         "competition": "Nations League",
@@ -1512,6 +1520,88 @@
         "homeScore": 0,
         "away": "Egypt",
         "awayScore": 0
+      }
+    ]
+  },
+  "89": {
+    "teamA": {
+      "squadId": 34,
+      "abbr": "PAR",
+      "name": "Paraguay",
+      "cleanSheets": 1,
+      "draws": 2,
+      "matchesPlayed": 5,
+      "wins": 0,
+      "losses": 3,
+      "goalsScored": 4,
+      "goalsAgainst": 14,
+      "idTeam": "43928",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Paraguay",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 19,
+      "abbr": "FRA",
+      "name": "France",
+      "cleanSheets": 3,
+      "draws": 2,
+      "matchesPlayed": 5,
+      "wins": 3,
+      "losses": 0,
+      "goalsScored": 14,
+      "goalsAgainst": 4,
+      "idTeam": "43946",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "France",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2017-06-02",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 5,
+        "away": "Paraguay",
+        "awayScore": 0
+      },
+      {
+        "date": "2014-06-01",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Paraguay",
+        "awayScore": 1
+      },
+      {
+        "date": "2008-05-31",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Paraguay",
+        "awayScore": 0
+      },
+      {
+        "date": "1998-06-28",
+        "competition": "FIFA World Cup™",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Paraguay",
+        "awayScore": 0
+      },
+      {
+        "date": "1958-06-08",
+        "competition": "FIFA World Cup™",
+        "home": "France",
+        "homeScore": 7,
+        "away": "Paraguay",
+        "awayScore": 3
       }
     ]
   },
