@@ -3847,13 +3847,14 @@
       "5": 0.6
     },
     "stats": {
-      "totalPoints": 8,
+      "totalPoints": 12,
       "avgPoints": 4,
-      "form": 2.7,
-      "lastRoundPoints": 0,
+      "form": 4,
+      "lastRoundPoints": 4,
       "roundPoints": {
         "1": 7,
-        "2": 1
+        "2": 1,
+        "4": 4
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -3978,15 +3979,15 @@
       "5": 0.5
     },
     "stats": {
-      "totalPoints": 14,
-      "avgPoints": 3.5,
-      "form": 4,
-      "lastRoundPoints": 1,
+      "totalPoints": 13,
+      "avgPoints": 3.3,
+      "form": 3.7,
+      "lastRoundPoints": 0,
       "roundPoints": {
         "1": 2,
         "2": 9,
         "3": 2,
-        "4": 1
+        "4": 0
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -4082,14 +4083,15 @@
       "5": 1.3
     },
     "stats": {
-      "totalPoints": 13,
-      "avgPoints": 4.3,
-      "form": 4.3,
-      "lastRoundPoints": 11,
+      "totalPoints": 21,
+      "avgPoints": 5.3,
+      "form": 6.7,
+      "lastRoundPoints": 8,
       "roundPoints": {
         "1": 1,
         "2": 1,
-        "3": 11
+        "3": 11,
+        "4": 8
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -4154,12 +4156,13 @@
       "5": 0.1
     },
     "stats": {
-      "totalPoints": 1,
+      "totalPoints": 2,
       "avgPoints": 1,
-      "form": 0.3,
-      "lastRoundPoints": 0,
+      "form": 0.7,
+      "lastRoundPoints": 1,
       "roundPoints": {
-        "2": 1
+        "2": 1,
+        "4": 1
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -4291,14 +4294,15 @@
       "5": 0.1
     },
     "stats": {
-      "totalPoints": 6,
-      "avgPoints": 2,
+      "totalPoints": 7,
+      "avgPoints": 1.8,
       "form": 2,
-      "lastRoundPoints": 4,
+      "lastRoundPoints": 1,
       "roundPoints": {
         "1": 1,
         "2": 1,
-        "3": 4
+        "3": 4,
+        "4": 1
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -4362,15 +4366,15 @@
       "5": 0.7
     },
     "stats": {
-      "totalPoints": 8,
-      "avgPoints": 2,
-      "form": 2,
-      "lastRoundPoints": 1,
+      "totalPoints": 17,
+      "avgPoints": 4.3,
+      "form": 5,
+      "lastRoundPoints": 10,
       "roundPoints": {
         "1": 2,
         "2": 3,
         "3": 2,
-        "4": 1
+        "4": 10
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -14831,13 +14835,13 @@
     "price": 10,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 34.7,
+    "percentSelected": 34.8,
     "roundsSelected": {
       "1": 16.6,
       "2": 15.5,
       "3": 14.8,
       "4": 33.5,
-      "5": 34.7
+      "5": 34.8
     },
     "stats": {
       "totalPoints": 41,
@@ -15250,13 +15254,13 @@
     "price": 9.5,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 35.2,
+    "percentSelected": 35.3,
     "roundsSelected": {
       "1": 34.8,
       "2": 35.8,
       "3": 33,
       "4": 34.8,
-      "5": 35.2
+      "5": 35.3
     },
     "stats": {
       "totalPoints": 27,
@@ -22373,13 +22377,13 @@
     "price": 5.7,
     "status": "eliminated",
     "matchStatus": "start",
-    "percentSelected": 13.6,
+    "percentSelected": 13.5,
     "roundsSelected": {
       "1": 15.1,
       "2": 11.9,
       "3": 21.1,
       "4": 14.2,
-      "5": 13.6
+      "5": 13.5
     },
     "stats": {
       "totalPoints": 16,
@@ -22410,13 +22414,13 @@
     "price": 5.5,
     "status": "eliminated",
     "matchStatus": "start",
-    "percentSelected": 19.4,
+    "percentSelected": 19.3,
     "roundsSelected": {
       "1": 19.9,
       "2": 19.2,
       "3": 23,
       "4": 20.7,
-      "5": 19.4
+      "5": 19.3
     },
     "stats": {
       "totalPoints": 17,
@@ -24259,13 +24263,13 @@
     "price": 10.5,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 30.4,
+    "percentSelected": 30.3,
     "roundsSelected": {
       "1": 33.8,
       "2": 31.7,
       "3": 26.3,
       "4": 30.3,
-      "5": 30.4
+      "5": 30.3
     },
     "stats": {
       "totalPoints": 38,
@@ -29215,15 +29219,15 @@
       "5": 0.2
     },
     "stats": {
-      "totalPoints": 9,
-      "avgPoints": 2.3,
-      "form": 2.3,
-      "lastRoundPoints": 1,
+      "totalPoints": 10,
+      "avgPoints": 2.5,
+      "form": 2.7,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "1": 2,
         "2": 2,
         "3": 4,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29252,12 +29256,13 @@
       "5": 0.3
     },
     "stats": {
-      "totalPoints": 1,
+      "totalPoints": 2,
       "avgPoints": 1,
-      "form": 0.3,
-      "lastRoundPoints": 0,
+      "form": 0.7,
+      "lastRoundPoints": 1,
       "roundPoints": {
-        "2": 1
+        "2": 1,
+        "4": 1
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29286,15 +29291,15 @@
       "5": 0
     },
     "stats": {
-      "totalPoints": 4,
-      "avgPoints": 1,
-      "form": 1,
-      "lastRoundPoints": 1,
+      "totalPoints": 5,
+      "avgPoints": 1.3,
+      "form": 1.3,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "1": 1,
         "2": 1,
         "3": 1,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29323,15 +29328,15 @@
       "5": 0.3
     },
     "stats": {
-      "totalPoints": 21,
-      "avgPoints": 5.3,
-      "form": 6.3,
-      "lastRoundPoints": 1,
+      "totalPoints": 23,
+      "avgPoints": 5.8,
+      "form": 7,
+      "lastRoundPoints": 3,
       "roundPoints": {
         "1": 2,
         "2": 1,
         "3": 17,
-        "4": 1
+        "4": 3
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29392,15 +29397,15 @@
       "5": 0.1
     },
     "stats": {
-      "totalPoints": 10,
-      "avgPoints": 2.5,
-      "form": 3.3,
-      "lastRoundPoints": 1,
+      "totalPoints": 13,
+      "avgPoints": 3.3,
+      "form": 4.3,
+      "lastRoundPoints": 4,
       "roundPoints": {
         "1": 0,
         "2": 0,
         "3": 9,
-        "4": 1
+        "4": 4
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29637,14 +29642,14 @@
       "5": 0.4
     },
     "stats": {
-      "totalPoints": 17,
-      "avgPoints": 5.7,
-      "form": 5.7,
-      "lastRoundPoints": 1,
+      "totalPoints": 18,
+      "avgPoints": 6,
+      "form": 6,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "1": 4,
         "3": 12,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29673,15 +29678,15 @@
       "5": 1.1
     },
     "stats": {
-      "totalPoints": 31,
-      "avgPoints": 7.8,
-      "form": 9.7,
-      "lastRoundPoints": 1,
+      "totalPoints": 42,
+      "avgPoints": 10.5,
+      "form": 13.3,
+      "lastRoundPoints": 12,
       "roundPoints": {
         "1": 2,
         "2": 15,
         "3": 13,
-        "4": 1
+        "4": 12
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29810,14 +29815,15 @@
       "5": 0.2
     },
     "stats": {
-      "totalPoints": 10,
-      "avgPoints": 3.3,
-      "form": 3.3,
+      "totalPoints": 11,
+      "avgPoints": 2.8,
+      "form": 1,
       "lastRoundPoints": 1,
       "roundPoints": {
         "1": 8,
         "2": 1,
-        "3": 1
+        "3": 1,
+        "4": 1
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29913,14 +29919,14 @@
       "5": 0.1
     },
     "stats": {
-      "totalPoints": 11,
-      "avgPoints": 3.7,
-      "form": 3.7,
-      "lastRoundPoints": 1,
+      "totalPoints": 12,
+      "avgPoints": 4,
+      "form": 4,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "2": 1,
         "3": 9,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29949,15 +29955,15 @@
       "5": 0
     },
     "stats": {
-      "totalPoints": 10,
-      "avgPoints": 2.5,
-      "form": 2.3,
-      "lastRoundPoints": 1,
+      "totalPoints": 11,
+      "avgPoints": 2.8,
+      "form": 2.7,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "1": 3,
         "2": 2,
         "3": 4,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -29987,13 +29993,14 @@
     },
     "stats": {
       "totalPoints": 8,
-      "avgPoints": 2.7,
-      "form": 2.7,
-      "lastRoundPoints": 4,
+      "avgPoints": 2,
+      "form": 2,
+      "lastRoundPoints": 0,
       "roundPoints": {
         "1": 2,
         "2": 2,
-        "3": 4
+        "3": 4,
+        "4": 0
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -30022,14 +30029,14 @@
       "5": 0
     },
     "stats": {
-      "totalPoints": 11,
-      "avgPoints": 3.7,
-      "form": 3.7,
-      "lastRoundPoints": 1,
+      "totalPoints": 21,
+      "avgPoints": 7,
+      "form": 7,
+      "lastRoundPoints": 11,
       "roundPoints": {
         "1": 1,
         "3": 9,
-        "4": 1
+        "4": 11
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -30926,13 +30933,13 @@
     "price": 5.5,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 13.4,
+    "percentSelected": 13.5,
     "roundsSelected": {
       "1": 4.8,
       "2": 4.9,
       "3": 6.5,
       "4": 12.6,
-      "5": 13.4
+      "5": 13.5
     },
     "stats": {
       "totalPoints": 28,
@@ -30994,13 +31001,13 @@
     "price": 5.1,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 32.8,
+    "percentSelected": 32.9,
     "roundsSelected": {
       "1": 25.9,
       "2": 28.9,
       "3": 23.3,
       "4": 32.3,
-      "5": 32.8
+      "5": 32.9
     },
     "stats": {
       "totalPoints": 24,
@@ -41639,15 +41646,15 @@
       "5": 0
     },
     "stats": {
-      "totalPoints": 10,
-      "avgPoints": 2.5,
-      "form": 3,
-      "lastRoundPoints": 1,
+      "totalPoints": 11,
+      "avgPoints": 2.8,
+      "form": 3.3,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "1": 1,
         "2": 1,
         "3": 7,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -41712,15 +41719,15 @@
       "5": 4.4
     },
     "stats": {
-      "totalPoints": 23,
-      "avgPoints": 5.8,
-      "form": 7,
-      "lastRoundPoints": 1,
+      "totalPoints": 29,
+      "avgPoints": 7.3,
+      "form": 9,
+      "lastRoundPoints": 7,
       "roundPoints": {
         "1": 2,
         "2": 3,
         "3": 17,
-        "4": 1
+        "4": 7
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
@@ -41749,11 +41756,13 @@
       "5": 0.1
     },
     "stats": {
-      "totalPoints": 0,
-      "avgPoints": 0,
-      "form": 0,
-      "lastRoundPoints": 0,
-      "roundPoints": [],
+      "totalPoints": 1,
+      "avgPoints": 1,
+      "form": 0.3,
+      "lastRoundPoints": 1,
+      "roundPoints": {
+        "4": 1
+      },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
     },
@@ -44270,13 +44279,13 @@
     "price": 5.6,
     "status": "eliminated",
     "matchStatus": "start",
-    "percentSelected": 10.9,
+    "percentSelected": 10.8,
     "roundsSelected": {
       "1": 0.1,
       "2": 2.5,
       "3": 7.4,
       "4": 11.7,
-      "5": 10.9
+      "5": 10.8
     },
     "stats": {
       "totalPoints": 26,
@@ -45854,15 +45863,15 @@
       "5": 1.7
     },
     "stats": {
-      "totalPoints": 14,
-      "avgPoints": 3.5,
-      "form": 4,
-      "lastRoundPoints": 1,
+      "totalPoints": 15,
+      "avgPoints": 3.8,
+      "form": 4.3,
+      "lastRoundPoints": 2,
       "roundPoints": {
         "1": 2,
         "2": 8,
         "3": 3,
-        "4": 1
+        "4": 2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null

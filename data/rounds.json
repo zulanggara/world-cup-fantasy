@@ -3410,8 +3410,8 @@
       },
       {
         "id": 84,
-        "period": "first_half",
-        "minutes": 14,
+        "period": "second_half",
+        "minutes": 89,
         "extraMinutes": 0,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
@@ -3427,12 +3427,34 @@
         "awaySquadName": "Senegal",
         "homeSquadAbbr": "BEL",
         "awaySquadAbbr": "SEN",
-        "homeScore": 0,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 124,
+            "assistId": 117,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 137,
+            "assistId": 1526,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 2,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1056,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1043,
+            "assistId": 1034,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 76,
