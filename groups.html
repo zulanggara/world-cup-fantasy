@@ -135,6 +135,12 @@
   .bracket-h2h-badge:hover { background: var(--row-hover); }
   .bh2h-badge-count { color: var(--text-dim); font-weight: 400; }
   .bracket-time-note { font-size: 11px; color: var(--text-dim); margin-bottom: 14px; opacity: .8; }
+  .bracket-header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 0; flex-wrap: wrap; }
+  .bracket-header-row .section-title { margin-bottom: 16px; }
+  .bracket-view-toggle { display: flex; gap: 6px; margin-bottom: 16px; }
+  .bvt-btn { padding: 6px 14px; border-radius: 8px; font-size: 12px; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); cursor: pointer; font-family: 'JetBrains Mono', monospace; }
+  .bvt-btn:hover { color: var(--text); }
+  .bvt-btn.active { background: var(--accent); color: #14180a; border-color: var(--accent); font-weight: 700; }
 
   table.fixtures { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 13px; }
   table.fixtures th { text-align: left; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--panel2); }
@@ -197,16 +203,27 @@
   </div>
 
   <div class="section-pane" id="pane-bracket">
-    <h2 class="section-title" data-i18n="groups.bracketTitle">Bagan Babak Gugur</h2>
+    <div class="bracket-header-row">
+      <h2 class="section-title" data-i18n="groups.bracketTitle">Bagan Babak Gugur</h2>
+      <div class="bracket-view-toggle">
+        <button class="bvt-btn active" id="btnViewNormal" onclick="setBracketView('normal')">&#9776; Normal</button>
+        <button class="bvt-btn" id="btnViewRound" onclick="setBracketView('round')">&#9711; Round</button>
+      </div>
+    </div>
     <div class="bracket-legend" style="display:none;">
       <span><span class="swatch" style="background:var(--accent);"></span> <span data-i18n="groups.legendConfirmed">Tim pasti (klasemen final / hasil resmi)</span></span>
       <span><span class="swatch" style="background:var(--accent2);"></span> <span data-i18n="groups.legendLive">Posisi saat ini (klasemen belum final, bisa berubah)</span></span>
     </div>
     <div class="bracket-time-note" data-i18n="groups.bracketTimeNote">Jam pada bagan ini sesuai sumber data asli (zona waktu venue/penyelenggara), belum dikonversi ke WIB.</div>
-    <div class="bracket-scroll">
-      <div class="bracket-tree" id="bracketTree"></div>
+    <div id="bracketViewNormal">
+      <div class="bracket-scroll">
+        <div class="bracket-tree" id="bracketTree"></div>
+      </div>
+      <div class="bracket-third-note" id="bracketThirdNote"></div>
     </div>
-    <div class="bracket-third-note" id="bracketThirdNote"></div>
+    <div id="bracketViewRound" style="display:none;">
+      <svg id="roundBracketSvg" style="display:block;margin:0 auto;"></svg>
+    </div>
   </div>
 
   <div class="section-pane" id="pane-fixtures">
@@ -867,6 +884,7 @@ function bracketMatchBoxHtml(m) {
 
 function renderBracket(standings, bestThirds, thirdAssignments) {
   const { rounds, thirdPlace, matchResultById } = buildKnockoutTree(standings, bestThirds, thirdAssignments);
+  lastKoTree = { rounds, thirdPlace, matchResultById };
   const treeEl = document.getElementById('bracketTree');
 
   if (!rounds.r32.length) {
@@ -983,9 +1001,395 @@ function drawBracketConnectors() {
   svg.innerHTML = lines;
 }
 
+// Primary flag colors per abbr — used for winner connector lines in round view.
+const FLAG_COLORS = {
+  ALG:'#006233', ARG:'#74ACDF', AUS:'#00008B', AUT:'#ED2939', BEL:'#EF3340',
+  BIH:'#002395', BRA:'#009C3B', CPV:'#003893', CAN:'#FF0000', COL:'#FCD116',
+  COD:'#007FFF', CIV:'#F77F00', CRO:'#FF0000', CZE:'#D7141A', ECU:'#FFD100',
+  EGY:'#CE1126', ENG:'#CF142B', FRA:'#002395', GER:'#000000', GHA:'#006B3F',
+  IRN:'#239F40', JPN:'#BC002D', JOR:'#007A3D', KOR:'#CD2E3A', KSA:'#006C35',
+  MAR:'#C1272D', MEX:'#006847', NED:'#FF4F00', NOR:'#EF2B2D', PAR:'#D52B1E',
+  POR:'#006600', RSA:'#007A4D', SEN:'#00853F', ESP:'#AA151B', SWE:'#006AA7',
+  SUI:'#FF0000', TUN:'#E70013', URU:'#5EB6E4', USA:'#B22234', UZB:'#1EB53A',
+  GHA:'#006B3F', HAI:'#00209F', NZL:'#00247D', PAN:'#DA121A', QAT:'#8D1B3D',
+  SCO:'#003F87', TUR:'#E30A17',
+};
+
+function flagPrimaryColor(abbr) {
+  return FLAG_COLORS[abbr] || 'var(--accent)';
+}
+
+function renderRoundBracket() {
+  if (!lastKoTree) return;
+  const { matchResultById } = lastKoTree;
+  const halves = buildBracketHalves(matchResultById);
+  if (!halves) return;
+
+  const container = document.getElementById('bracketViewRound');
+  const W = Math.min(container.clientWidth || 700, 900);
+  const H = W;
+  const cx = W / 2, cy = H / 2;
+  const trophy_r = 28;
+
+  // Radii for each round ring (outermost = R32 teams, inward per round)
+  const R_TEAM  = W * 0.46; // R32 team nodes
+  const R_R32   = W * 0.37; // R32 match connector dots
+  const R_R16   = W * 0.285;
+  const R_QF    = W * 0.21;
+  const R_SF    = W * 0.145;
+  const R_FINAL = W * 0.08;
+
+  // Collect R32 matches in clockwise order: left half top->bottom, right half top->bottom (mirrored)
+  // halves.left rounds are [SF, QF, R16, R32] — last element is R32
+  const r32Left  = (halves.left[halves.left.length - 1] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const r32Right = (halves.right[halves.right.length - 1] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const r16Left  = (halves.left[halves.left.length - 2] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const r16Right = (halves.right[halves.right.length - 2] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const qfLeft   = (halves.left[halves.left.length - 3] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const qfRight  = (halves.right[halves.right.length - 3] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const sfLeft   = (halves.left[0] || []).map((id) => matchResultById[id]).filter(Boolean);
+  const sfRight  = (halves.right[0] || []).map((id) => matchResultById[id]).filter(Boolean);
+
+  // 32 teams total — 16 per side, arranged in a full circle.
+  // Left half occupies angles 180°→360° (left side of circle, top then bottom).
+  // Right half occupies angles 0°→180° (right side).
+  const totalTeams = 32;
+  const angleStep = (2 * Math.PI) / totalTeams;
+
+  // Build the ordered list of teams: left half teams (home then away for each R32 match),
+  // then right half teams, going clockwise from top.
+  // Left side: angles from -π/2 going counter-clockwise (i.e. top-left arc)
+  // We want: top → left → bottom for left half, top → right → bottom for right half
+  // Start at top (angle = -π/2), left half goes counter-clockwise (decreasing angle)
+  // right half goes clockwise (increasing angle)
+
+  // Place 16 left-half teams at angles: -π/2, -π/2 - step, ... (going CCW)
+  // Place 16 right-half teams at angles: -π/2 + step, -π/2 + 2*step, ... (going CW)
+  // This gives a symmetric clock layout.
+
+  function pt(r, angle) {
+    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+  }
+
+  // Assign angles to R32 matches (each match has 2 team slots)
+  // Left half: 8 matches × 2 teams = 16 team slots, CCW from top
+  // Right half: 8 matches × 2 teams = 16 team slots, CW from top
+  const matchAngles = []; // angle for each R32 match (midpoint of its 2 teams)
+  const teamAngles  = []; // angle for each team node [{ match, side:'home'|'away', angle }]
+
+  const topAngle = -Math.PI / 2;
+
+  // Left half: R32 matches ordered top→bottom on left arc, CCW
+  // That means match 0 is closest to top, match 7 is closest to bottom-left
+  for (let i = 0; i < r32Left.length; i++) {
+    const homeAngle = topAngle - (2 * i) * angleStep - angleStep * 0.5;
+    const awayAngle = topAngle - (2 * i) * angleStep - angleStep * 1.5;
+    const midAngle  = topAngle - (2 * i + 1) * angleStep;
+    matchAngles.push({ match: r32Left[i], angle: midAngle, side: 'left', idx: i });
+    teamAngles.push({ match: r32Left[i], angle: homeAngle, teamSide: 'home' });
+    teamAngles.push({ match: r32Left[i], angle: awayAngle, teamSide: 'away' });
+  }
+  // Right half: CW from top
+  for (let i = 0; i < r32Right.length; i++) {
+    const homeAngle = topAngle + (2 * i) * angleStep + angleStep * 0.5;
+    const awayAngle = topAngle + (2 * i) * angleStep + angleStep * 1.5;
+    const midAngle  = topAngle + (2 * i + 1) * angleStep;
+    matchAngles.push({ match: r32Right[i], angle: midAngle, side: 'right', idx: i });
+    teamAngles.push({ match: r32Right[i], angle: homeAngle, teamSide: 'home' });
+    teamAngles.push({ match: r32Right[i], angle: awayAngle, teamSide: 'away' });
+  }
+
+  // R16 match angles — each R16 match is the winner of 2 R32 matches
+  // Left R16: same ordering as r32Left pairs (match 0+1 -> R16[0], 2+3 -> R16[1], etc.)
+  function r16Angle(r32Pair, side) {
+    // midpoint angle between the two R32 match angles
+    const aAngles = matchAngles.filter((ma) => ma.side === side);
+    const a = aAngles[r32Pair * 2];
+    const b = aAngles[r32Pair * 2 + 1];
+    if (!a || !b) return null;
+    // Average of two angles (handle wrap-around)
+    let diff = b.angle - a.angle;
+    while (diff > Math.PI) diff -= 2 * Math.PI;
+    while (diff < -Math.PI) diff += 2 * Math.PI;
+    return a.angle + diff / 2;
+  }
+
+  const r16Angles = [
+    ...r16Left.map((m, i) => ({ match: m, angle: r16Angle(i, 'left'), side: 'left' })),
+    ...r16Right.map((m, i) => ({ match: m, angle: r16Angle(i, 'right'), side: 'right' })),
+  ];
+
+  const qfAngles = [
+    ...qfLeft.map((m, i) => {
+      const a = r16Angles.find((x) => x.side === 'left' && x.match && r16Left[i * 2] === x.match)?.angle;
+      const b = r16Angles.find((x) => x.side === 'left' && x.match && r16Left[i * 2 + 1] === x.match)?.angle;
+      const ang = (a != null && b != null) ? (a + b) / 2 : r16Angle(i * 2, 'left');
+      return { match: m, angle: ang, side: 'left' };
+    }),
+    ...qfRight.map((m, i) => {
+      const a = r16Angles.find((x) => x.side === 'right' && x.match && r16Right[i * 2] === x.match)?.angle;
+      const b = r16Angles.find((x) => x.side === 'right' && x.match && r16Right[i * 2 + 1] === x.match)?.angle;
+      const ang = (a != null && b != null) ? (a + b) / 2 : r16Angle(i * 2, 'right');
+      return { match: m, angle: ang, side: 'right' };
+    }),
+  ];
+
+  const sfAngles = [
+    sfLeft[0]  ? { match: sfLeft[0],  angle: -Math.PI * 0.75, side: 'left' }  : null,
+    sfRight[0] ? { match: sfRight[0], angle: -Math.PI * 0.25, side: 'right' } : null,
+  ].filter(Boolean);
+
+  // ---- Build SVG elements ----
+  let svgLines = ''; // connector lines (behind nodes)
+  let svgNodes = ''; // team nodes
+  let svgMatchDots = ''; // small dots for match nodes (R16/QF/SF)
+  const interactiveItems = []; // { x, y, r, matchId, type } for click targets
+
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const lineColor = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
+  const textColor = isDark ? '#e8e8e0' : '#111';
+  const scoreColor = isDark ? '#c8c820' : '#5a5a00';
+  const bgColor = isDark ? '#1a1d0f' : '#f5f5f0';
+  const nodeBg  = isDark ? '#252a15' : '#ffffff';
+  const borderCol = isDark ? '#3a4020' : '#d0d0c0';
+
+  function winnerSide(m) {
+    if (!m || !m.finished) return null;
+    return matchHomeWon(m) ? 'home' : 'away';
+  }
+
+  function winnerTeam(m) {
+    if (!m || !m.finished) return null;
+    return matchHomeWon(m) ? m.home : m.away;
+  }
+
+  // Draw lines: R32 team -> R32 match dot -> R16 dot -> QF dot -> SF dot -> Final dot -> Center
+  // First: team nodes to R32 match dots
+  for (const ma of matchAngles) {
+    const m = ma.match;
+    const p1 = pt(R_TEAM - 20, ma.angle); // team node edge (approx)
+    const p2 = pt(R_R32, ma.angle);
+    const winner = winnerTeam(m);
+    const winColor = winner?.abbr ? flagPrimaryColor(winner.abbr) : null;
+
+    // home team line
+    const homePt = pt(R_TEAM - 20, ma.angle + angleStep * 0.5);
+    svgLines += `<line x1="${homePt.x.toFixed(1)}" y1="${homePt.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${lineColor}" stroke-width="1.5"/>`;
+    // away team line
+    const awayPt = pt(R_TEAM - 20, ma.angle - angleStep * 0.5);
+    svgLines += `<line x1="${awayPt.x.toFixed(1)}" y1="${awayPt.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${lineColor}" stroke-width="1.5"/>`;
+  }
+
+  // R32 -> R16 lines
+  for (const r16a of r16Angles) {
+    const p2 = pt(R_R16, r16a.angle);
+    const winner = winnerTeam(r16a.match);
+    const wAbbr  = winner?.abbr;
+    // find the two R32 matches that feed this R16 match
+    const sideMatches = matchAngles.filter((ma) => ma.side === r16a.side);
+    const idx = r16a.side === 'left' ? r16Left.indexOf(r16a.match) : r16Right.indexOf(r16a.match);
+    const feederA = sideMatches[idx * 2];
+    const feederB = sideMatches[idx * 2 + 1];
+    for (const feeder of [feederA, feederB].filter(Boolean)) {
+      const p1 = pt(R_R32, feeder.angle);
+      const r32Winner = winnerTeam(feeder.match);
+      const lineW = (r32Winner && r32Winner.squadId && winner && r32Winner.squadId === winner.squadId) ? 3 : 1.5;
+      const lColor = (lineW === 3 && wAbbr) ? flagPrimaryColor(wAbbr) : lineColor;
+      svgLines += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${lColor}" stroke-width="${lineW}"/>`;
+    }
+  }
+
+  // R16 -> QF lines
+  for (const qfa of qfAngles) {
+    const p2 = pt(R_QF, qfa.angle);
+    const winner = winnerTeam(qfa.match);
+    const sideR16 = r16Angles.filter((x) => x.side === qfa.side);
+    const idx = qfa.side === 'left' ? qfLeft.indexOf(qfa.match) : qfRight.indexOf(qfa.match);
+    for (const feeder of [sideR16[idx * 2], sideR16[idx * 2 + 1]].filter(Boolean)) {
+      const p1 = pt(R_R16, feeder.angle);
+      const r16winner = winnerTeam(feeder.match);
+      const bold = r16winner && winner && r16winner.squadId === winner.squadId;
+      const lColor = bold && winner.abbr ? flagPrimaryColor(winner.abbr) : lineColor;
+      svgLines += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${lColor}" stroke-width="${bold ? 3 : 1.5}"/>`;
+    }
+  }
+
+  // QF -> SF lines
+  for (const sfa of sfAngles) {
+    const p2 = pt(R_SF, sfa.angle);
+    const winner = winnerTeam(sfa.match);
+    const sideQF = qfAngles.filter((x) => x.side === sfa.side);
+    for (const feeder of sideQF) {
+      const p1 = pt(R_QF, feeder.angle);
+      const qfWinner = winnerTeam(feeder.match);
+      const bold = qfWinner && winner && qfWinner.squadId === winner.squadId;
+      const lColor = bold && winner.abbr ? flagPrimaryColor(winner.abbr) : lineColor;
+      svgLines += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${lColor}" stroke-width="${bold ? 3 : 1.5}"/>`;
+    }
+  }
+
+  // SF -> Final (center)
+  for (const sfa of sfAngles) {
+    const p1 = pt(R_SF, sfa.angle);
+    const p2 = pt(R_FINAL, sfa.angle);
+    const sfWinner = winnerTeam(sfa.match);
+    const finalWinner = winnerTeam(halves.final);
+    const bold = sfWinner && finalWinner && sfWinner.squadId === finalWinner.squadId;
+    const lColor = bold && finalWinner.abbr ? flagPrimaryColor(finalWinner.abbr) : lineColor;
+    svgLines += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${lColor}" stroke-width="${bold ? 3 : 1.5}"/>`;
+    const p3 = pt(R_FINAL, sfa.angle);
+    svgLines += `<line x1="${p3.x.toFixed(1)}" y1="${p3.y.toFixed(1)}" x2="${cx.toFixed(1)}" y2="${cy.toFixed(1)}" stroke="${lColor}" stroke-width="${bold ? 3 : 1.5}"/>`;
+  }
+
+  // ---- Draw match dots (R32 mid, R16, QF, SF) ----
+  const DOT_R = 5;
+  for (const ma of matchAngles) {
+    const p = pt(R_R32, ma.angle);
+    svgMatchDots += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${DOT_R}" fill="${nodeBg}" stroke="${borderCol}" stroke-width="1.5" class="rb-match-dot" data-match-id="${ma.match.id}" style="cursor:pointer;"/>`;
+    interactiveItems.push({ ...p, r: DOT_R, matchId: ma.match.id });
+  }
+  for (const a of r16Angles) {
+    if (!a.match) continue;
+    const p = pt(R_R16, a.angle);
+    svgMatchDots += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${DOT_R}" fill="${nodeBg}" stroke="${borderCol}" stroke-width="1.5" class="rb-match-dot" data-match-id="${a.match.id}" style="cursor:pointer;"/>`;
+    interactiveItems.push({ ...p, r: DOT_R, matchId: a.match.id });
+  }
+  for (const a of qfAngles) {
+    if (!a.match) continue;
+    const p = pt(R_QF, a.angle);
+    svgMatchDots += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${DOT_R}" fill="${nodeBg}" stroke="${borderCol}" stroke-width="1.5" class="rb-match-dot" data-match-id="${a.match.id}" style="cursor:pointer;"/>`;
+    interactiveItems.push({ ...p, r: DOT_R, matchId: a.match.id });
+  }
+  for (const a of sfAngles) {
+    if (!a.match) continue;
+    const p = pt(R_SF, a.angle);
+    svgMatchDots += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${DOT_R}" fill="${nodeBg}" stroke="${borderCol}" stroke-width="1.5" class="rb-match-dot" data-match-id="${a.match.id}" style="cursor:pointer;"/>`;
+    interactiveItems.push({ ...p, r: DOT_R, matchId: a.match.id });
+  }
+  // Final dot
+  {
+    const p = pt(R_FINAL, -Math.PI / 2);
+    svgMatchDots += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${DOT_R}" fill="${nodeBg}" stroke="${borderCol}" stroke-width="1.5" class="rb-match-dot" data-match-id="${halves.final.id}" style="cursor:pointer;"/>`;
+    interactiveItems.push({ ...p, r: DOT_R, matchId: halves.final.id });
+  }
+
+  // ---- Draw team nodes ----
+  const NODE_R = W * 0.046;
+  for (const ta of teamAngles) {
+    const m = ta.match;
+    const team = ta.teamSide === 'home' ? m.home : m.away;
+    if (!team || team.pending) {
+      const p = pt(R_TEAM, ta.angle);
+      svgNodes += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${NODE_R}" fill="${nodeBg}" stroke="${borderCol}" stroke-width="1.5"/>`;
+      svgNodes += `<text x="${p.x.toFixed(1)}" y="${(p.y + 4).toFixed(1)}" text-anchor="middle" font-size="${NODE_R * 0.55}px" fill="${textColor}" opacity="0.4">?</text>`;
+      continue;
+    }
+    const hasScore = m.finished && m.homeScore != null;
+    const score = hasScore ? (ta.teamSide === 'home' ? m.homeScore : m.awayScore) : null;
+    const hasPen = hasScore && Number(m.homeScore) === Number(m.awayScore) && m.homePenaltyScore != null;
+    const penScore = hasPen ? (ta.teamSide === 'home' ? m.homePenaltyScore : m.awayPenaltyScore) : null;
+    const isWinner = hasScore && (ta.teamSide === (matchHomeWon(m) ? 'home' : 'away'));
+    const color = isWinner ? flagPrimaryColor(team.abbr) : borderCol;
+    const strokeW = isWinner ? 3 : 1.5;
+    const p = pt(R_TEAM, ta.angle);
+    const flag = FLAGS.flagFor(team.abbr);
+    const abbr = escapeHtml(team.abbr || '');
+
+    svgNodes += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${NODE_R}" fill="${nodeBg}" stroke="${color}" stroke-width="${strokeW}" class="rb-team-node" data-match-id="${m.id}" style="cursor:pointer;"/>`;
+
+    // Flag emoji (via foreignObject for proper rendering)
+    const foSize = NODE_R * 1.1;
+    svgNodes += `<foreignObject x="${(p.x - foSize / 2).toFixed(1)}" y="${(p.y - NODE_R * 0.85).toFixed(1)}" width="${foSize.toFixed(1)}" height="${(NODE_R).toFixed(1)}">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font-size:${(NODE_R * 0.75).toFixed(0)}px;line-height:1;">${flag}</div>
+    </foreignObject>`;
+    // Abbr text
+    svgNodes += `<text x="${p.x.toFixed(1)}" y="${(p.y + NODE_R * 0.45).toFixed(1)}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="${(NODE_R * 0.38).toFixed(1)}px" font-weight="${isWinner ? 700 : 400}" fill="${isWinner ? color : textColor}">${abbr}</text>`;
+    // Score
+    if (score != null) {
+      const scoreTxt = penScore != null ? `${score}(${penScore})` : `${score}`;
+      svgNodes += `<text x="${p.x.toFixed(1)}" y="${(p.y + NODE_R * 0.78).toFixed(1)}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="${(NODE_R * 0.34).toFixed(1)}px" font-weight="700" fill="${isWinner ? scoreColor : textColor}" opacity="${isWinner ? 1 : 0.6}">${escapeHtml(scoreTxt)}</text>`;
+    }
+    interactiveItems.push({ ...p, r: NODE_R, matchId: m.id });
+  }
+
+  // ---- Trophy at center ----
+  const trophySvg = `<text x="${cx.toFixed(1)}" y="${(cy + trophy_r * 0.38).toFixed(1)}" text-anchor="middle" font-size="${(trophy_r * 1.4).toFixed(0)}px">🏆</text>`;
+
+  const svgEl = document.getElementById('roundBracketSvg');
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svgEl.setAttribute('width', W);
+  svgEl.setAttribute('height', H);
+  svgEl.style.maxWidth = '100%';
+  svgEl.innerHTML = `
+    <rect width="${W}" height="${H}" rx="16" fill="${bgColor}"/>
+    ${svgLines}
+    ${svgMatchDots}
+    ${svgNodes}
+    ${trophySvg}
+  `;
+
+  // Click handlers on match dots and team nodes
+  svgEl.querySelectorAll('.rb-match-dot, .rb-team-node').forEach((el) => {
+    el.addEventListener('click', () => {
+      const matchId = el.dataset.matchId;
+      if (!matchId) return;
+      const rec = lastKoTree.matchResultById[matchId];
+      if (!rec) return;
+      openRoundMatchModal(rec);
+    });
+  });
+}
+
+function openRoundMatchModal(m) {
+  const hasScore = m.finished && m.homeScore != null && m.awayScore != null;
+  const hasPen = hasScore && Number(m.homeScore) === Number(m.awayScore)
+    && m.homePenaltyScore != null && m.awayPenaltyScore != null
+    && Number(m.homePenaltyScore) !== Number(m.awayPenaltyScore);
+  const homeWon = hasScore && (hasPen ? Number(m.homePenaltyScore) > Number(m.awayPenaltyScore) : Number(m.homeScore) > Number(m.awayScore));
+  const awayWon = hasScore && !homeWon;
+
+  function teamRow(team, score, penScore, isWon) {
+    if (!team || team.pending) return `<div class="dm-match-row"><span style="opacity:.5">${escapeHtml(team?.text || 'TBD')}</span></div>`;
+    const flag = FLAGS.flagFor(team.abbr);
+    const scoreStr = score != null ? (penScore != null ? ` ${score} <small style="opacity:.6">(${penScore})</small>` : ` ${score}`) : '';
+    return `<div class="dm-match-row" style="cursor:pointer;${isWon ? 'font-weight:700;' : ''}" onclick="DetailModal.openTeam(${team.squadId})">
+      <span>${flag} ${escapeHtml(team.name || team.abbr)}</span>
+      <span class="score" style="color:${isWon ? 'var(--accent)' : 'inherit'}">${scoreStr}</span>
+    </div>`;
+  }
+
+  const roundLabel = KO_ROUNDS.find((r) => r.type === m.type)?.label || m.type?.toUpperCase() || '';
+  const venue = matchVenueLabel(m.date, m.stadiumId);
+  const ftLabel = hasPen ? I18N.t('groups.matchPenalties', 'PEN') : (hasScore ? I18N.t('groups.matchFinished', 'FT') : '');
+
+  const html = `
+    <div class="dm-head"><h2>${escapeHtml(roundLabel)}</h2></div>
+    <div class="dm-sub">${escapeHtml(venue)}${ftLabel ? ` &middot; <b>${escapeHtml(ftLabel)}</b>` : ''}</div>
+    ${teamRow(m.home, hasScore ? m.homeScore : null, hasPen ? m.homePenaltyScore : null, homeWon)}
+    ${teamRow(m.away, hasScore ? m.awayScore : null, hasPen ? m.awayPenaltyScore : null, awayWon)}
+    ${bracketWinExpHtml(m.home, m.away, m.date)}
+    ${bracketH2hHtml(m.id, m.home, m.away)}
+  `;
+  DetailModal.openHtml(html);
+}
+
 window.addEventListener('resize', () => {
   if (document.getElementById('bracketTree')?.children.length) drawBracketConnectors();
+  if (currentBracketView === 'round') renderRoundBracket();
 });
+
+let currentBracketView = 'normal';
+let lastKoTree = null; // cached from renderBracket for round view reuse
+
+function setBracketView(view) {
+  currentBracketView = view;
+  document.getElementById('bracketViewNormal').style.display = view === 'normal' ? '' : 'none';
+  document.getElementById('bracketViewRound').style.display = view === 'round' ? '' : 'none';
+  document.getElementById('btnViewNormal').classList.toggle('active', view === 'normal');
+  document.getElementById('btnViewRound').classList.toggle('active', view === 'round');
+  if (view === 'round' && lastKoTree) renderRoundBracket();
+  if (view === 'normal') requestAnimationFrame(() => drawBracketConnectors());
+}
 
 function renderFixtures() {
   const upcoming = tournaments
