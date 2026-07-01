@@ -2054,49 +2054,6 @@
     "endDate": "2026-06-28T05:00:00+01:00",
     "tournaments": [
       {
-        "id": 49,
-        "period": "full_time",
-        "minutes": 97,
-        "extraMinutes": 0,
-        "venueName": "Bc Place",
-        "venueCity": "Vancouver",
-        "venueNameTranslationKey": null,
-        "venueCityTranslationKey": null,
-        "venueId": 8,
-        "date": "2026-06-24T20:00:00+01:00",
-        "status": "complete",
-        "isSuspended": false,
-        "homeSquadId": 43,
-        "awaySquadId": 9,
-        "homeSquadName": "Switzerland",
-        "awaySquadName": "Canada",
-        "homeSquadAbbr": "SUI",
-        "awaySquadAbbr": "CAN",
-        "homeScore": 2,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": [
-          {
-            "playerId": 1158,
-            "assistId": 1133,
-            "isOwnGoal": false
-          },
-          {
-            "playerId": 1133,
-            "assistId": 1149,
-            "isOwnGoal": false
-          }
-        ],
-        "awayScore": 1,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": [
-          {
-            "playerId": 1970,
-            "assistId": 241,
-            "isOwnGoal": false
-          }
-        ]
-      },
-      {
         "id": 50,
         "period": "full_time",
         "minutes": 97,
@@ -2145,43 +2102,44 @@
         ]
       },
       {
-        "id": 51,
+        "id": 49,
         "period": "full_time",
         "minutes": 97,
         "extraMinutes": 0,
-        "venueName": "Hard Rock Stadium",
-        "venueCity": "Miami Gardens, Florida",
+        "venueName": "Bc Place",
+        "venueCity": "Vancouver",
         "venueNameTranslationKey": null,
         "venueCityTranslationKey": null,
-        "venueId": 15,
-        "date": "2026-06-24T23:00:00+01:00",
+        "venueId": 8,
+        "date": "2026-06-24T20:00:00+01:00",
         "status": "complete",
         "isSuspended": false,
-        "homeSquadId": 38,
-        "awaySquadId": 7,
-        "homeSquadName": "Scotland",
-        "awaySquadName": "Brazil",
-        "homeSquadAbbr": "SCO",
-        "awaySquadAbbr": "BRA",
-        "homeScore": 0,
+        "homeSquadId": 43,
+        "awaySquadId": 9,
+        "homeSquadName": "Switzerland",
+        "awaySquadName": "Canada",
+        "homeSquadAbbr": "SUI",
+        "awaySquadAbbr": "CAN",
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 3,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1158,
+            "assistId": 1133,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1133,
+            "assistId": 1149,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": [
           {
-            "playerId": 173,
-            "assistId": 179,
-            "isOwnGoal": false
-          },
-          {
-            "playerId": 173,
-            "assistId": 1361,
-            "isOwnGoal": false
-          },
-          {
-            "playerId": 174,
-            "assistId": 1361,
+            "playerId": 1970,
+            "assistId": 241,
             "isOwnGoal": false
           }
         ]
@@ -2245,36 +2203,46 @@
         ]
       },
       {
-        "id": 54,
+        "id": 51,
         "period": "full_time",
         "minutes": 97,
         "extraMinutes": 0,
-        "venueName": "Estadio Bbva",
-        "venueCity": "Guadalupe",
+        "venueName": "Hard Rock Stadium",
+        "venueCity": "Miami Gardens, Florida",
         "venueNameTranslationKey": null,
         "venueCityTranslationKey": null,
-        "venueId": 12,
-        "date": "2026-06-25T02:00:00+01:00",
+        "venueId": 15,
+        "date": "2026-06-24T23:00:00+01:00",
         "status": "complete",
         "isSuspended": false,
-        "homeSquadId": 40,
-        "awaySquadId": 27,
-        "homeSquadName": "South Africa",
-        "awaySquadName": "Korea Republic",
-        "homeSquadAbbr": "RSA",
-        "awaySquadAbbr": "KOR",
-        "homeScore": 1,
+        "homeSquadId": 38,
+        "awaySquadId": 7,
+        "homeSquadName": "Scotland",
+        "awaySquadName": "Brazil",
+        "homeSquadAbbr": "SCO",
+        "awaySquadAbbr": "BRA",
+        "homeScore": 0,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": [
+        "homeGoalScorersAssists": null,
+        "awayScore": 3,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": [
           {
-            "playerId": 1076,
-            "assistId": 1061,
+            "playerId": 173,
+            "assistId": 179,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 173,
+            "assistId": 1361,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 174,
+            "assistId": 1361,
             "isOwnGoal": false
           }
-        ],
-        "awayScore": 0,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        ]
       },
       {
         "id": 53,
@@ -2317,6 +2285,38 @@
             "isOwnGoal": false
           }
         ]
+      },
+      {
+        "id": 54,
+        "period": "full_time",
+        "minutes": 97,
+        "extraMinutes": 0,
+        "venueName": "Estadio Bbva",
+        "venueCity": "Guadalupe",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 12,
+        "date": "2026-06-25T02:00:00+01:00",
+        "status": "complete",
+        "isSuspended": false,
+        "homeSquadId": 40,
+        "awaySquadId": 27,
+        "homeSquadName": "South Africa",
+        "awaySquadName": "Korea Republic",
+        "homeSquadAbbr": "RSA",
+        "awaySquadAbbr": "KOR",
+        "homeScore": 1,
+        "homePenaltyScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1076,
+            "assistId": 1061,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": null
       },
       {
         "id": 55,
@@ -2399,6 +2399,44 @@
         ]
       },
       {
+        "id": 58,
+        "period": "full_time",
+        "minutes": 97,
+        "extraMinutes": 0,
+        "venueName": "At&t Stadium",
+        "venueCity": "Arlington, Texas",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 10,
+        "date": "2026-06-26T00:00:00+01:00",
+        "status": "complete",
+        "isSuspended": false,
+        "homeSquadId": 25,
+        "awaySquadId": 42,
+        "homeSquadName": "Japan",
+        "awaySquadName": "Sweden",
+        "homeSquadAbbr": "JPN",
+        "awaySquadAbbr": "SWE",
+        "homeScore": 1,
+        "homePenaltyScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 670,
+            "assistId": 684,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1125,
+            "assistId": 1124,
+            "isOwnGoal": false
+          }
+        ]
+      },
+      {
         "id": 57,
         "period": "full_time",
         "minutes": 96,
@@ -2447,42 +2485,30 @@
         ]
       },
       {
-        "id": 58,
+        "id": 60,
         "period": "full_time",
-        "minutes": 97,
+        "minutes": 96,
         "extraMinutes": 0,
-        "venueName": "At&t Stadium",
-        "venueCity": "Arlington, Texas",
+        "venueName": "Levi's Stadium",
+        "venueCity": "Santa Clara, California",
         "venueNameTranslationKey": null,
         "venueCityTranslationKey": null,
-        "venueId": 10,
-        "date": "2026-06-26T00:00:00+01:00",
+        "venueId": 5,
+        "date": "2026-06-26T03:00:00+01:00",
         "status": "complete",
         "isSuspended": false,
-        "homeSquadId": 25,
-        "awaySquadId": 42,
-        "homeSquadName": "Japan",
-        "awaySquadName": "Sweden",
-        "homeSquadAbbr": "JPN",
-        "awaySquadAbbr": "SWE",
-        "homeScore": 1,
+        "homeSquadId": 34,
+        "awaySquadId": 3,
+        "homeSquadName": "Paraguay",
+        "awaySquadName": "Australia",
+        "homeSquadAbbr": "PAR",
+        "awaySquadAbbr": "AUS",
+        "homeScore": 0,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": [
-          {
-            "playerId": 670,
-            "assistId": 684,
-            "isOwnGoal": false
-          }
-        ],
-        "awayScore": 1,
+        "homeGoalScorersAssists": null,
+        "awayScore": 0,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": [
-          {
-            "playerId": 1125,
-            "assistId": 1124,
-            "isOwnGoal": false
-          }
-        ]
+        "awayGoalScorersAssists": null
       },
       {
         "id": 59,
@@ -2536,32 +2562,6 @@
             "isOwnGoal": false
           }
         ]
-      },
-      {
-        "id": 60,
-        "period": "full_time",
-        "minutes": 96,
-        "extraMinutes": 0,
-        "venueName": "Levi's Stadium",
-        "venueCity": "Santa Clara, California",
-        "venueNameTranslationKey": null,
-        "venueCityTranslationKey": null,
-        "venueId": 5,
-        "date": "2026-06-26T03:00:00+01:00",
-        "status": "complete",
-        "isSuspended": false,
-        "homeSquadId": 34,
-        "awaySquadId": 3,
-        "homeSquadName": "Paraguay",
-        "awaySquadName": "Australia",
-        "homeSquadAbbr": "PAR",
-        "awaySquadAbbr": "AUS",
-        "homeScore": 0,
-        "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
-        "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
       },
       {
         "id": 62,
@@ -3410,8 +3410,8 @@
       },
       {
         "id": 84,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 14,
         "extraMinutes": 0,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
@@ -3419,7 +3419,7 @@
         "venueCityTranslationKey": null,
         "venueId": 14,
         "date": "2026-07-01T21:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 5,
         "awaySquadId": 39,
@@ -3427,10 +3427,10 @@
         "awaySquadName": "Senegal",
         "homeSquadAbbr": "BEL",
         "awaySquadAbbr": "SEN",
-        "homeScore": null,
+        "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
       },
@@ -3697,6 +3697,32 @@
         "awaySquadName": "Norway",
         "homeSquadAbbr": "BRA",
         "awaySquadAbbr": "NOR",
+        "homeScore": null,
+        "homePenaltyScore": null,
+        "homeGoalScorersAssists": null,
+        "awayScore": null,
+        "awayPenaltyScore": null,
+        "awayGoalScorersAssists": null
+      },
+      {
+        "id": 92,
+        "period": "pre_match",
+        "minutes": 0,
+        "extraMinutes": 0,
+        "venueName": "Estadio Banorte",
+        "venueCity": "Mexico City",
+        "venueNameTranslationKey": null,
+        "venueCityTranslationKey": null,
+        "venueId": 1,
+        "date": "2026-07-06T01:00:00+01:00",
+        "status": "scheduled",
+        "isSuspended": false,
+        "homeSquadId": 28,
+        "awaySquadId": 18,
+        "homeSquadName": "Mexico",
+        "awaySquadName": "England",
+        "homeSquadAbbr": "MEX",
+        "awaySquadAbbr": "ENG",
         "homeScore": null,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
