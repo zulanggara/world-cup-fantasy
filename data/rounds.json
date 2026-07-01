@@ -3367,8 +3367,8 @@
       },
       {
         "id": 83,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "full_time",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -3376,7 +3376,7 @@
         "venueCityTranslationKey": null,
         "venueId": 13,
         "date": "2026-07-01T17:00:00+01:00",
-        "status": "scheduled",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 18,
         "awaySquadId": 11,
@@ -3384,12 +3384,29 @@
         "awaySquadName": "Congo DR",
         "homeSquadAbbr": "ENG",
         "awaySquadAbbr": "COD",
-        "homeScore": null,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 468,
+            "assistId": 474,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 468,
+            "assistId": 474,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 288,
+            "assistId": 274,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 84,

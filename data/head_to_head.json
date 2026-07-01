@@ -1760,5 +1760,119 @@
         "awayScore": 1
       }
     ]
+  },
+  "92": {
+    "teamA": {
+      "squadId": 28,
+      "abbr": "MEX",
+      "name": "Mexico",
+      "cleanSheets": 2,
+      "draws": 1,
+      "matchesPlayed": 9,
+      "wins": 2,
+      "losses": 6,
+      "goalsScored": 4,
+      "goalsAgainst": 23,
+      "idTeam": "43911",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Mexico",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 18,
+      "abbr": "ENG",
+      "name": "England",
+      "cleanSheets": 6,
+      "draws": 1,
+      "matchesPlayed": 9,
+      "wins": 6,
+      "losses": 2,
+      "goalsScored": 23,
+      "goalsAgainst": 4,
+      "idTeam": "43942",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "England",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2010-05-24",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 3,
+        "away": "Mexico",
+        "awayScore": 1
+      },
+      {
+        "date": "2001-05-25",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 4,
+        "away": "Mexico",
+        "awayScore": 0
+      },
+      {
+        "date": "1997-03-29",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 2,
+        "away": "Mexico",
+        "awayScore": 0
+      },
+      {
+        "date": "1986-05-17",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "England",
+        "awayScore": 3
+      },
+      {
+        "date": "1985-06-09",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 1,
+        "away": "England",
+        "awayScore": 0
+      },
+      {
+        "date": "1969-06-01",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 0,
+        "away": "England",
+        "awayScore": 0
+      },
+      {
+        "date": "1966-07-16",
+        "competition": "FIFA World Cup™",
+        "home": "England",
+        "homeScore": 2,
+        "away": "Mexico",
+        "awayScore": 0
+      },
+      {
+        "date": "1961-05-10",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 8,
+        "away": "Mexico",
+        "awayScore": 0
+      },
+      {
+        "date": "1959-05-24",
+        "competition": "Friendly",
+        "home": "Mexico",
+        "homeScore": 2,
+        "away": "England",
+        "awayScore": 1
+      }
+    ]
   }
 }
