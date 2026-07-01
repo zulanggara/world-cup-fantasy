@@ -81,7 +81,7 @@
     "name": "Côte d'Ivoire",
     "group": "e",
     "abbr": "CIV",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 13,
@@ -109,7 +109,7 @@
     "name": "Ecuador",
     "group": "e",
     "abbr": "ECU",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 17,
@@ -291,7 +291,7 @@
     "name": "Sweden",
     "group": "f",
     "abbr": "SWE",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 43,
