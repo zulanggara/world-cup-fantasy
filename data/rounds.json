@@ -3410,16 +3410,16 @@
       },
       {
         "id": 84,
-        "period": "second_half",
-        "minutes": 89,
-        "extraMinutes": 0,
+        "period": "full_time",
+        "minutes": 132,
+        "extraMinutes": 42,
         "venueName": "Lumen Field",
         "venueCity": "Seattle, Washington",
         "venueNameTranslationKey": null,
         "venueCityTranslationKey": null,
         "venueId": 14,
         "date": "2026-07-01T21:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 5,
         "awaySquadId": 39,
@@ -3427,7 +3427,7 @@
         "awaySquadName": "Senegal",
         "homeSquadAbbr": "BEL",
         "awaySquadAbbr": "SEN",
-        "homeScore": 2,
+        "homeScore": 3,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": [
           {
@@ -3438,6 +3438,11 @@
           {
             "playerId": 137,
             "assistId": 1526,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 137,
+            "assistId": null,
             "isOwnGoal": false
           }
         ],

@@ -1016,11 +1016,11 @@
       "name": "Belgium",
       "cleanSheets": 0,
       "draws": 0,
-      "matchesPlayed": 0,
-      "wins": 0,
+      "matchesPlayed": 1,
+      "wins": 1,
       "losses": 0,
-      "goalsScored": 0,
-      "goalsAgainst": 0,
+      "goalsScored": 3,
+      "goalsAgainst": 2,
       "idTeam": "43935",
       "pictureUrl": "",
       "score": 0,
@@ -1035,11 +1035,11 @@
       "name": "Senegal",
       "cleanSheets": 0,
       "draws": 0,
-      "matchesPlayed": 0,
+      "matchesPlayed": 1,
       "wins": 0,
-      "losses": 0,
-      "goalsScored": 0,
-      "goalsAgainst": 0,
+      "losses": 1,
+      "goalsScored": 2,
+      "goalsAgainst": 3,
       "idTeam": "43879",
       "pictureUrl": "",
       "score": 0,
@@ -1048,7 +1048,16 @@
         "locale": ""
       }
     },
-    "matches": []
+    "matches": [
+      {
+        "date": "2026-07-01",
+        "competition": "FIFA World Cup™",
+        "home": "Belgium",
+        "homeScore": 3,
+        "away": "Senegal",
+        "awayScore": 2
+      }
+    ]
   },
   "83": {
     "teamA": {
