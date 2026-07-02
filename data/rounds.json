@@ -3463,8 +3463,8 @@
       },
       {
         "id": 76,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 97,
         "extraMinutes": 0,
         "venueName": "Levi's Stadium",
         "venueCity": "Santa Clara, California",
@@ -3472,7 +3472,7 @@
         "venueCityTranslationKey": null,
         "venueId": 5,
         "date": "2026-07-02T01:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 47,
         "awaySquadId": 6,
@@ -3480,10 +3480,21 @@
         "awaySquadName": "Bosnia and Herzegovina",
         "homeSquadAbbr": "USA",
         "awaySquadAbbr": "BIH",
-        "homeScore": null,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1267,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1254,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
       },
