@@ -96,6 +96,7 @@
   }
   thead th:hover { color: var(--text); }
   thead th .arrow { font-size: 10px; margin-left: 4px; opacity: .7; }
+  thead th.round-col-hdr { color: var(--accent2); border-bottom: 2px solid var(--accent2); }
   tbody td {
     padding: 9px 12px;
     font-size: 13px;
@@ -218,6 +219,10 @@ let sortDir = 'desc';
 let currentPage = 1;
 let pageSize = 50;
 
+// Round ID → display label mapping (group stage MD1-3, then knockout rounds)
+const ROUND_LABELS = { 1: 'MD1', 2: 'MD2', 3: 'MD3', 4: 'R32', 5: 'R16', 6: 'QF', 7: 'SF', 8: 'Final' };
+let activeRoundIds = []; // populated after loading players — only rounds with at least one player scoring
+
 const root = document.documentElement;
 const tbody = document.getElementById('tbody');
 const searchEl = document.getElementById('search');
@@ -259,6 +264,7 @@ function flatten(p) {
     form: p?.stats?.form ?? 0,
     avgPoints: p?.stats?.avgPoints ?? 0,
     percentSelected: p?.percentSelected ?? 0,
+    roundPoints: p?.stats?.roundPoints ?? {},
   };
 }
 
@@ -271,11 +277,29 @@ async function loadPlayers() {
     if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
     const json = await playersRes.json();
     squads = squadsRes.ok ? await squadsRes.json() : [];
-    players = (Array.isArray(json) ? json : []).map(flatten).map((p) => ({ ...p, squadAbbr: squadAbbr(p.squadId) }));
+    players = (Array.isArray(json) ? json : []).map(flatten).map((p) => {
+      // Expose round points as r1, r2, r3... for sortable columns
+      const roundCols = {};
+      for (const [rid, pts] of Object.entries(p.roundPoints)) {
+        roundCols[`r${rid}`] = pts ?? 0;
+      }
+      return { ...p, squadAbbr: squadAbbr(p.squadId), ...roundCols };
+    });
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="9" class="empty-msg">${I18N.t('common.errLoadData')} data/players.json: ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errHttpServerHint')}</td></tr>`;
     return;
   }
+
+  // Detect which round IDs have data (at least one player with non-zero score)
+  const roundSet = new Set();
+  for (const p of players) {
+    for (const [rid, pts] of Object.entries(p.roundPoints)) {
+      if (pts > 0) roundSet.add(Number(rid));
+    }
+  }
+  activeRoundIds = [...roundSet].sort((a, b) => a - b);
+  injectRoundColumns();
+
   populateStatusFilter();
   renderHeroStats();
   render();
@@ -364,6 +388,11 @@ function render() {
     const tr = document.createElement('tr');
     tr.className = 'player-row';
     tr.dataset.id = p.id;
+    const roundCells = activeRoundIds.map((rid) => {
+      const pts = p[`r${rid}`] ?? '—';
+      const cls = typeof pts === 'number' && pts > 0 ? ' style="color:var(--accent);font-weight:700;"' : '';
+      return `<td class="num"${cls}>${pts}</td>`;
+    }).join('');
     tr.innerHTML = `
       <td class="name-cell" onclick="DetailModal.openPlayer(${p.id})" style="display:flex; align-items:center; gap:8px;">${PlayerPhoto.html(p.fifaId, p.name, 24)} ${escapeHtml(p.name)}<span class="pid">#${p.id}</span></td>
       <td class="team-cell" onclick="DetailModal.openTeam(${p.squadId})">${FLAGS.flagFor(p.squadAbbr)} ${escapeHtml(p.squadAbbr)}</td>
@@ -373,10 +402,46 @@ function render() {
       <td class="num">${p.totalPoints}</td>
       <td class="num">${p.form}</td>
       <td class="num">${Number(p.avgPoints).toFixed(1)}</td>
+      ${roundCells}
       <td class="num">${Number(p.percentSelected).toFixed(1)}%</td>
     `;
     tbody.appendChild(tr);
   }
+}
+
+function injectRoundColumns() {
+  const thead = document.querySelector('thead tr');
+  // Remove any previously injected round headers
+  thead.querySelectorAll('.round-col-hdr').forEach((el) => el.remove());
+  // Insert before the last th (% Selected)
+  const lastTh = thead.querySelector('th[data-key="percentSelected"]');
+  for (const rid of activeRoundIds) {
+    const th = document.createElement('th');
+    th.className = 'num round-col-hdr';
+    th.dataset.key = `r${rid}`;
+    th.title = `Points scored in ${ROUND_LABELS[rid] || `Round ${rid}`}`;
+    th.textContent = ROUND_LABELS[rid] || `R${rid}`;
+    thead.insertBefore(th, lastTh);
+  }
+  // Re-attach sort listeners for all th including new ones
+  attachSortListeners();
+}
+
+function attachSortListeners() {
+  document.querySelectorAll('thead th').forEach((th) => {
+    th.onclick = () => {
+      const key = th.dataset.key;
+      if (!key) return;
+      if (sortKey === key) {
+        sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortKey = key;
+        sortDir = 'desc';
+      }
+      currentPage = 1;
+      render();
+    };
+  });
 }
 
 document.querySelectorAll('thead th').forEach((th) => {
