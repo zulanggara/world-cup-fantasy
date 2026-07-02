@@ -39,7 +39,7 @@
     "name": "Bosnia and Herzegovina",
     "group": "b",
     "abbr": "BIH",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 7,
@@ -74,7 +74,7 @@
     "name": "Congo DR",
     "group": "k",
     "abbr": "COD",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 12,
@@ -270,7 +270,7 @@
     "name": "Senegal",
     "group": "i",
     "abbr": "SEN",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 40,
