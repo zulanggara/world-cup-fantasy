@@ -1892,5 +1892,103 @@
         "awayScore": 1
       }
     ]
+  },
+  "94": {
+    "teamA": {
+      "squadId": 47,
+      "abbr": "USA",
+      "name": "USA",
+      "cleanSheets": 1,
+      "draws": 0,
+      "matchesPlayed": 7,
+      "wins": 1,
+      "losses": 6,
+      "goalsScored": 8,
+      "goalsAgainst": 15,
+      "idTeam": "43921",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "USA",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 5,
+      "abbr": "BEL",
+      "name": "Belgium",
+      "cleanSheets": 3,
+      "draws": 0,
+      "matchesPlayed": 7,
+      "wins": 6,
+      "losses": 1,
+      "goalsScored": 15,
+      "goalsAgainst": 8,
+      "idTeam": "43935",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Belgium",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2026-03-28",
+        "competition": "Friendly",
+        "home": "USA",
+        "homeScore": 2,
+        "away": "Belgium",
+        "awayScore": 5
+      },
+      {
+        "date": "2014-07-01",
+        "competition": "FIFA World Cup™",
+        "home": "Belgium",
+        "homeScore": 2,
+        "away": "USA",
+        "awayScore": 1
+      },
+      {
+        "date": "2013-05-30",
+        "competition": "Friendly",
+        "home": "USA",
+        "homeScore": 2,
+        "away": "Belgium",
+        "awayScore": 4
+      },
+      {
+        "date": "2011-09-06",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "USA",
+        "awayScore": 0
+      },
+      {
+        "date": "1998-02-25",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 2,
+        "away": "USA",
+        "awayScore": 0
+      },
+      {
+        "date": "1995-04-22",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "USA",
+        "awayScore": 0
+      },
+      {
+        "date": "1930-07-13",
+        "competition": "FIFA World Cup™",
+        "home": "USA",
+        "homeScore": 3,
+        "away": "Belgium",
+        "awayScore": 0
+      }
+    ]
   }
 }
