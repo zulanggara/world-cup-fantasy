@@ -3500,8 +3500,8 @@
       },
       {
         "id": 87,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 74,
         "extraMinutes": 0,
         "venueName": "Sofi Stadium",
         "venueCity": "Inglewood, California",
@@ -3509,7 +3509,7 @@
         "venueCityTranslationKey": null,
         "venueId": 4,
         "date": "2026-07-02T20:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 41,
         "awaySquadId": 4,
@@ -3517,10 +3517,21 @@
         "awaySquadName": "Austria",
         "homeSquadAbbr": "ESP",
         "awaySquadAbbr": "AUT",
-        "homeScore": null,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1094,
+            "assistId": 1088,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1085,
+            "assistId": 1082,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
       },
