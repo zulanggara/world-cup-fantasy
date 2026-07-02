@@ -342,6 +342,12 @@ async function fetchHeadToHead() {
 
   const result = {};
   for (const g of confirmed) {
+    // H2H for a finished match won't change — skip if already cached
+    if (g.finished === 'TRUE' && existing[g.id]) {
+      log(`[h2h] skipping finished match ${g.id} (already cached)`);
+      continue;
+    }
+
     const home = squadByNameForH2H(squads, g.home_team_name_en);
     const away = squadByNameForH2H(squads, g.away_team_name_en);
     const fifaA = home && teamIds[home.abbr];
