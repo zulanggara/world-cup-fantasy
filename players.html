@@ -214,8 +214,8 @@
 <script>
 let players = [];
 let squads = [];
-let sortKey = 'totalPoints';
-let sortDir = 'desc';
+let sortKey = 'totalPoints'; // null = original order
+let sortDir = 'desc';        // 'desc' | 'asc'
 let currentPage = 1;
 let pageSize = 50;
 
@@ -349,14 +349,21 @@ function getFiltered() {
     if (status && p.status !== status) return false;
     return true;
   });
-  list.sort((a, b) => {
-    let av = a[sortKey], bv = b[sortKey];
-    if (typeof av === 'string') av = av.toLowerCase();
-    if (typeof bv === 'string') bv = bv.toLowerCase();
-    if (av < bv) return sortDir === 'asc' ? -1 : 1;
-    if (av > bv) return sortDir === 'asc' ? 1 : -1;
-    return 0;
-  });
+  if (sortKey) {
+    list.sort((a, b) => {
+      let av = a[sortKey], bv = b[sortKey];
+      // Treat missing round values as -1 so they sink to the bottom in both directions
+      const missing = (v) => v == null || v === undefined;
+      if (missing(av) && missing(bv)) return 0;
+      if (missing(av)) return 1;
+      if (missing(bv)) return -1;
+      if (typeof av === 'string') av = av.toLowerCase();
+      if (typeof bv === 'string') bv = bv.toLowerCase();
+      if (av < bv) return sortDir === 'asc' ? -1 : 1;
+      if (av > bv) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
   return list;
 }
 
@@ -369,7 +376,7 @@ function render() {
   document.querySelectorAll('thead th').forEach((th) => {
     const key = th.dataset.key;
     let arrow = '';
-    if (key === sortKey) arrow = `<span class="arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>`;
+    if (sortKey && key === sortKey) arrow = `<span class="arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>`;
     th.innerHTML = th.textContent.replace(/\s*[▲▼]?$/, '').trim() + arrow;
   });
 
@@ -433,7 +440,13 @@ function attachSortListeners() {
       const key = th.dataset.key;
       if (!key) return;
       if (sortKey === key) {
-        sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        if (sortDir === 'desc') {
+          sortDir = 'asc';
+        } else {
+          // third click → reset to normal (no sort)
+          sortKey = null;
+          sortDir = 'desc';
+        }
       } else {
         sortKey = key;
         sortDir = 'desc';
@@ -443,20 +456,6 @@ function attachSortListeners() {
     };
   });
 }
-
-document.querySelectorAll('thead th').forEach((th) => {
-  th.addEventListener('click', () => {
-    const key = th.dataset.key;
-    if (sortKey === key) {
-      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortKey = key;
-      sortDir = 'desc';
-    }
-    currentPage = 1;
-    render();
-  });
-});
 
 searchEl.addEventListener('input', () => { currentPage = 1; render(); });
 filterPosEl.addEventListener('change', () => { currentPage = 1; render(); });
