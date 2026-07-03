@@ -3585,8 +3585,8 @@
       },
       {
         "id": 88,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 95,
         "extraMinutes": 0,
         "venueName": "Bc Place",
         "venueCity": "Vancouver",
@@ -3594,7 +3594,7 @@
         "venueCityTranslationKey": null,
         "venueId": 8,
         "date": "2026-07-03T04:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 43,
         "awaySquadId": 1,
@@ -3602,10 +3602,21 @@
         "awaySquadName": "Algeria",
         "homeSquadAbbr": "SUI",
         "awaySquadAbbr": "ALG",
-        "homeScore": null,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1149,
+            "assistId": 1133,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1151,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
       },
