@@ -3660,8 +3660,8 @@
       },
       {
         "id": 80,
-        "period": "first_half",
-        "minutes": 11,
+        "period": "second_half",
+        "minutes": 58,
         "extraMinutes": 0,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
@@ -3677,9 +3677,15 @@
         "awaySquadName": "Cabo Verde",
         "homeSquadAbbr": "ARG",
         "awaySquadAbbr": "CPV",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 38,
+            "assistId": 1318,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
