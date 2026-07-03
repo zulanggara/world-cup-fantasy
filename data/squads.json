@@ -4,7 +4,7 @@
     "name": "Algeria",
     "group": "j",
     "abbr": "ALG",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 2,
@@ -25,7 +25,7 @@
     "name": "Austria",
     "group": "j",
     "abbr": "AUT",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 5,
@@ -88,7 +88,7 @@
     "name": "Croatia",
     "group": "l",
     "abbr": "CRO",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 14,
