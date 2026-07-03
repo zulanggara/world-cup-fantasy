@@ -1901,6 +1901,376 @@
       }
     ]
   },
+  "93": {
+    "teamA": {
+      "squadId": 35,
+      "abbr": "POR",
+      "name": "Portugal",
+      "cleanSheets": 7,
+      "draws": 16,
+      "matchesPlayed": 41,
+      "wins": 7,
+      "losses": 18,
+      "goalsScored": 47,
+      "goalsAgainst": 79,
+      "idTeam": "43963",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Portugal",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 41,
+      "abbr": "ESP",
+      "name": "Spain",
+      "cleanSheets": 15,
+      "draws": 16,
+      "matchesPlayed": 41,
+      "wins": 18,
+      "losses": 7,
+      "goalsScored": 79,
+      "goalsAgainst": 47,
+      "idTeam": "43969",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Spain",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2025-06-08",
+        "competition": "Nations League",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "2022-09-27",
+        "competition": "Nations League",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "2022-06-02",
+        "competition": "Nations League",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "2021-06-04",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 0,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "2020-10-07",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "2018-06-15",
+        "competition": "FIFA World Cup™",
+        "home": "Portugal",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "2012-06-27",
+        "competition": "Continental Final",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "2010-11-17",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 4,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "2010-06-29",
+        "competition": "FIFA World Cup™",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "2004-06-20",
+        "competition": "Continental Final",
+        "home": "Spain",
+        "homeScore": 0,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "2003-09-06",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "2002-02-13",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "1994-01-19",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Portugal",
+        "awayScore": 2
+      },
+      {
+        "date": "1992-01-15",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1991-01-16",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "1984-06-17",
+        "competition": "Continental Final",
+        "home": "Portugal",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1981-06-20",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1979-09-26",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "1964-11-15",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1958-04-13",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "1956-06-03",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1950-04-09",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1950-04-02",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 5,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "1949-03-20",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1948-03-21",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "1947-01-26",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 4,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1945-05-06",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 4,
+        "away": "Portugal",
+        "awayScore": 2
+      },
+      {
+        "date": "1945-03-11",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1941-03-16",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 5,
+        "away": "Portugal",
+        "awayScore": 1
+      },
+      {
+        "date": "1941-01-12",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1935-05-05",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "1934-03-18",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Portugal",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1934-03-11",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 9,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "1933-04-02",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 3,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "1930-11-30",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1929-03-17",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 5,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "1928-01-08",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1925-05-17",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1923-12-16",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 3,
+        "away": "Portugal",
+        "awayScore": 0
+      },
+      {
+        "date": "1922-12-17",
+        "competition": "Friendly",
+        "home": "Portugal",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1921-12-18",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 3,
+        "away": "Portugal",
+        "awayScore": 1
+      }
+    ]
+  },
   "94": {
     "teamA": {
       "squadId": 47,
