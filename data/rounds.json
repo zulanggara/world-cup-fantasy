@@ -3622,9 +3622,9 @@
       },
       {
         "id": 81,
-        "period": "first_half",
-        "minutes": 39,
-        "extraMinutes": 0,
+        "period": "extra_time_second_half",
+        "minutes": 117,
+        "extraMinutes": 27,
         "venueName": "At&t Stadium",
         "venueCity": "Arlington, Texas",
         "venueNameTranslationKey": null,
@@ -3639,9 +3639,15 @@
         "awaySquadName": "Egypt",
         "homeSquadAbbr": "AUS",
         "awaySquadAbbr": "EGY",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 439,
+            "assistId": null,
+            "isOwnGoal": true
+          }
+        ],
         "awayScore": 1,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": [
