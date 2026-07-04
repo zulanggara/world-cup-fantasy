@@ -3749,14 +3749,14 @@
   },
   {
     "id": 5,
-    "status": "scheduled",
+    "status": "playing",
     "startDate": "2026-07-04T18:00:00+01:00",
     "endDate": "2026-07-07T23:00:00+01:00",
     "tournaments": [
       {
         "id": 89,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "first_half",
+        "minutes": 16,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -3764,7 +3764,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-07-04T18:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 9,
         "awaySquadId": 29,
@@ -3772,10 +3772,10 @@
         "awaySquadName": "Morocco",
         "homeSquadAbbr": "CAN",
         "awaySquadAbbr": "MAR",
-        "homeScore": null,
+        "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
       },
@@ -3963,7 +3963,7 @@
       }
     ],
     "stage": "R16",
-    "isLockoutFinished": false
+    "isLockoutFinished": true
   },
   {
     "id": 6,
