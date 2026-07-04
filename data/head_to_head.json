@@ -2368,5 +2368,137 @@
         "awayScore": 0
       }
     ]
+  },
+  "95": {
+    "teamA": {
+      "squadId": 2,
+      "abbr": "ARG",
+      "name": "Argentina",
+      "cleanSheets": 2,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 2,
+      "losses": 0,
+      "goalsScored": 8,
+      "goalsAgainst": 0,
+      "idTeam": "43922",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Argentina",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 17,
+      "abbr": "EGY",
+      "name": "Egypt",
+      "cleanSheets": 0,
+      "draws": 0,
+      "matchesPlayed": 2,
+      "wins": 0,
+      "losses": 2,
+      "goalsScored": 0,
+      "goalsAgainst": 8,
+      "idTeam": "43855",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Egypt",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2008-03-26",
+        "competition": "Friendly",
+        "home": "Egypt",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 2
+      },
+      {
+        "date": "1928-06-06",
+        "competition": "Olympic Football Tournament™ Final",
+        "home": "Argentina",
+        "homeScore": 6,
+        "away": "Egypt",
+        "awayScore": 0
+      }
+    ]
+  },
+  "96": {
+    "teamA": {
+      "squadId": 43,
+      "abbr": "SUI",
+      "name": "Switzerland",
+      "cleanSheets": 0,
+      "draws": 1,
+      "matchesPlayed": 4,
+      "wins": 1,
+      "losses": 2,
+      "goalsScored": 6,
+      "goalsAgainst": 9,
+      "idTeam": "43971",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Switzerland",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 10,
+      "abbr": "COL",
+      "name": "Colombia",
+      "cleanSheets": 1,
+      "draws": 1,
+      "matchesPlayed": 4,
+      "wins": 2,
+      "losses": 1,
+      "goalsScored": 9,
+      "goalsAgainst": 6,
+      "idTeam": "43926",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Colombia",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2007-03-25",
+        "competition": "Friendly",
+        "home": "Colombia",
+        "homeScore": 3,
+        "away": "Switzerland",
+        "awayScore": 1
+      },
+      {
+        "date": "1994-06-26",
+        "competition": "FIFA World Cup™",
+        "home": "Switzerland",
+        "homeScore": 0,
+        "away": "Colombia",
+        "awayScore": 2
+      },
+      {
+        "date": "1991-02-03",
+        "competition": "Friendly",
+        "home": "Colombia",
+        "homeScore": 2,
+        "away": "Switzerland",
+        "awayScore": 3
+      },
+      {
+        "date": "1985-02-02",
+        "competition": "Friendly",
+        "home": "Colombia",
+        "homeScore": 2,
+        "away": "Switzerland",
+        "awayScore": 2
+      }
+    ]
   }
 }
