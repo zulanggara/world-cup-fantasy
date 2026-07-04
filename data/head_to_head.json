@@ -2500,5 +2500,95 @@
         "awayScore": 2
       }
     ]
+  },
+  "97": {
+    "teamA": {
+      "squadId": 19,
+      "abbr": "FRA",
+      "name": "France",
+      "cleanSheets": 2,
+      "draws": 1,
+      "matchesPlayed": 6,
+      "wins": 4,
+      "losses": 1,
+      "goalsScored": 14,
+      "goalsAgainst": 6,
+      "idTeam": "43946",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "France",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 29,
+      "abbr": "MAR",
+      "name": "Morocco",
+      "cleanSheets": 0,
+      "draws": 1,
+      "matchesPlayed": 6,
+      "wins": 1,
+      "losses": 4,
+      "goalsScored": 6,
+      "goalsAgainst": 14,
+      "idTeam": "43872",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Morocco",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2022-12-14",
+        "competition": "FIFA World Cup™",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Morocco",
+        "awayScore": 0
+      },
+      {
+        "date": "2007-11-16",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Morocco",
+        "awayScore": 2
+      },
+      {
+        "date": "2000-06-06",
+        "competition": "Friendly",
+        "home": "Morocco",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 5
+      },
+      {
+        "date": "1999-01-20",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Morocco",
+        "awayScore": 0
+      },
+      {
+        "date": "1998-05-29",
+        "competition": "Friendly",
+        "home": "Morocco",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 2
+      },
+      {
+        "date": "1988-02-05",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Morocco",
+        "awayScore": 1
+      }
+    ]
   }
 }
