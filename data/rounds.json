@@ -3755,8 +3755,8 @@
     "tournaments": [
       {
         "id": 89,
-        "period": "first_half",
-        "minutes": 16,
+        "period": "full_time",
+        "minutes": 100,
         "extraMinutes": 0,
         "venueName": "Nrg Stadium",
         "venueCity": "Houston, Texas",
@@ -3764,7 +3764,7 @@
         "venueCityTranslationKey": null,
         "venueId": 9,
         "date": "2026-07-04T18:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 9,
         "awaySquadId": 29,
@@ -3775,9 +3775,25 @@
         "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "awayScore": 3,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 2021,
+            "assistId": 2012,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 2021,
+            "assistId": 2020,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 2023,
+            "assistId": 2020,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 91,
