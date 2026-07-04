@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-04T09:31:15.057Z",
+  "fetchedAt": "2026-07-04T11:45:44.135Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -100,7 +100,7 @@
     "10": {
       "eloCode": "CO",
       "rank": 7,
-      "rating": 2004
+      "rating": 2009
     },
     "11": {
       "eloCode": "CD",
@@ -155,7 +155,7 @@
     "21": {
       "eloCode": "GH",
       "rank": 68,
-      "rating": 1575
+      "rating": 1570
     },
     "22": {
       "eloCode": "HT",
@@ -294,43 +294,6 @@
     }
   },
   "fixtures": [
-    {
-      "date": "2026-07-03",
-      "hostCountry": "US",
-      "homeSquadId": 10,
-      "awaySquadId": 21,
-      "homeEloCode": "CO",
-      "awayEloCode": "GH",
-      "homeRank": 7,
-      "awayRank": 68,
-      "homeRating": 2004,
-      "awayRating": 1575,
-      "homeWinPct": 92,
-      "awayWinPct": 8,
-      "eloPointsAtStake": {
-        "draw": -25,
-        "winMargin1": [
-          5,
-          55
-        ],
-        "winMargin2": [
-          7,
-          83
-        ],
-        "winMargin3": [
-          8,
-          97
-        ],
-        "winMargin4": [
-          9,
-          104
-        ],
-        "winMargin5": [
-          9,
-          111
-        ]
-      }
-    },
     {
       "date": "2026-07-04",
       "hostCountry": "US",
@@ -591,6 +554,43 @@
       }
     },
     {
+      "date": "2026-07-07",
+      "hostCountry": "US",
+      "homeSquadId": 10,
+      "awaySquadId": 43,
+      "homeEloCode": "CO",
+      "awayEloCode": "CH",
+      "homeRank": 7,
+      "awayRank": 9,
+      "homeRating": 2009,
+      "awayRating": 1943,
+      "homeWinPct": 59,
+      "awayWinPct": 41,
+      "eloPointsAtStake": {
+        "draw": -6,
+        "winMargin1": [
+          24,
+          36
+        ],
+        "winMargin2": [
+          37,
+          53
+        ],
+        "winMargin3": [
+          43,
+          62
+        ],
+        "winMargin4": [
+          46,
+          67
+        ],
+        "winMargin5": [
+          49,
+          71
+        ]
+      }
+    },
+    {
       "date": "2026-09-00",
       "hostCountry": "CI",
       "homeSquadId": 12,
@@ -600,14 +600,14 @@
       "homeRank": 39,
       "awayRank": 68,
       "homeRating": 1727,
-      "awayRating": 1575,
+      "awayRating": 1570,
       "homeWinPct": 81,
       "awayWinPct": 19,
       "eloPointsAtStake": {
-        "draw": -12,
+        "draw": -13,
         "winMargin1": [
-          8,
-          32
+          7,
+          33
         ],
         "winMargin2": [
           11,
@@ -1820,10 +1820,10 @@
       "awayEloCode": "CI",
       "homeRank": 68,
       "awayRank": 39,
-      "homeRating": 1575,
+      "homeRating": 1570,
       "awayRating": 1727,
-      "homeWinPct": 43,
-      "awayWinPct": 57,
+      "homeWinPct": 42,
+      "awayWinPct": 58,
       "eloPointsAtStake": {
         "draw": 3,
         "winMargin1": [
@@ -1831,20 +1831,57 @@
           17
         ],
         "winMargin2": [
-          34,
-          26
+          35,
+          25
         ],
         "winMargin3": [
-          40,
-          30
+          41,
+          29
         ],
         "winMargin4": [
-          43,
-          32
+          44,
+          31
         ],
         "winMargin5": [
-          46,
-          34
+          47,
+          33
+        ]
+      }
+    },
+    {
+      "date": "2026-07-03",
+      "hostCountry": "US",
+      "homeSquadId": 10,
+      "awaySquadId": 21,
+      "homeEloCode": "CO",
+      "awayEloCode": "GH",
+      "homeRank": 7,
+      "awayRank": 68,
+      "homeRating": 2004,
+      "awayRating": 1575,
+      "homeWinPct": 92,
+      "awayWinPct": 8,
+      "eloPointsAtStake": {
+        "draw": -25,
+        "winMargin1": [
+          5,
+          55
+        ],
+        "winMargin2": [
+          7,
+          83
+        ],
+        "winMargin3": [
+          8,
+          97
+        ],
+        "winMargin4": [
+          9,
+          104
+        ],
+        "winMargin5": [
+          9,
+          111
         ]
       }
     },
@@ -4445,6 +4482,21 @@
       "awayRatingAfter": 1747,
       "homeRankAfter": 26,
       "awayRankAfter": 33
+    },
+    {
+      "date": "2026-07-03",
+      "hostCountry": "US",
+      "homeSquadId": 10,
+      "awaySquadId": 21,
+      "homeEloCode": "CO",
+      "awayEloCode": "GH",
+      "homeScore": 1,
+      "awayScore": 0,
+      "eloChangeHome": 5,
+      "homeRatingAfter": 2009,
+      "awayRatingAfter": 1570,
+      "homeRankAfter": 7,
+      "awayRankAfter": 68
     },
     {
       "date": "2026-07-02",
