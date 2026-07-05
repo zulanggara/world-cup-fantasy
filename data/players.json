@@ -51310,14 +51310,14 @@
     "price": 4.3,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 14.3,
+    "percentSelected": 14.4,
     "roundsSelected": {
       "1": 2.2,
       "2": 4.2,
       "3": 5,
       "4": 11.5,
       "5": 14.3,
-      "6": 14.3
+      "6": 14.4
     },
     "stats": {
       "totalPoints": 32,
