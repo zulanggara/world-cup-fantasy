@@ -3829,8 +3829,8 @@
       },
       {
         "id": 90,
-        "period": "second_half",
-        "minutes": 56,
+        "period": "full_time",
+        "minutes": 102,
         "extraMinutes": 0,
         "venueName": "Metlife Stadium",
         "venueCity": "East Rutherford, New Jersey",
@@ -3838,7 +3838,7 @@
         "venueCityTranslationKey": null,
         "venueId": 6,
         "date": "2026-07-05T21:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 7,
         "awaySquadId": 32,
@@ -3846,12 +3846,29 @@
         "awaySquadName": "Norway",
         "homeSquadAbbr": "BRA",
         "awaySquadAbbr": "NOR",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1369,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 2,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 855,
+            "assistId": 857,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 855,
+            "assistId": 857,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 92,
