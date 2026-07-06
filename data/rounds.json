@@ -3925,8 +3925,8 @@
       },
       {
         "id": 94,
-        "period": "first_half",
-        "minutes": 3,
+        "period": "second_half",
+        "minutes": 98,
         "extraMinutes": 0,
         "venueName": "At&t Stadium",
         "venueCity": "Arlington, Texas",
@@ -3945,9 +3945,15 @@
         "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "awayScore": 1,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 1997,
+            "assistId": 1093,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 93,
