@@ -5490,14 +5490,14 @@
     "price": 5.5,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 18.1,
+    "percentSelected": 18,
     "roundsSelected": {
       "1": 19.7,
       "2": 22.5,
       "3": 19.2,
       "4": 17.9,
       "5": 18.5,
-      "6": 18.1
+      "6": 18
     },
     "stats": {
       "totalPoints": 22,
@@ -5747,14 +5747,14 @@
     "price": 10,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 42.7,
+    "percentSelected": 42.6,
     "roundsSelected": {
       "1": 12.4,
       "2": 18.5,
       "3": 27.2,
       "4": 42,
       "5": 43.9,
-      "6": 42.7
+      "6": 42.6
     },
     "stats": {
       "totalPoints": 39,
@@ -6487,14 +6487,14 @@
     "price": 3.5,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 0.2,
+    "percentSelected": 0.1,
     "roundsSelected": {
       "1": 0.2,
       "2": 0.3,
       "3": 0.2,
       "4": 0.2,
       "5": 0.2,
-      "6": 0.2
+      "6": 0.1
     },
     "stats": {
       "totalPoints": 17,
@@ -14851,14 +14851,14 @@
     "price": 4.8,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 15.7,
+    "percentSelected": 15.8,
     "roundsSelected": {
       "1": 14.8,
       "2": 13.2,
       "3": 15.3,
       "4": 17.1,
       "5": 15.7,
-      "6": 15.7
+      "6": 15.8
     },
     "stats": {
       "totalPoints": 20,
@@ -15212,14 +15212,14 @@
     "price": 5.3,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 9.5,
+    "percentSelected": 9.6,
     "roundsSelected": {
       "1": 4.6,
       "2": 4.9,
       "3": 4.6,
       "4": 5.1,
       "5": 9.3,
-      "6": 9.5
+      "6": 9.6
     },
     "stats": {
       "totalPoints": 27,
@@ -19755,14 +19755,14 @@
     "price": 5.5,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 0.8,
+    "percentSelected": 0.7,
     "roundsSelected": {
       "1": 0.3,
       "2": 1.7,
       "3": 2.3,
       "4": 1.4,
       "5": 0.8,
-      "6": 0.8
+      "6": 0.7
     },
     "stats": {
       "totalPoints": 22,
