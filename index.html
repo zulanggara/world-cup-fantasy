@@ -624,8 +624,10 @@ function buildQFOpponentMapDash() {
     const isoDate = matchesDateToIso(g.local_date);
     const home = squadByName(g.home_team_name_en) || resolveQFSlotDash(g.home_team_label);
     const away = squadByName(g.away_team_name_en) || resolveQFSlotDash(g.away_team_label);
-    if (home) map[home.id] = { oppSquadId: away?.id ?? null, oppAbbr: away?.abbr ?? null, isoDate };
-    if (away) map[away.id] = { oppSquadId: home?.id ?? null, oppAbbr: home?.abbr ?? null, isoDate };
+    const homeId = home?.squadId ?? home?.id;
+    const awayId = away?.squadId ?? away?.id;
+    if (homeId) map[homeId] = { oppSquadId: awayId ?? null, oppAbbr: away?.abbr ?? null, isoDate };
+    if (awayId) map[awayId] = { oppSquadId: homeId ?? null, oppAbbr: home?.abbr ?? null, isoDate };
   }
   return map;
 }

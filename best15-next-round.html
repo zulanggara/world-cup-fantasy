@@ -877,13 +877,16 @@ function resolveQFSlot(label) {
 }
 
 function buildQFMatches() {
+  function toSlot(squad) {
+    return { squadId: squad.id, name: squad.name, abbr: squad.abbr, confirmed: true };
+  }
   return matchesGames
     .filter((g) => g.type === 'qf')
     .map((g) => ({
       id: g.id,
       date: g.local_date,
-      home: squadByName(g.home_team_name_en) ? { ...squadByName(g.home_team_name_en), confirmed: true } : resolveQFSlot(g.home_team_label),
-      away: squadByName(g.away_team_name_en) ? { ...squadByName(g.away_team_name_en), confirmed: true } : resolveQFSlot(g.away_team_label),
+      home: squadByName(g.home_team_name_en) ? toSlot(squadByName(g.home_team_name_en)) : resolveQFSlot(g.home_team_label),
+      away: squadByName(g.away_team_name_en) ? toSlot(squadByName(g.away_team_name_en)) : resolveQFSlot(g.away_team_label),
     }));
 }
 
