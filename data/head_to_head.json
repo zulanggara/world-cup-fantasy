@@ -2590,5 +2590,143 @@
         "awayScore": 1
       }
     ]
+  },
+  "99": {
+    "teamA": {
+      "squadId": 32,
+      "abbr": "NOR",
+      "name": "Norway",
+      "cleanSheets": 3,
+      "draws": 3,
+      "matchesPlayed": 12,
+      "wins": 2,
+      "losses": 7,
+      "goalsScored": 7,
+      "goalsAgainst": 28,
+      "idTeam": "43961",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Norway",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 18,
+      "abbr": "ENG",
+      "name": "England",
+      "cleanSheets": 7,
+      "draws": 3,
+      "matchesPlayed": 12,
+      "wins": 7,
+      "losses": 2,
+      "goalsScored": 28,
+      "goalsAgainst": 7,
+      "idTeam": "43942",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "England",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2014-09-03",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 1,
+        "away": "Norway",
+        "awayScore": 0
+      },
+      {
+        "date": "2012-05-26",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 0,
+        "away": "England",
+        "awayScore": 1
+      },
+      {
+        "date": "1995-10-11",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 0,
+        "away": "England",
+        "awayScore": 0
+      },
+      {
+        "date": "1994-05-22",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 0,
+        "away": "Norway",
+        "awayScore": 0
+      },
+      {
+        "date": "1993-06-02",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Norway",
+        "homeScore": 2,
+        "away": "England",
+        "awayScore": 0
+      },
+      {
+        "date": "1992-10-14",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "England",
+        "homeScore": 1,
+        "away": "Norway",
+        "awayScore": 1
+      },
+      {
+        "date": "1981-09-09",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Norway",
+        "homeScore": 2,
+        "away": "England",
+        "awayScore": 1
+      },
+      {
+        "date": "1980-09-10",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "England",
+        "homeScore": 4,
+        "away": "Norway",
+        "awayScore": 0
+      },
+      {
+        "date": "1966-06-29",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 1,
+        "away": "England",
+        "awayScore": 6
+      },
+      {
+        "date": "1949-05-18",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 1,
+        "away": "England",
+        "awayScore": 4
+      },
+      {
+        "date": "1938-11-09",
+        "competition": "Friendly",
+        "home": "England",
+        "homeScore": 4,
+        "away": "Norway",
+        "awayScore": 0
+      },
+      {
+        "date": "1937-05-14",
+        "competition": "Friendly",
+        "home": "Norway",
+        "homeScore": 0,
+        "away": "England",
+        "awayScore": 6
+      }
+    ]
   }
 }

@@ -3872,8 +3872,8 @@
       },
       {
         "id": 92,
-        "period": "first_half",
-        "minutes": 34,
+        "period": "full_time",
+        "minutes": 103,
         "extraMinutes": 0,
         "venueName": "Estadio Banorte",
         "venueCity": "Mexico City",
@@ -3881,7 +3881,7 @@
         "venueCityTranslationKey": null,
         "venueId": 1,
         "date": "2026-07-06T02:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 28,
         "awaySquadId": 18,
@@ -3889,12 +3889,39 @@
         "awaySquadName": "England",
         "homeSquadAbbr": "MEX",
         "awaySquadAbbr": "ENG",
-        "homeScore": 0,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 750,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 748,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 3,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 491,
+            "assistId": 469,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 491,
+            "assistId": 468,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 468,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 94,
