@@ -47911,13 +47911,13 @@
       "6": 0.1
     },
     "stats": {
-      "totalPoints": 7,
-      "avgPoints": 3.5,
-      "form": 2.3,
-      "lastRoundPoints": -1,
+      "totalPoints": 6,
+      "avgPoints": 3,
+      "form": 2,
+      "lastRoundPoints": -2,
       "roundPoints": {
         "3": 8,
-        "5": -1
+        "5": -2
       },
       "nextFixtureFromActiveRound": null,
       "nextFixtureFromScheduledRound": null
