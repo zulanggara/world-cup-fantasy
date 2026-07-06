@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-06T09:10:24.621Z",
+  "fetchedAt": "2026-07-06T12:58:36.743Z",
   "source": "Polymarket (gamma-api.polymarket.com) — aggregated prediction-market odds, not an official forecast",
   "teams": {
     "1": {
@@ -16,9 +16,9 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 0.855,
-      "makeSF": 0.625,
+      "makeSF": 0.645,
       "makeFinal": 0.355,
-      "winWC": 0.1675,
+      "winWC": 0.1655,
       "winGroup": 1,
       "group": "j"
     },
@@ -46,8 +46,8 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 0.4685,
-      "makeSF": 0.1265,
-      "makeFinal": 0.031,
+      "makeSF": 0.1255,
+      "makeFinal": 0.0265,
       "winWC": 0.0135,
       "winGroup": 1,
       "group": "g"
@@ -94,10 +94,10 @@
     "10": {
       "makeR32": 1,
       "makeR16": 1,
-      "makeQF": 0.605,
+      "makeQF": 0.61,
       "makeSF": 0.235,
       "makeFinal": 0.108,
-      "winWC": 0.0325,
+      "winWC": 0.0305,
       "winGroup": 1,
       "group": "k"
     },
@@ -165,8 +165,8 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 0.145,
-      "makeSF": 0.036,
-      "makeFinal": 0.014,
+      "makeSF": 0.0275,
+      "makeFinal": 0.0115,
       "winWC": 0.0025,
       "winGroup": 0,
       "group": "g"
@@ -176,7 +176,7 @@
       "makeR16": 1,
       "makeQF": 1,
       "makeSF": 0.655,
-      "makeFinal": 0.345,
+      "makeFinal": 0.355,
       "winWC": 0.1405,
       "winGroup": 1,
       "group": "l"
@@ -187,7 +187,7 @@
       "makeQF": 1,
       "makeSF": 0.785,
       "makeFinal": 0.545,
-      "winWC": 0.3305,
+      "winWC": 0.3275,
       "winGroup": 1,
       "group": "i"
     },
@@ -285,9 +285,9 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 1,
-      "makeSF": 0.2215,
-      "makeFinal": 0.0965,
-      "winWC": 0.0285,
+      "makeSF": 0.2205,
+      "makeFinal": 0.0925,
+      "winWC": 0.0265,
       "winGroup": 0,
       "group": "c"
     },
@@ -316,8 +316,8 @@
       "makeR16": 1,
       "makeQF": 1,
       "makeSF": 0.355,
-      "makeFinal": 0.1535,
-      "winWC": 0.0475,
+      "makeFinal": 0.149,
+      "winWC": 0.0465,
       "winGroup": 0,
       "group": "i"
     },
@@ -344,10 +344,10 @@
     "35": {
       "makeR32": 1,
       "makeR16": 1,
-      "makeQF": 0.345,
-      "makeSF": 0.22,
-      "makeFinal": 0.115,
-      "winWC": 0.0605,
+      "makeQF": 0.335,
+      "makeSF": 0.225,
+      "makeFinal": 0.125,
+      "winWC": 0.0565,
       "winGroup": 0,
       "group": "k"
     },
@@ -405,9 +405,9 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 0.665,
-      "makeSF": 0.505,
+      "makeSF": 0.525,
       "makeFinal": 0.235,
-      "winWC": 0.1285,
+      "winWC": 0.1265,
       "winGroup": 1,
       "group": "h"
     },
@@ -425,8 +425,8 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 0.405,
-      "makeSF": 0.121,
-      "makeFinal": 0.0475,
+      "makeSF": 0.118,
+      "makeFinal": 0.0445,
       "winWC": 0.0095,
       "winGroup": 1,
       "group": "b"
@@ -466,8 +466,8 @@
       "makeR16": 1,
       "makeQF": 0.535,
       "makeSF": 0.175,
-      "makeFinal": 0.0685,
-      "winWC": 0.0315,
+      "makeFinal": 0.0675,
+      "winWC": 0.0295,
       "winGroup": 1,
       "group": "d"
     },
@@ -1853,8 +1853,8 @@
         "p": 0.1745
       },
       {
-        "t": 1783329004,
-        "p": 0.1675
+        "t": 1783342684,
+        "p": 0.1655
       }
     ],
     "10": [
@@ -3275,8 +3275,8 @@
         "p": 0.0335
       },
       {
-        "t": 1783329005,
-        "p": 0.0325
+        "t": 1783342685,
+        "p": 0.0305
       }
     ],
     "18": [
@@ -4645,7 +4645,7 @@
         "p": 0.0835
       },
       {
-        "t": 1783329005,
+        "t": 1783342685,
         "p": 0.1405
       }
     ],
@@ -6043,8 +6043,8 @@
         "p": 0.3385
       },
       {
-        "t": 1783328944,
-        "p": 0.3305
+        "t": 1783342684,
+        "p": 0.3275
       }
     ],
     "32": [
@@ -7405,8 +7405,8 @@
         "p": 0.0545
       },
       {
-        "t": 1783329005,
-        "p": 0.0475
+        "t": 1783342685,
+        "p": 0.0465
       }
     ],
     "35": [
@@ -8807,8 +8807,8 @@
         "p": 0.0585
       },
       {
-        "t": 1783329004,
-        "p": 0.0605
+        "t": 1783342684,
+        "p": 0.0565
       }
     ],
     "41": [
@@ -10261,8 +10261,8 @@
         "p": 0.1265
       },
       {
-        "t": 1783329004,
-        "p": 0.1285
+        "t": 1783342625,
+        "p": 0.1265
       }
     ],
     "47": [
@@ -11667,7 +11667,7 @@
         "p": 0.0325
       },
       {
-        "t": 1783329005,
+        "t": 1783342685,
         "p": 0.0305
       }
     ]
