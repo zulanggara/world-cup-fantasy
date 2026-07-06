@@ -748,7 +748,7 @@ function renderRecap() {
     const r16Scored = computeR16RoundScores();
     if (r16Scored.length) {
       const anyR16Played = r16Scored.some((p) => p.actualPoints != null);
-      const variants = SquadBuilder.buildVariants(r16Scored, 'score', FORMATION, POS_ORDER_LOCAL, 4, SquadBuilder.BUDGET + KNOCKOUT_BUDGET_BONUS);
+      const variants = SquadBuilder.buildVariants(r16Scored, 'projectedPoints', FORMATION, POS_ORDER_LOCAL, 4, SquadBuilder.BUDGET + KNOCKOUT_BUDGET_BONUS);
       const variant = variants.find((v) => v.key === 'budget') || variants[0];
       if (variant && anyR16Played) {
         const totalProjected = SquadBuilder.totalMetric(variant.starters, 'projectedPoints');
@@ -761,7 +761,7 @@ function renderRecap() {
     const qfScored = computeQFRoundScores();
     if (qfScored.length) {
       const anyQFPlayed = qfScored.some((p) => p.actualPoints != null);
-      const variants = SquadBuilder.buildVariants(qfScored, 'score', FORMATION, POS_ORDER_LOCAL, 5, SquadBuilder.BUDGET + KNOCKOUT_BUDGET_BONUS);
+      const variants = SquadBuilder.buildVariants(qfScored, 'projectedPoints', FORMATION, POS_ORDER_LOCAL, 5, SquadBuilder.BUDGET + KNOCKOUT_BUDGET_BONUS);
       const variant = variants.find((v) => v.key === 'budget') || variants[0];
       if (variant && anyQFPlayed) {
         const totalProjected = SquadBuilder.totalMetric(variant.starters, 'projectedPoints');

@@ -1053,7 +1053,11 @@ function render() {
 
   const budget = SquadBuilder.BUDGET + (isKnockout ? KNOCKOUT_BUDGET_BONUS : 0);
   const maxPerSquad = isQF ? MAX_PER_SQUAD_QF : isR16 ? MAX_PER_SQUAD_R16 : MAX_PER_SQUAD;
-  const variants = SquadBuilder.buildVariants(scored, 'score', FORMATION, POS_ORDER, maxPerSquad, budget);
+  // Knockout rounds: select by projectedPoints (form × fixture multiplier) so
+  // teams with bad fixtures (low win chance) are naturally deprioritised, not
+  // just slightly down-scored via the 40% fixture weight in the 'score' formula.
+  const selectionMetric = isKnockout ? 'projectedPoints' : 'score';
+  const variants = SquadBuilder.buildVariants(scored, selectionMetric, FORMATION, POS_ORDER, maxPerSquad, budget);
 
   document.getElementById('variantTabs').innerHTML = variants.map((v) => `
     <button class="variant-tab ${v.key === currentVariant ? 'active' : ''}" data-key="${v.key}">${escapeHtml(v.label)}</button>
