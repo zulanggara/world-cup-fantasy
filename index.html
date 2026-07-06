@@ -256,6 +256,7 @@ function flatten(p) {
 }
 
 let polymarket = { teams: {}, history: {} };
+let headToHead = {};
 let teamProjections = {};
 let tournaments = [];
 let matchesGames = [];
@@ -264,7 +265,7 @@ let eloFixtures = [];
 async function loadData() {
   const lbGrid = document.getElementById('lbGrid');
   try {
-    const [playersRes, squadsRes, aggRes, polyRes, projRes, roundsRes, matchesRes, eloRes] = await Promise.all([
+    const [playersRes, squadsRes, aggRes, polyRes, projRes, roundsRes, matchesRes, eloRes, h2hRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/player_aggregates.json'),
@@ -273,6 +274,7 @@ async function loadData() {
       fetch('data/rounds.json'),
       fetch('data/matches.json'),
       fetch('data/elo.json'),
+      fetch('data/head_to_head.json'),
     ]);
     if (!playersRes.ok) throw new Error(`HTTP ${playersRes.status}`);
     const json = await playersRes.json();
@@ -287,6 +289,7 @@ async function loadData() {
     }
     if (matchesRes.ok) matchesGames = (await matchesRes.json())?.games ?? [];
     if (eloRes.ok) eloFixtures = (await eloRes.json())?.fixtures ?? [];
+    if (h2hRes.ok) headToHead = await h2hRes.json();
   } catch (e) {
     lbGrid.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. ${I18N.t('common.errRunScraperHint')}</div>`;
     return;
@@ -300,6 +303,21 @@ async function loadData() {
 
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
+}
+
+function h2hFactor(matchId, playerSquadId) {
+  const rec = headToHead[matchId];
+  if (!rec) return null;
+  const isTeamA = rec.teamA.squadId === playerSquadId;
+  const isTeamB = rec.teamB.squadId === playerSquadId;
+  if (!isTeamA && !isTeamB) return null;
+  const side = isTeamA ? rec.teamA : rec.teamB;
+  const total = (side.wins ?? 0) + (side.draws ?? 0) + (side.losses ?? 0);
+  if (total < 2) return null;
+  const winRate = side.wins / total;
+  const confidence = Math.min(1, (total - 1) / 9);
+  const rawFactor = clamp(1 + 0.3 * ((winRate - 0.5) / 0.5), 0.7, 1.3);
+  return 1 + (rawFactor - 1) * confidence;
 }
 
 function effectiveAvgPoints(p) {
@@ -444,8 +462,8 @@ function buildR32OpponentMap() {
   const map = {};
   for (const m of buildR32Matches()) {
     const isoDate = matchesDateToIso(m.date);
-    if (m.home) map[m.home.id] = { oppSquadId: m.away?.id ?? null, oppAbbr: m.away?.abbr ?? null, isoDate };
-    if (m.away) map[m.away.id] = { oppSquadId: m.home?.id ?? null, oppAbbr: m.home?.abbr ?? null, isoDate };
+    if (m.home) map[m.home.id] = { oppSquadId: m.away?.id ?? null, oppAbbr: m.away?.abbr ?? null, isoDate, matchId: m.id };
+    if (m.away) map[m.away.id] = { oppSquadId: m.home?.id ?? null, oppAbbr: m.home?.abbr ?? null, isoDate, matchId: m.id };
   }
   return map;
 }
@@ -494,6 +512,8 @@ function computeR32RoundScores() {
     if (oppMakeR16 != null && leagueAvgMakeR16 > 0) {
       factors.push(clamp(1 + 0.5 * ((leagueAvgMakeR16 - oppMakeR16) / leagueAvgMakeR16), 0.5, 1.8));
     }
+    const h2hR32 = h2hFactor(opp.matchId, p.squadId);
+    if (h2hR32 != null) factors.push(h2hR32);
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
 
@@ -544,8 +564,8 @@ function buildR16OpponentMapDash() {
     const isoDate = matchesDateToIso(g.local_date);
     const home = squadByName(g.home_team_name_en) || resolveR16SlotDash(g.home_team_label);
     const away = squadByName(g.away_team_name_en) || resolveR16SlotDash(g.away_team_label);
-    if (home) map[home.id] = { oppSquadId: away?.id ?? null, oppAbbr: away?.abbr ?? null, isoDate };
-    if (away) map[away.id] = { oppSquadId: home?.id ?? null, oppAbbr: home?.abbr ?? null, isoDate };
+    if (home) map[home.id] = { oppSquadId: away?.id ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: g.id };
+    if (away) map[away.id] = { oppSquadId: home?.id ?? null, oppAbbr: home?.abbr ?? null, isoDate, matchId: g.id };
   }
   return map;
 }
@@ -582,6 +602,8 @@ function computeR16RoundScores() {
     if (oppMakeQF != null && leagueAvgMakeQF > 0) {
       factors.push(clamp(1 + 0.5 * ((leagueAvgMakeQF - oppMakeQF) / leagueAvgMakeQF), 0.5, 1.8));
     }
+    const h2hR16 = h2hFactor(opp.matchId, p.squadId);
+    if (h2hR16 != null) factors.push(h2hR16);
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
     const rotation = rotationFactor(p);
@@ -626,8 +648,8 @@ function buildQFOpponentMapDash() {
     const away = squadByName(g.away_team_name_en) || resolveQFSlotDash(g.away_team_label);
     const homeId = home?.squadId ?? home?.id;
     const awayId = away?.squadId ?? away?.id;
-    if (homeId) map[homeId] = { oppSquadId: awayId ?? null, oppAbbr: away?.abbr ?? null, isoDate };
-    if (awayId) map[awayId] = { oppSquadId: homeId ?? null, oppAbbr: home?.abbr ?? null, isoDate };
+    if (homeId) map[homeId] = { oppSquadId: awayId ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: g.id };
+    if (awayId) map[awayId] = { oppSquadId: homeId ?? null, oppAbbr: home?.abbr ?? null, isoDate, matchId: g.id };
   }
   return map;
 }
@@ -664,6 +686,8 @@ function computeQFRoundScores() {
     if (oppMakeSF != null && leagueAvgMakeSF > 0) {
       factors.push(clamp(1 + 0.5 * ((leagueAvgMakeSF - oppMakeSF) / leagueAvgMakeSF), 0.5, 1.8));
     }
+    const h2hQF = h2hFactor(opp.matchId, p.squadId);
+    if (h2hQF != null) factors.push(h2hQF);
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
     const rotation = rotationFactor(p);

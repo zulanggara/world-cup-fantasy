@@ -191,6 +191,7 @@ let tournaments = [];
 let eloFixtures = [];
 let matchesGames = [];
 let polymarket = { teams: {} };
+let headToHead = {};
 let aggregates = {};
 // Flat +$5M from R32 onward — a one-time bump that stays +5 for every
 // knockout round (R16, QF, SF, F too, once those get their own projection),
@@ -296,7 +297,7 @@ function matchdayOpponent(squadId, mdIndex) {
 async function loadData() {
   const panelEl = document.getElementById('panel');
   try {
-    const [playersRes, squadsRes, projRes, roundsRes, eloRes, matchesRes, polyRes, aggRes] = await Promise.all([
+    const [playersRes, squadsRes, projRes, roundsRes, eloRes, matchesRes, polyRes, aggRes, h2hRes] = await Promise.all([
       fetch('data/players.json'),
       fetch('data/squads.json'),
       fetch('data/team_projections.json'),
@@ -305,6 +306,7 @@ async function loadData() {
       fetch('data/matches.json'),
       fetch('data/polymarket.json'),
       fetch('data/player_aggregates.json'),
+      fetch('data/head_to_head.json'),
     ]);
     aggregates = aggRes.ok ? (await aggRes.json()) : {};
 
@@ -336,6 +338,9 @@ async function loadData() {
     }
     if (polyRes.ok) {
       polymarket = await polyRes.json();
+    }
+    if (h2hRes.ok) {
+      headToHead = await h2hRes.json();
     }
   } catch (e) {
     panelEl.innerHTML = `<div class="empty-msg">${I18N.t('common.errLoadData')} ${escapeHtml(String(e.message || e))}. data/players.json, data/squads.json, data/team_projections.json. ${I18N.t('common.errHttpServerHint')}</div>`;
@@ -429,6 +434,26 @@ function findEloFixture(homeSquadId, awaySquadId, isoDate) {
 }
 
 // "MM/DD/YYYY HH:mm" (data/matches.json's local_date) -> "YYYY-MM-DD".
+// H2H multiplier for a given match: how historically dominant the player's team
+// is against this specific opponent. Returns null when no data or sample too small.
+// Weight is conservative (max ±30%) and scales up with sample size to avoid
+// over-fitting on a single historical encounter.
+function h2hFactor(matchId, playerSquadId) {
+  const rec = headToHead[matchId];
+  if (!rec) return null;
+  const isTeamA = rec.teamA.squadId === playerSquadId;
+  const isTeamB = rec.teamB.squadId === playerSquadId;
+  if (!isTeamA && !isTeamB) return null;
+  const side = isTeamA ? rec.teamA : rec.teamB;
+  const total = (side.wins ?? 0) + (side.draws ?? 0) + (side.losses ?? 0);
+  if (total < 2) return null;
+  const winRate = side.wins / total;
+  // Scale confidence: full weight at ≥10 games, half weight at 2-4, linear in between
+  const confidence = Math.min(1, (total - 1) / 9);
+  const rawFactor = clamp(1 + 0.3 * ((winRate - 0.5) / 0.5), 0.7, 1.3);
+  return 1 + (rawFactor - 1) * confidence;
+}
+
 function matchesDateToIso(localDate) {
   if (!localDate) return null;
   const [datePart] = localDate.split(' ');
@@ -597,6 +622,7 @@ function buildR32OpponentMap() {
         ownConfirmed: !!home.confirmed,
         oppConfirmed: !!away?.confirmed,
         isoDate,
+        matchId: m.id,
       };
     }
     if (away) {
@@ -606,6 +632,7 @@ function buildR32OpponentMap() {
         ownConfirmed: !!away.confirmed,
         oppConfirmed: !!home?.confirmed,
         isoDate,
+        matchId: m.id,
       };
     }
   }
@@ -684,6 +711,8 @@ function computeScoresR32() {
     if (oppMakeR16 != null && leagueAvgMakeR16 > 0) {
       factors.push(clamp(1 + 0.5 * ((leagueAvgMakeR16 - oppMakeR16) / leagueAvgMakeR16), 0.5, 1.8));
     }
+    const h2h = h2hFactor(opp.matchId, p.squadId);
+    if (h2h != null) factors.push(h2h);
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
 
@@ -777,8 +806,8 @@ function buildR16OpponentMap() {
     const isoDate = matchesDateToIso(m.date);
     const home = m.home && !m.home.pending ? m.home : null;
     const away = m.away && !m.away.pending ? m.away : null;
-    if (home) map[home.squadId] = { oppSquadId: away?.squadId ?? null, oppAbbr: away?.abbr ?? null, isoDate };
-    if (away) map[away.squadId] = { oppSquadId: home?.squadId ?? null, oppAbbr: home?.abbr ?? null, isoDate };
+    if (home) map[home.squadId] = { oppSquadId: away?.squadId ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: m.id };
+    if (away) map[away.squadId] = { oppSquadId: home?.squadId ?? null, oppAbbr: home?.abbr ?? null, isoDate, matchId: m.id };
   }
   return map;
 }
@@ -822,6 +851,8 @@ function computeScoresR16() {
     if (oppMakeQF != null && leagueAvgMakeQF > 0) {
       factors.push(clamp(1 + 0.5 * ((leagueAvgMakeQF - oppMakeQF) / leagueAvgMakeQF), 0.5, 1.8));
     }
+    const h2h = h2hFactor(opp.matchId, p.squadId);
+    if (h2h != null) factors.push(h2h);
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
 
@@ -896,8 +927,8 @@ function buildQFOpponentMap() {
     const isoDate = matchesDateToIso(m.date);
     const home = m.home && !m.home.pending ? m.home : null;
     const away = m.away && !m.away.pending ? m.away : null;
-    if (home) map[home.squadId] = { oppSquadId: away?.squadId ?? null, oppAbbr: away?.abbr ?? null, isoDate };
-    if (away) map[away.squadId] = { oppSquadId: home?.squadId ?? null, oppAbbr: home?.abbr ?? null, isoDate };
+    if (home) map[home.squadId] = { oppSquadId: away?.squadId ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: m.id };
+    if (away) map[away.squadId] = { oppSquadId: home?.squadId ?? null, oppAbbr: home?.abbr ?? null, isoDate, matchId: m.id };
   }
   return map;
 }
@@ -938,6 +969,8 @@ function computeScoresQF() {
     if (oppMakeSF != null && leagueAvgMakeSF > 0) {
       factors.push(clamp(1 + 0.5 * ((leagueAvgMakeSF - oppMakeSF) / leagueAvgMakeSF), 0.5, 1.8));
     }
+    const h2h = h2hFactor(opp.matchId, p.squadId);
+    if (h2h != null) factors.push(h2h);
     const hasFixtureData = factors.length > 0;
     const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
 
