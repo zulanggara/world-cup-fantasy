@@ -2954,5 +2954,103 @@
         "awayScore": 6
       }
     ]
+  },
+  "100": {
+    "teamA": {
+      "squadId": 2,
+      "abbr": "ARG",
+      "name": "Argentina",
+      "cleanSheets": 4,
+      "draws": 2,
+      "matchesPlayed": 7,
+      "wins": 5,
+      "losses": 0,
+      "goalsScored": 15,
+      "goalsAgainst": 3,
+      "idTeam": "43922",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Argentina",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 43,
+      "abbr": "SUI",
+      "name": "Switzerland",
+      "cleanSheets": 0,
+      "draws": 2,
+      "matchesPlayed": 7,
+      "wins": 0,
+      "losses": 5,
+      "goalsScored": 3,
+      "goalsAgainst": 15,
+      "idTeam": "43971",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Switzerland",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2014-07-01",
+        "competition": "FIFA World Cup™",
+        "home": "Argentina",
+        "homeScore": 1,
+        "away": "Switzerland",
+        "awayScore": 0
+      },
+      {
+        "date": "2012-02-29",
+        "competition": "Friendly",
+        "home": "Switzerland",
+        "homeScore": 1,
+        "away": "Argentina",
+        "awayScore": 3
+      },
+      {
+        "date": "2007-06-02",
+        "competition": "Friendly",
+        "home": "Switzerland",
+        "homeScore": 1,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1990-05-08",
+        "competition": "Friendly",
+        "home": "Switzerland",
+        "homeScore": 1,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1984-09-01",
+        "competition": "Friendly",
+        "home": "Switzerland",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 2
+      },
+      {
+        "date": "1980-12-16",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 5,
+        "away": "Switzerland",
+        "awayScore": 0
+      },
+      {
+        "date": "1966-07-19",
+        "competition": "FIFA World Cup™",
+        "home": "Argentina",
+        "homeScore": 2,
+        "away": "Switzerland",
+        "awayScore": 0
+      }
+    ]
   }
 }
