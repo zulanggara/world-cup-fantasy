@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-07T17:26:15.144Z",
+  "fetchedAt": "2026-07-07T20:13:57.889Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -60,7 +60,7 @@
     "2": {
       "eloCode": "AR",
       "rank": 2,
-      "rating": 2151
+      "rating": 2156
     },
     "3": {
       "eloCode": "AU",
@@ -134,8 +134,8 @@
     },
     "17": {
       "eloCode": "EG",
-      "rank": 31,
-      "rating": 1747
+      "rank": 34,
+      "rating": 1742
     },
     "18": {
       "eloCode": "EN",
@@ -239,7 +239,7 @@
     },
     "38": {
       "eloCode": "SQ",
-      "rank": 33,
+      "rank": 32,
       "rating": 1745
     },
     "39": {
@@ -294,43 +294,6 @@
     }
   },
   "fixtures": [
-    {
-      "date": "2026-07-07",
-      "hostCountry": "US",
-      "homeSquadId": 2,
-      "awaySquadId": 17,
-      "homeEloCode": "AR",
-      "awayEloCode": "EG",
-      "homeRank": 2,
-      "awayRank": 31,
-      "homeRating": 2151,
-      "awayRating": 1747,
-      "homeWinPct": 91,
-      "awayWinPct": 9,
-      "eloPointsAtStake": {
-        "draw": -25,
-        "winMargin1": [
-          5,
-          55
-        ],
-        "winMargin2": [
-          8,
-          82
-        ],
-        "winMargin3": [
-          9,
-          96
-        ],
-        "winMargin4": [
-          10,
-          102
-        ],
-        "winMargin5": [
-          11,
-          109
-        ]
-      }
-    },
     {
       "date": "2026-07-07",
       "hostCountry": "CA",
@@ -856,7 +819,7 @@
       "awaySquadId": 43,
       "homeEloCode": "SQ",
       "awayEloCode": "CH",
-      "homeRank": 33,
+      "homeRank": 32,
       "awayRank": 11,
       "homeRating": 1745,
       "awayRating": 1943,
@@ -1560,7 +1523,7 @@
       "homeEloCode": "CH",
       "awayEloCode": "SQ",
       "homeRank": 11,
-      "awayRank": 33,
+      "awayRank": 32,
       "homeRating": 1943,
       "awayRating": 1745,
       "homeWinPct": 85,
@@ -1734,6 +1697,43 @@
         "winMargin5": [
           47,
           33
+        ]
+      }
+    },
+    {
+      "date": "2026-07-07",
+      "hostCountry": "US",
+      "homeSquadId": 2,
+      "awaySquadId": 17,
+      "homeEloCode": "AR",
+      "awayEloCode": "EG",
+      "homeRank": 2,
+      "awayRank": 31,
+      "homeRating": 2151,
+      "awayRating": 1747,
+      "homeWinPct": 91,
+      "awayWinPct": 9,
+      "eloPointsAtStake": {
+        "draw": -25,
+        "winMargin1": [
+          5,
+          55
+        ],
+        "winMargin2": [
+          8,
+          82
+        ],
+        "winMargin3": [
+          9,
+          96
+        ],
+        "winMargin4": [
+          10,
+          102
+        ],
+        "winMargin5": [
+          11,
+          109
         ]
       }
     },
@@ -4564,6 +4564,21 @@
     }
   ],
   "results": [
+    {
+      "date": "2026-07-07",
+      "hostCountry": "US",
+      "homeSquadId": 2,
+      "awaySquadId": 17,
+      "homeEloCode": "AR",
+      "awayEloCode": "EG",
+      "homeScore": 3,
+      "awayScore": 2,
+      "eloChangeHome": 5,
+      "homeRatingAfter": 2156,
+      "awayRatingAfter": 1742,
+      "homeRankAfter": 2,
+      "awayRankAfter": 34
+    },
     {
       "date": "2026-07-06",
       "hostCountry": "US",
