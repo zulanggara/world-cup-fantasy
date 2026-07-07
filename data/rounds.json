@@ -4010,8 +4010,8 @@
       },
       {
         "id": 95,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 61,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -4019,7 +4019,7 @@
         "venueCityTranslationKey": null,
         "venueId": 13,
         "date": "2026-07-07T17:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 2,
         "awaySquadId": 17,
@@ -4027,12 +4027,18 @@
         "awaySquadName": "Egypt",
         "homeSquadAbbr": "ARG",
         "awaySquadAbbr": "EGY",
-        "homeScore": null,
+        "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "awayScore": 1,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 444,
+            "assistId": 432,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 96,
