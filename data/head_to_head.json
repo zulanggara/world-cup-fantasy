@@ -2591,6 +2591,232 @@
       }
     ]
   },
+  "98": {
+    "teamA": {
+      "squadId": 41,
+      "abbr": "ESP",
+      "name": "Spain",
+      "cleanSheets": 8,
+      "draws": 5,
+      "matchesPlayed": 23,
+      "wins": 12,
+      "losses": 6,
+      "goalsScored": 46,
+      "goalsAgainst": 22,
+      "idTeam": "43969",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Spain",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 5,
+      "abbr": "BEL",
+      "name": "Belgium",
+      "cleanSheets": 1,
+      "draws": 5,
+      "matchesPlayed": 23,
+      "wins": 6,
+      "losses": 12,
+      "goalsScored": 22,
+      "goalsAgainst": 46,
+      "idTeam": "43935",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Belgium",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2016-09-01",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "2009-09-05",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 5,
+        "away": "Belgium",
+        "awayScore": 0
+      },
+      {
+        "date": "2008-10-15",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "2005-10-08",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Belgium",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "2004-10-09",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Belgium",
+        "awayScore": 0
+      },
+      {
+        "date": "1995-03-29",
+        "competition": "Continental Qualifier",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Belgium",
+        "awayScore": 1
+      },
+      {
+        "date": "1994-12-17",
+        "competition": "Continental Qualifier",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 4
+      },
+      {
+        "date": "1990-06-21",
+        "competition": "FIFA World Cup™",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1986-06-22",
+        "competition": "FIFA World Cup™",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Belgium",
+        "awayScore": 1
+      },
+      {
+        "date": "1986-02-19",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 3,
+        "away": "Belgium",
+        "awayScore": 0
+      },
+      {
+        "date": "1981-12-16",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Belgium",
+        "awayScore": 0
+      },
+      {
+        "date": "1980-06-15",
+        "competition": "Continental Final",
+        "home": "Belgium",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1969-02-23",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Belgium",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1968-12-11",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Belgium",
+        "awayScore": 1
+      },
+      {
+        "date": "1963-12-01",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Belgium",
+        "awayScore": 2
+      },
+      {
+        "date": "1962-12-02",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1957-03-31",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 5
+      },
+      {
+        "date": "1953-03-19",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 3,
+        "away": "Belgium",
+        "awayScore": 1
+      },
+      {
+        "date": "1951-06-10",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "1949-01-02",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Belgium",
+        "awayScore": 1
+      },
+      {
+        "date": "1923-02-04",
+        "competition": "Friendly",
+        "home": "Belgium",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1921-10-09",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Belgium",
+        "awayScore": 0
+      },
+      {
+        "date": "1920-08-29",
+        "competition": "Olympic Football Tournament™ Final",
+        "home": "Belgium",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 1
+      }
+    ]
+  },
   "99": {
     "teamA": {
       "squadId": 32,
