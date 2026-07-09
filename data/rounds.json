@@ -4099,8 +4099,8 @@
     "tournaments": [
       {
         "id": 97,
-        "period": "first_half",
-        "minutes": 2,
+        "period": "second_half",
+        "minutes": 79,
         "extraMinutes": 0,
         "venueName": "Gillette Stadium",
         "venueCity": "Foxborough, Massachusetts",
@@ -4116,9 +4116,20 @@
         "awaySquadName": "Morocco",
         "homeSquadAbbr": "FRA",
         "awaySquadAbbr": "MAR",
-        "homeScore": 0,
+        "homeScore": 2,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 500,
+            "assistId": 505,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 501,
+            "assistId": 500,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
@@ -4203,7 +4214,7 @@
       }
     ],
     "stage": "QF",
-    "isLockoutFinished": false
+    "isLockoutFinished": true
   },
   {
     "id": 7,

@@ -127,25 +127,25 @@
   {
     "roundId": 6,
     "tournamentId": 97,
-    "points": 1,
+    "points": 5,
     "stats": {
       "SXI": 0,
-      "MP": 6,
+      "MP": 82,
       "AS": 0,
       "YC": 0,
       "RC": 0,
       "OG": 0,
       "PW": 0,
       "PC": 0,
-      "CS": 1,
+      "CS": 0,
       "GS": 0,
-      "GC": 0,
-      "PS": 0,
+      "GC": 2,
+      "PS": 1,
       "T": 0,
       "CC": 0,
       "ST": 0,
       "FK": 0,
-      "S": 2,
+      "S": 4,
       "SB": 0
     }
   }
