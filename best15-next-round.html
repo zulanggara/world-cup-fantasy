@@ -1161,7 +1161,7 @@ function render() {
   if (isR32) noteEl.innerHTML = I18N.t('nextround.r32Disclaimer');
   else if (isR16) noteEl.innerHTML = I18N.t('nextround.r16Disclaimer');
   else if (isQF) noteEl.innerHTML = I18N.t('nextround.qfDisclaimer', 'Proyeksi QF: hanya tim yang sudah lolos dari R16 yang masuk pool. Kekuatan lawan dari statistik gol riil sepanjang turnamen + peluang Polymarket makeSF.');
-  else if (isSF) noteEl.innerHTML = I18N.t('nextround.sfDisclaimer', 'Proyeksi SF: hanya tim pemenang QF yang masuk pool. Lawan di-resolve dari hasil QF + peluang Polymarket makeFinal.');
+  else if (isSF) noteEl.innerHTML = I18N.t('nextround.sfDisclaimer');
   else noteEl.innerHTML = '';
   renderLegend(isR32, isR16 || isQF || isSF);
 
