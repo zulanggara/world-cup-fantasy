@@ -3052,5 +3052,351 @@
         "awayScore": 0
       }
     ]
+  },
+  "101": {
+    "teamA": {
+      "squadId": 19,
+      "abbr": "FRA",
+      "name": "France",
+      "cleanSheets": 6,
+      "draws": 7,
+      "matchesPlayed": 38,
+      "wins": 13,
+      "losses": 18,
+      "goalsScored": 44,
+      "goalsAgainst": 71,
+      "idTeam": "43946",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "France",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 41,
+      "abbr": "ESP",
+      "name": "Spain",
+      "cleanSheets": 12,
+      "draws": 7,
+      "matchesPlayed": 38,
+      "wins": 18,
+      "losses": 13,
+      "goalsScored": 71,
+      "goalsAgainst": 44,
+      "idTeam": "43969",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Spain",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2025-06-05",
+        "competition": "Nations League",
+        "home": "Spain",
+        "homeScore": 5,
+        "away": "France",
+        "awayScore": 4
+      },
+      {
+        "date": "2024-07-09",
+        "competition": "Continental Final",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "2021-10-10",
+        "competition": "Nations League",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 2
+      },
+      {
+        "date": "2017-03-28",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "2014-09-04",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "2013-03-26",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "2012-10-16",
+        "competition": "FIFA World Cup™ Qualifiers",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "2012-06-23",
+        "competition": "Continental Final",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "2010-03-03",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "2008-02-06",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "2006-06-27",
+        "competition": "FIFA World Cup™",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 3
+      },
+      {
+        "date": "2001-03-27",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "2000-06-25",
+        "competition": "Continental Final",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 2
+      },
+      {
+        "date": "1998-01-28",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1996-06-15",
+        "competition": "Continental Final",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1991-10-12",
+        "competition": "Continental Qualifier",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 2
+      },
+      {
+        "date": "1991-02-20",
+        "competition": "Continental Qualifier",
+        "home": "France",
+        "homeScore": 3,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1988-03-23",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1984-06-27",
+        "competition": "Continental Final",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1983-10-05",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1981-02-18",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1978-11-08",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1971-03-17",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 2
+      },
+      {
+        "date": "1968-10-17",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "1963-01-09",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 0,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1961-12-10",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1961-04-02",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1959-12-17",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 4,
+        "away": "Spain",
+        "awayScore": 3
+      },
+      {
+        "date": "1958-03-13",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 2
+      },
+      {
+        "date": "1955-03-17",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 2
+      },
+      {
+        "date": "1949-06-19",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 5
+      },
+      {
+        "date": "1942-03-15",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 4,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1935-01-24",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1933-04-23",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1929-04-14",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 8,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "1927-05-22",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 4
+      },
+      {
+        "date": "1923-01-28",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 3,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1922-04-30",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Spain",
+        "awayScore": 4
+      }
+    ]
   }
 }
