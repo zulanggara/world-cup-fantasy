@@ -4136,8 +4136,8 @@
       },
       {
         "id": 99,
-        "period": "pre_match",
-        "minutes": 0,
+        "period": "second_half",
+        "minutes": 79,
         "extraMinutes": 0,
         "venueName": "Sofi Stadium",
         "venueCity": "Inglewood, California",
@@ -4145,7 +4145,7 @@
         "venueCityTranslationKey": null,
         "venueId": 4,
         "date": "2026-07-10T20:00:00+01:00",
-        "status": "scheduled",
+        "status": "playing",
         "isSuspended": false,
         "homeSquadId": 41,
         "awaySquadId": 5,
@@ -4153,12 +4153,24 @@
         "awaySquadName": "Belgium",
         "homeSquadAbbr": "ESP",
         "awaySquadAbbr": "BEL",
-        "homeScore": null,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1998,
+            "assistId": null,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 129,
+            "assistId": 115,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 98,
