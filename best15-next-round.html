@@ -155,7 +155,8 @@
         <option value="2">MD3</option>
         <option value="r32" data-i18n="nextround.r32Option">Round of 32</option>
         <option value="r16" data-i18n="nextround.r16Option">Round of 16</option>
-        <option value="qf" selected data-i18n="nextround.qfOption">Quarter Finals</option>
+        <option value="qf" data-i18n="nextround.qfOption">Quarter Finals</option>
+        <option value="sf" selected data-i18n="nextround.sfOption">Semi Finals</option>
       </select>
     </label>
     <span class="spacer"></span>
@@ -420,6 +421,7 @@ function computeScores(mdIndex) {
 const MAX_PER_SQUAD = 3;
 const MAX_PER_SQUAD_R16 = 4;
 const MAX_PER_SQUAD_QF = 5;
+const MAX_PER_SQUAD_SF = 6;
 
 function squadById(id) {
   return squads.find((s) => s.id === id);
@@ -1009,6 +1011,123 @@ function computeScoresQF() {
   return withFixture;
 }
 
+// ── Semi Finals ────────────────────────────────────────────────────────────────
+// Slot labels reference QF match IDs ("Winner Match 97" etc.). Once a QF match
+// finishes, we resolve the winner — same pattern as resolveQFSlot → r16 matches.
+function resolveSFSlot(label) {
+  const refId = parseRefMatchId(label);
+  const qfMatch = refId ? matchesGames.find((g) => g.type === 'qf' && g.id === refId) : null;
+  if (!qfMatch || qfMatch.finished !== 'TRUE') return { pending: true, text: label || 'TBD' };
+  const homeScore = Number(qfMatch.home_score);
+  const awayScore = Number(qfMatch.away_score);
+  const winnerName = homeScore > awayScore ? qfMatch.home_team_name_en : qfMatch.away_team_name_en;
+  const winnerSquad = squadByName(winnerName);
+  if (!winnerSquad) return { pending: true, text: label };
+  return { squadId: winnerSquad.id, name: winnerSquad.name, abbr: winnerSquad.abbr, confirmed: true };
+}
+
+function buildSFMatches() {
+  function toSlot(squad) {
+    return { squadId: squad.id, name: squad.name, abbr: squad.abbr, confirmed: true };
+  }
+  return matchesGames
+    .filter((g) => g.type === 'sf')
+    .map((g) => ({
+      id: g.id,
+      date: g.local_date,
+      home: squadByName(g.home_team_name_en) ? toSlot(squadByName(g.home_team_name_en)) : resolveSFSlot(g.home_team_label),
+      away: squadByName(g.away_team_name_en) ? toSlot(squadByName(g.away_team_name_en)) : resolveSFSlot(g.away_team_label),
+    }));
+}
+
+function buildSFOpponentMap() {
+  const map = {};
+  for (const m of buildSFMatches()) {
+    const isoDate = matchesDateToIso(m.date);
+    const home = m.home && !m.home.pending ? m.home : null;
+    const away = m.away && !m.away.pending ? m.away : null;
+    if (home) map[home.squadId] = { oppSquadId: away?.squadId ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: m.id };
+    if (away) map[away.squadId] = { oppSquadId: home?.squadId ?? null, oppAbbr: home?.abbr ?? null, isoDate, matchId: m.id };
+  }
+  return map;
+}
+
+function computeScoresSF() {
+  const oppMap = buildSFOpponentMap();
+  const teamStrength = buildTeamStrength();
+  const teamsWithData = Object.values(teamStrength).filter((s) => s.played > 0);
+  const leagueAvgGF = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGF, 0) / teamsWithData.length : 1;
+  const leagueAvgGA = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGA, 0) / teamsWithData.length : 1;
+
+  const polyTeams = polymarket.teams || {};
+  const finalProbs = Object.values(polyTeams).map((t) => t.makeFinal).filter((v) => v != null);
+  const leagueAvgMakeFinal = finalProbs.length ? finalProbs.reduce((s, v) => s + v, 0) / finalProbs.length : 0.5;
+
+  const pool = players.filter((p) => p.squadId != null && oppMap[p.squadId] && !p.suspendedNextMatch);
+
+  const withFixture = pool.map((p) => {
+    const opp = oppMap[p.squadId];
+    const oppStrength = opp.oppSquadId != null ? teamStrength[opp.oppSquadId] : null;
+    const winPct = opp.oppSquadId != null ? (() => {
+      const fx = findEloFixture(p.squadId, opp.oppSquadId, opp.isoDate);
+      if (!fx) return null;
+      return fx.homeSquadId === p.squadId ? fx.homeWinPct : fx.awayWinPct;
+    })() : null;
+    const oppMakeFinal = opp.oppSquadId != null ? (polyTeams[opp.oppSquadId]?.makeFinal ?? null) : null;
+    const ownMakeFinalPct = polyTeams[p.squadId]?.makeFinal ?? null;
+
+    const factors = [];
+    if (oppStrength && oppStrength.played > 0) {
+      factors.push((p.position === 'GK' || p.position === 'DEF')
+        ? clamp(1 + 0.5 * ((leagueAvgGF - oppStrength.avgGF) / leagueAvgGF), 0.5, 1.8)
+        : clamp(1 + 0.5 * ((oppStrength.avgGA - leagueAvgGA) / leagueAvgGA), 0.5, 1.8));
+    }
+    if (winPct != null) {
+      factors.push(clamp(1 + (winPct - 50) / 50 * 0.5, 0.5, 1.8));
+    }
+    if (oppMakeFinal != null && leagueAvgMakeFinal > 0) {
+      factors.push(clamp(1 + 0.5 * ((leagueAvgMakeFinal - oppMakeFinal) / leagueAvgMakeFinal), 0.5, 1.8));
+    }
+    const h2h = h2hFactor(opp.matchId, p.squadId);
+    if (h2h != null) factors.push(h2h);
+    const hasFixtureData = factors.length > 0;
+    const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
+
+    const rotation = rotationFactor(p);
+    const projectedPoints = Math.round(effectiveAvgPoints(p) * multiplier * rotation * 10) / 10;
+    return {
+      ...p,
+      fixtureIndex: multiplier,
+      hasFixtureData,
+      projectedPoints,
+      oppAbbr: opp.oppAbbr,
+      winPct,
+      ownConfirmed: true,
+      oppConfirmed: !!opp.oppAbbr,
+      ownMakeR32Pct: null,
+      ownMakeR16Pct: ownMakeFinalPct,
+      rotationFactor: rotation,
+    };
+  });
+
+  for (const pos of POS_ORDER) {
+    const group = withFixture.filter((p) => p.position === pos);
+    const forms = group.map((p) => p.form);
+    const fixtures = group.map((p) => p.fixtureIndex);
+    const formMin = Math.min(...forms, 0);
+    const formMax = Math.max(...forms, 1);
+    const fixMin = Math.min(...fixtures, 0.5);
+    const fixMax = Math.max(...fixtures, 1.8);
+    for (const p of group) {
+      const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
+      const normFix = fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50;
+      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+    }
+  }
+
+  return withFixture;
+}
+
 function renderLegend(isR32, isR16) {
   const items = [];
   if (isR32 || isR16) {
@@ -1032,17 +1151,19 @@ function render() {
   const isR32 = mdValue === 'r32';
   const isR16 = mdValue === 'r16';
   const isQF = mdValue === 'qf';
-  const isKnockout = isR32 || isR16 || isQF;
+  const isSF = mdValue === 'sf';
+  const isKnockout = isR32 || isR16 || isQF || isSF;
   const mdIndex = isKnockout ? null : Number(mdValue);
-  const scored = isR32 ? computeScoresR32() : isR16 ? computeScoresR16() : isQF ? computeScoresQF() : computeScores(mdIndex);
+  const scored = isR32 ? computeScoresR32() : isR16 ? computeScoresR16() : isQF ? computeScoresQF() : isSF ? computeScoresSF() : computeScores(mdIndex);
 
   const noteEl = document.getElementById('r32Note');
-  noteEl.style.display = (isR32 || isR16 || isQF) ? 'block' : 'none';
+  noteEl.style.display = (isR32 || isR16 || isQF || isSF) ? 'block' : 'none';
   if (isR32) noteEl.innerHTML = I18N.t('nextround.r32Disclaimer');
   else if (isR16) noteEl.innerHTML = I18N.t('nextround.r16Disclaimer');
   else if (isQF) noteEl.innerHTML = I18N.t('nextround.qfDisclaimer', 'Proyeksi QF: hanya tim yang sudah lolos dari R16 yang masuk pool. Kekuatan lawan dari statistik gol riil sepanjang turnamen + peluang Polymarket makeSF.');
+  else if (isSF) noteEl.innerHTML = I18N.t('nextround.sfDisclaimer', 'Proyeksi SF: hanya tim pemenang QF yang masuk pool. Lawan di-resolve dari hasil QF + peluang Polymarket makeFinal.');
   else noteEl.innerHTML = '';
-  renderLegend(isR32, isR16 || isQF);
+  renderLegend(isR32, isR16 || isQF || isSF);
 
   const unmatchedCount = scored.filter((p) => !p.hasFixtureData).length;
   const suspendedCount = players.filter((p) => p.suspendedNextMatch).length;
@@ -1052,7 +1173,7 @@ function render() {
   document.getElementById('unmatchedNote').textContent = notes.join(' · ');
 
   const budget = SquadBuilder.BUDGET + (isKnockout ? KNOCKOUT_BUDGET_BONUS : 0);
-  const maxPerSquad = isQF ? MAX_PER_SQUAD_QF : isR16 ? MAX_PER_SQUAD_R16 : MAX_PER_SQUAD;
+  const maxPerSquad = isSF ? MAX_PER_SQUAD_SF : isQF ? MAX_PER_SQUAD_QF : isR16 ? MAX_PER_SQUAD_R16 : MAX_PER_SQUAD;
   // Knockout rounds: select by projectedPoints (form × fixture multiplier) so
   // teams with bad fixtures (low win chance) are naturally deprioritised, not
   // just slightly down-scored via the 40% fixture weight in the 'score' formula.
@@ -1074,7 +1195,8 @@ function renderVariant(variant, mdValue, budget) {
   const isR32 = mdValue === 'r32';
   const isR16 = mdValue === 'r16';
   const isQF = mdValue === 'qf';
-  const mdIndex = (isR32 || isR16 || isQF) ? null : Number(mdValue);
+  const isSF = mdValue === 'sf';
+  const mdIndex = (isR32 || isR16 || isQF || isSF) ? null : Number(mdValue);
   const { starters, bench } = variant;
   const totalScore = Math.round((starters.reduce((sum, p) => sum + p.score, 0) / starters.length) * 10) / 10;
   const totalProjectedPoints = SquadBuilder.totalMetric(starters, 'projectedPoints');
@@ -1087,7 +1209,7 @@ function renderVariant(variant, mdValue, budget) {
   // resolve it from matchdayOpponent(), R32/R16 already carry it precomputed
   // on the scored player object.
   function opponentFor(p) {
-    if (isR32 || isR16 || isQF) return { oppAbbr: p.oppAbbr, winPct: p.winPct, oppConfirmed: p.oppConfirmed };
+    if (isR32 || isR16 || isQF || isSF) return { oppAbbr: p.oppAbbr, winPct: p.winPct, oppConfirmed: p.oppConfirmed };
     const opp = p.squadId != null ? matchdayOpponent(p.squadId, mdIndex) : null;
     return opp ? { oppAbbr: opp.oppAbbr, winPct: opp.winPct, oppConfirmed: true } : null;
   }
@@ -1097,7 +1219,7 @@ function renderVariant(variant, mdValue, budget) {
   // the chip itself uncluttered.
   function winPillHtml(opp) {
     if (!opp?.oppAbbr) {
-      if (isR16 || isQF) return `<span class="pscore-pill">${escapeHtml(I18N.t('nextround.opponentTBDR16', 'lawan belum ditentukan'))}</span>`;
+      if (isR16 || isQF || isSF) return `<span class="pscore-pill">${escapeHtml(I18N.t('nextround.opponentTBDR16', 'lawan belum ditentukan'))}</span>`;
       return isR32 ? `<span class="pscore-pill">${escapeHtml(I18N.t('nextround.opponentTBD', 'lawan belum ditentukan'))}</span>` : '';
     }
     const pct = opp.winPct != null ? ` ${opp.winPct}%` : '';
@@ -1108,7 +1230,7 @@ function renderVariant(variant, mdValue, budget) {
   const rows = POS_ORDER.map((pos) => {
     const chips = starters.filter((p) => p.position === pos).map((p) => {
       const opp = opponentFor(p);
-      const qualClass = isR32 ? (p.ownConfirmed ? 'qual-confirmed' : 'qual-projected') : ((isR16 || isQF) ? 'qual-confirmed' : '');
+      const qualClass = isR32 ? (p.ownConfirmed ? 'qual-confirmed' : 'qual-projected') : ((isR16 || isQF || isSF) ? 'qual-confirmed' : '');
       let qualDot = '';
       if (isR32) {
         const marketPct = p.ownMakeR32Pct != null ? ` — ${Math.round(p.ownMakeR32Pct * 100)}% ${I18N.t('marketOdds.colMakeR32', 'Make R32')}` : '';
@@ -1122,6 +1244,10 @@ function renderVariant(variant, mdValue, budget) {
         qualDot = `<span class="qual-dot confirmed" title="${escapeHtml(qualTip)}">✓</span>`;
       } else if (isQF) {
         const marketPct = p.ownMakeR16Pct != null ? ` — ${Math.round(p.ownMakeR16Pct * 100)}% ${I18N.t('marketOdds.colMakeSF', 'Make SF')}` : '';
+        const qualTip = I18N.t('nextround.qualifiedConfirmed', 'pasti lolos') + marketPct;
+        qualDot = `<span class="qual-dot confirmed" title="${escapeHtml(qualTip)}">✓</span>`;
+      } else if (isSF) {
+        const marketPct = p.ownMakeR16Pct != null ? ` — ${Math.round(p.ownMakeR16Pct * 100)}% ${I18N.t('marketOdds.colMakeFinal', 'Make Final')}` : '';
         const qualTip = I18N.t('nextround.qualifiedConfirmed', 'pasti lolos') + marketPct;
         qualDot = `<span class="qual-dot confirmed" title="${escapeHtml(qualTip)}">✓</span>`;
       }

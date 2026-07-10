@@ -154,8 +154,8 @@
 
   <a class="proj-cta" href="best15-next-round.html">
     <div class="proj-cta-text">
-      <b data-i18n="index.projCtaTitle">Next Round Projection: who to pick for Round of 32</b>
-      <span data-i18n="index.projCtaSub">Best 15 squad forecast with budget, qualifier status, and rotation risk — updated live.</span>
+      <b data-i18n="index.projCtaTitle">Next Round Projection: who to pick for Semi Finals</b>
+      <span data-i18n="index.projCtaSub">Best 15 squad forecast untuk SF — budget, qualifier status, dan rotation risk — updated live.</span>
     </div>
     <span class="proj-cta-btn" data-i18n="index.projCtaBtn">Build squad →</span>
   </a>
@@ -628,6 +628,90 @@ function computeR16RoundScores() {
   return withFixture;
 }
 
+// SF resolution — mirrors best15-next-round.html's resolveSFSlot/buildSFMatches.
+function resolveSFSlotDash(label) {
+  const m = label && label.match(/^(?:Winner|Loser) Match (\d+)$/i);
+  const refId = m ? m[1] : null;
+  const qfMatch = refId ? matchesGames.find((g) => g.type === 'qf' && g.id === refId) : null;
+  if (!qfMatch || qfMatch.finished !== 'TRUE') return null;
+  const homeScore = Number(qfMatch.home_score);
+  const awayScore = Number(qfMatch.away_score);
+  const winnerName = homeScore > awayScore ? qfMatch.home_team_name_en : qfMatch.away_team_name_en;
+  return squadByName(winnerName) ?? null;
+}
+
+function buildSFOpponentMapDash() {
+  const map = {};
+  for (const g of matchesGames.filter((g) => g.type === 'sf')) {
+    const isoDate = matchesDateToIso(g.local_date);
+    const home = squadByName(g.home_team_name_en) || resolveSFSlotDash(g.home_team_label);
+    const away = squadByName(g.away_team_name_en) || resolveSFSlotDash(g.away_team_label);
+    const homeId = home?.squadId ?? home?.id;
+    const awayId = away?.squadId ?? away?.id;
+    if (homeId) map[homeId] = { oppSquadId: awayId ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: g.id };
+    if (awayId) map[awayId] = { oppSquadId: homeId ?? null, oppAbbr: home?.abbr ?? null, isoDate, matchId: g.id };
+  }
+  return map;
+}
+
+function computeSFRoundScores() {
+  const oppMap = buildSFOpponentMapDash();
+  const teamStrength = buildTeamStrength();
+  const teamsWithData = Object.values(teamStrength).filter((s) => s.played > 0);
+  const leagueAvgGF = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGF, 0) / teamsWithData.length : 1;
+  const leagueAvgGA = teamsWithData.length ? teamsWithData.reduce((s, x) => s + x.avgGA, 0) / teamsWithData.length : 1;
+
+  const polyTeams = polymarket.teams || {};
+  const finalProbs = Object.values(polyTeams).map((t) => t.makeFinal).filter((v) => v != null);
+  const leagueAvgMakeFinal = finalProbs.length ? finalProbs.reduce((s, v) => s + v, 0) / finalProbs.length : 0.5;
+
+  const pool = players.filter((p) => p.squadId != null && oppMap[p.squadId] && !p.suspendedNextMatch);
+  const withFixture = pool.map((p) => {
+    const opp = oppMap[p.squadId];
+    const oppStrength = opp.oppSquadId != null ? teamStrength[opp.oppSquadId] : null;
+    const winPct = opp.oppSquadId != null ? (() => {
+      const fx = findEloFixture(p.squadId, opp.oppSquadId, opp.isoDate);
+      if (!fx) return null;
+      return fx.homeSquadId === p.squadId ? fx.homeWinPct : fx.awayWinPct;
+    })() : null;
+    const oppMakeFinal = opp.oppSquadId != null ? (polyTeams[opp.oppSquadId]?.makeFinal ?? null) : null;
+
+    const factors = [];
+    if (oppStrength && oppStrength.played > 0) {
+      factors.push((p.position === 'GK' || p.position === 'DEF')
+        ? clamp(1 + 0.5 * ((leagueAvgGF - oppStrength.avgGF) / leagueAvgGF), 0.5, 1.8)
+        : clamp(1 + 0.5 * ((oppStrength.avgGA - leagueAvgGA) / leagueAvgGA), 0.5, 1.8));
+    }
+    if (winPct != null) factors.push(clamp(1 + (winPct - 50) / 50 * 0.5, 0.5, 1.8));
+    if (oppMakeFinal != null && leagueAvgMakeFinal > 0) {
+      factors.push(clamp(1 + 0.5 * ((leagueAvgMakeFinal - oppMakeFinal) / leagueAvgMakeFinal), 0.5, 1.8));
+    }
+    const h2hSF = h2hFactor(opp.matchId, p.squadId);
+    if (h2hSF != null) factors.push(h2hSF);
+    const hasFixtureData = factors.length > 0;
+    const multiplier = hasFixtureData ? factors.reduce((s, f) => s + f, 0) / factors.length : 1;
+    const rotation = rotationFactor(p);
+    const projectedPoints = Math.round(effectiveAvgPoints(p) * multiplier * rotation * 10) / 10;
+    const actualPoints = p.roundPoints['7'];
+    return { ...p, fixtureIndex: multiplier, hasFixtureData, projectedPoints, rotationFactor: rotation, actualPoints: actualPoints != null ? actualPoints : null };
+  });
+
+  const POS_ORDER_LOCAL = ['GK', 'DEF', 'MID', 'FWD'];
+  for (const pos of POS_ORDER_LOCAL) {
+    const group = withFixture.filter((p) => p.position === pos);
+    const forms = group.map((p) => p.form);
+    const fixtures = group.map((p) => p.fixtureIndex);
+    const formMin = Math.min(...forms, 0), formMax = Math.max(...forms, 1);
+    const fixMin = Math.min(...fixtures, 0.5), fixMax = Math.max(...fixtures, 1.8);
+    for (const p of group) {
+      const normForm = formMax > formMin ? ((p.form - formMin) / (formMax - formMin)) * 100 : 50;
+      const normFix = fixMax > fixMin ? ((p.fixtureIndex - fixMin) / (fixMax - fixMin)) * 100 : 50;
+      p.score = Math.round((0.6 * normForm + 0.4 * normFix) * 10) / 10;
+    }
+  }
+  return withFixture;
+}
+
 // QF resolution — mirrors best15-next-round.html's resolveQFSlot/buildQFMatches.
 function resolveQFSlotDash(label) {
   const m = label && label.match(/^(?:Winner|Loser) Match (\d+)$/i);
@@ -771,6 +855,22 @@ function renderRecap() {
         // Show projection-only column while QF is in progress
         const totalProjected = SquadBuilder.totalMetric(variant.starters, 'projectedPoints');
         rounds.push({ mdIndex: 'qf', label: I18N.t('index.recapQFLabel', 'QF (live)'), totalProjected, totalActual: 0 });
+      }
+    }
+
+    // SF recap — shows once SF opponents are resolved (pool ≥ 2) or SF played
+    const sfScored = computeSFRoundScores();
+    if (sfScored.length) {
+      const anySFPlayed = sfScored.some((p) => p.actualPoints != null);
+      const sfVariants = SquadBuilder.buildVariants(sfScored, 'projectedPoints', FORMATION, POS_ORDER_LOCAL, 6, SquadBuilder.BUDGET + KNOCKOUT_BUDGET_BONUS);
+      const sfVariant = sfVariants.find((v) => v.key === 'budget') || sfVariants[0];
+      if (sfVariant && anySFPlayed) {
+        const totalProjected = SquadBuilder.totalMetric(sfVariant.starters, 'projectedPoints');
+        const totalActual = sfVariant.starters.reduce((s, p) => s + (p.actualPoints ?? 0), 0);
+        rounds.push({ mdIndex: 'sf', label: I18N.t('index.recapSFLabel', 'SF'), totalProjected, totalActual });
+      } else if (sfVariant && !anySFPlayed && sfScored.length >= 2) {
+        const totalProjected = SquadBuilder.totalMetric(sfVariant.starters, 'projectedPoints');
+        rounds.push({ mdIndex: 'sf', label: I18N.t('index.recapSFLabel', 'SF'), totalProjected, totalActual: 0 });
       }
     }
   }
