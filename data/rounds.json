@@ -4179,9 +4179,9 @@
       },
       {
         "id": 98,
-        "period": "half_time",
-        "minutes": 45,
-        "extraMinutes": 0,
+        "period": "extra_time_first_half",
+        "minutes": 92,
+        "extraMinutes": 2,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
         "venueNameTranslationKey": null,
