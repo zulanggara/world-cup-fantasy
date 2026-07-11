@@ -4179,8 +4179,8 @@
       },
       {
         "id": 98,
-        "period": "first_half",
-        "minutes": 1,
+        "period": "half_time",
+        "minutes": 45,
         "extraMinutes": 0,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
@@ -4196,12 +4196,24 @@
         "awaySquadName": "England",
         "homeSquadAbbr": "NOR",
         "awaySquadAbbr": "ENG",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 857,
+            "assistId": 1684,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 1,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 491,
+            "assistId": 474,
+            "isOwnGoal": false
+          }
+        ]
       },
       {
         "id": 100,
