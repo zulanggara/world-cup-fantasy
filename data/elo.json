@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-11T12:04:32.314Z",
+  "fetchedAt": "2026-07-11T13:53:07.197Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -150,7 +150,7 @@
     "20": {
       "eloCode": "DE",
       "rank": 13,
-      "rating": 1907
+      "rating": 1908
     },
     "21": {
       "eloCode": "GH",
@@ -452,7 +452,7 @@
       "homeRank": 9,
       "awayRank": 13,
       "homeRating": 1971,
-      "awayRating": 1907,
+      "awayRating": 1908,
       "homeWinPct": 72,
       "awayWinPct": 28,
       "eloPointsAtStake": {
@@ -1450,7 +1450,7 @@
       "awayEloCode": "NL",
       "homeRank": 13,
       "awayRank": 9,
-      "homeRating": 1907,
+      "homeRating": 1908,
       "awayRating": 1971,
       "homeWinPct": 55,
       "awayWinPct": 45,
@@ -4992,8 +4992,8 @@
       "awayEloCode": "PY",
       "homeScore": 1,
       "awayScore": 1,
-      "eloChangeHome": -9,
-      "homeRatingAfter": 1907,
+      "eloChangeHome": -8,
+      "homeRatingAfter": 1908,
       "awayRatingAfter": 1823,
       "homeRankAfter": 12,
       "awayRankAfter": 24
@@ -5217,9 +5217,9 @@
       "awayEloCode": "PY",
       "homeScore": 0,
       "awayScore": 0,
-      "eloChangeHome": 2,
+      "eloChangeHome": 1,
       "homeRatingAfter": 1800,
-      "awayRatingAfter": 1814,
+      "awayRatingAfter": 1815,
       "homeRankAfter": 25,
       "awayRankAfter": 24
     },
@@ -5684,7 +5684,7 @@
       "awayScore": 0,
       "eloChangeHome": 40,
       "homeRatingAfter": 1820,
-      "awayRatingAfter": 1798,
+      "awayRatingAfter": 1799,
       "homeRankAfter": 23,
       "awayRankAfter": 26
     },
@@ -5997,8 +5997,8 @@
       "awayEloCode": "TR",
       "homeScore": 2,
       "awayScore": 0,
-      "eloChangeHome": 61,
-      "homeRatingAfter": 1838,
+      "eloChangeHome": 62,
+      "homeRatingAfter": 1839,
       "awayRatingAfter": 1849,
       "homeRankAfter": 23,
       "awayRankAfter": 21
@@ -6900,7 +6900,7 @@
       "eloChangeHome": -12,
       "homeRatingAfter": 1885,
       "awayRatingAfter": 1922,
-      "homeRankAfter": 14,
+      "homeRankAfter": 15,
       "awayRankAfter": 11
     },
     {
