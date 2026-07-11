@@ -5684,7 +5684,7 @@
     "price": 5.5,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 11.9,
+    "percentSelected": 11.8,
     "roundsSelected": {
       "1": 19.7,
       "2": 22.5,
@@ -5692,7 +5692,7 @@
       "4": 17.9,
       "5": 18.5,
       "6": 12,
-      "7": 11.9
+      "7": 11.8
     },
     "stats": {
       "totalPoints": 22,
