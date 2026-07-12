@@ -4179,16 +4179,16 @@
       },
       {
         "id": 98,
-        "period": "extra_time_first_half",
-        "minutes": 92,
-        "extraMinutes": 2,
+        "period": "full_time",
+        "minutes": 123,
+        "extraMinutes": 33,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
         "venueNameTranslationKey": null,
         "venueCityTranslationKey": null,
         "venueId": 15,
         "date": "2026-07-11T22:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 32,
         "awaySquadId": 18,
@@ -4205,12 +4205,17 @@
             "isOwnGoal": false
           }
         ],
-        "awayScore": 1,
+        "awayScore": 2,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": [
           {
             "playerId": 491,
             "assistId": 474,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 491,
+            "assistId": null,
             "isOwnGoal": false
           }
         ]
