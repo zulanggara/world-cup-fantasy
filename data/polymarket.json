@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-12T03:55:50.755Z",
+  "fetchedAt": "2026-07-12T06:47:50.192Z",
   "source": "Polymarket (gamma-api.polymarket.com) — aggregated prediction-market odds, not an official forecast",
   "teams": {
     "1": {
@@ -16,9 +16,9 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 1,
-      "makeSF": 0.9995,
-      "makeFinal": 0.4655,
-      "winWC": 0.2025,
+      "makeSF": 1,
+      "makeFinal": 0.4645,
+      "winWC": 0.1915,
       "winGroup": 1,
       "group": "j"
     },
@@ -176,8 +176,8 @@
       "makeR16": 1,
       "makeQF": 1,
       "makeSF": 1,
-      "makeFinal": 0.525,
-      "winWC": 0.2035,
+      "makeFinal": 0.545,
+      "winWC": 0.2095,
       "winGroup": 1,
       "group": "l"
     },
@@ -186,8 +186,8 @@
       "makeR16": 1,
       "makeQF": 1,
       "makeSF": 1,
-      "makeFinal": 0.595,
-      "winWC": 0.3865,
+      "makeFinal": 0.605,
+      "winWC": 0.3915,
       "winGroup": 1,
       "group": "i"
     },
@@ -425,8 +425,8 @@
       "makeR32": 1,
       "makeR16": 1,
       "makeQF": 1,
-      "makeSF": 0.0005,
-      "makeFinal": 0.0005,
+      "makeSF": 0,
+      "makeFinal": 0,
       "winWC": 0.0005,
       "winGroup": 1,
       "group": "b"
@@ -2659,8 +2659,8 @@
         "p": 0.168
       },
       {
-        "t": 1783828443,
-        "p": 0.2025
+        "t": 1783838823,
+        "p": 0.1915
       }
     ],
     "3": [
@@ -5961,8 +5961,8 @@
         "p": 0.2075
       },
       {
-        "t": 1783828444,
-        "p": 0.2035
+        "t": 1783838824,
+        "p": 0.2095
       }
     ],
     "19": [
@@ -7383,8 +7383,8 @@
         "p": 0.3845
       },
       {
-        "t": 1783828443,
-        "p": 0.386
+        "t": 1783838823,
+        "p": 0.3915
       }
     ],
     "41": [
@@ -8861,8 +8861,8 @@
         "p": 0.2065
       },
       {
-        "t": 1783828504,
-        "p": 0.199
+        "t": 1783838823,
+        "p": 0.1995
       }
     ],
     "43": [
@@ -9675,7 +9675,7 @@
         "p": 0.0155
       },
       {
-        "t": 1783828503,
+        "t": 1783838763,
         "p": 0.0005
       }
     ]
