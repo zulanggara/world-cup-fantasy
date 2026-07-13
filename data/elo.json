@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-13T15:10:24.961Z",
+  "fetchedAt": "2026-07-13T17:22:39.777Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -115,7 +115,7 @@
     "13": {
       "eloCode": "HR",
       "rank": 16,
-      "rating": 1882
+      "rating": 1881
     },
     "14": {
       "eloCode": "CW",
@@ -526,7 +526,7 @@
       "homeRank": 50,
       "awayRank": 16,
       "homeRating": 1680,
-      "awayRating": 1882,
+      "awayRating": 1881,
       "homeWinPct": 36,
       "awayWinPct": 64,
       "eloPointsAtStake": {
@@ -536,8 +536,8 @@
           14
         ],
         "winMargin2": [
-          39,
-          21
+          38,
+          22
         ],
         "winMargin3": [
           45,
@@ -711,7 +711,7 @@
       "homeRank": 1,
       "awayRank": 16,
       "homeRating": 2190,
-      "awayRating": 1882,
+      "awayRating": 1881,
       "homeWinPct": 91,
       "awayWinPct": 9,
       "eloPointsAtStake": {
@@ -932,7 +932,7 @@
       "awayEloCode": "EN",
       "homeRank": 16,
       "awayRank": 4,
-      "homeRating": 1882,
+      "homeRating": 1881,
       "awayRating": 2097,
       "homeWinPct": 34,
       "awayWinPct": 66,
@@ -951,8 +951,8 @@
           24
         ],
         "winMargin4": [
-          49,
-          26
+          50,
+          25
         ],
         "winMargin5": [
           53,
@@ -1080,7 +1080,7 @@
       "awayEloCode": "ES",
       "homeRank": 16,
       "awayRank": 1,
-      "homeRating": 1882,
+      "homeRating": 1881,
       "awayRating": 2190,
       "homeWinPct": 23,
       "awayWinPct": 77,
@@ -1103,8 +1103,8 @@
           17
         ],
         "winMargin5": [
-          61,
-          19
+          62,
+          18
         ]
       }
     },
@@ -1192,7 +1192,7 @@
       "homeRank": 4,
       "awayRank": 16,
       "homeRating": 2097,
-      "awayRating": 1882,
+      "awayRating": 1881,
       "homeWinPct": 86,
       "awayWinPct": 14,
       "eloPointsAtStake": {
@@ -1210,8 +1210,8 @@
           60
         ],
         "winMargin4": [
-          11,
-          64
+          10,
+          65
         ],
         "winMargin5": [
           11,
@@ -1302,7 +1302,7 @@
       "awayEloCode": "CZ",
       "homeRank": 16,
       "awayRank": 50,
-      "homeRating": 1882,
+      "homeRating": 1881,
       "awayRating": 1680,
       "homeWinPct": 85,
       "awayWinPct": 15,
@@ -1317,8 +1317,8 @@
           51
         ],
         "winMargin3": [
-          10,
-          60
+          11,
+          59
         ],
         "winMargin4": [
           11,
@@ -4911,7 +4911,7 @@
       "awayScore": 1,
       "eloChangeHome": 23,
       "homeRatingAfter": 2013,
-      "awayRatingAfter": 1882,
+      "awayRatingAfter": 1881,
       "homeRankAfter": 6,
       "awayRankAfter": 16
     },
@@ -5150,7 +5150,7 @@
       "homeScore": 2,
       "awayScore": 1,
       "eloChangeHome": 9,
-      "homeRatingAfter": 1905,
+      "homeRatingAfter": 1904,
       "awayRatingAfter": 1575,
       "homeRankAfter": 14,
       "awayRankAfter": 68
@@ -5480,9 +5480,9 @@
       "homeScore": 1,
       "awayScore": 0,
       "eloChangeHome": 15,
-      "homeRatingAfter": 1896,
+      "homeRatingAfter": 1895,
       "awayRatingAfter": 1668,
-      "homeRankAfter": 12,
+      "homeRankAfter": 13,
       "awayRankAfter": 51
     },
     {
@@ -5856,9 +5856,9 @@
       "awayScore": 2,
       "eloChangeHome": 31,
       "homeRatingAfter": 2055,
-      "awayRatingAfter": 1881,
+      "awayRatingAfter": 1880,
       "homeRankAfter": 4,
-      "awayRankAfter": 13
+      "awayRankAfter": 14
     },
     {
       "date": "2026-06-17",
@@ -6380,7 +6380,7 @@
       "homeScore": 0,
       "awayScore": 2,
       "eloChangeHome": -22,
-      "homeRatingAfter": 1909,
+      "homeRatingAfter": 1908,
       "awayRatingAfter": 1889,
       "homeRankAfter": 12,
       "awayRankAfter": 17
@@ -6621,7 +6621,7 @@
       "awayScore": 1,
       "eloChangeHome": 14,
       "homeRatingAfter": 1984,
-      "awayRatingAfter": 1931,
+      "awayRatingAfter": 1930,
       "homeRankAfter": 5,
       "awayRankAfter": 10
     },
@@ -6980,7 +6980,7 @@
       "homeScore": 2,
       "awayScore": 1,
       "eloChangeHome": 12,
-      "homeRatingAfter": 1945,
+      "homeRatingAfter": 1944,
       "awayRatingAfter": 1986,
       "homeRankAfter": 9,
       "awayRankAfter": 5
