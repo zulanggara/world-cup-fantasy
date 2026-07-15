@@ -16514,7 +16514,7 @@
     "price": 5,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 27.3,
+    "percentSelected": 27.2,
     "roundsSelected": {
       "1": 9,
       "2": 9,
@@ -16523,7 +16523,7 @@
       "5": 14.7,
       "6": 19.1,
       "7": 27.6,
-      "8": 27.3
+      "8": 27.2
     },
     "stats": {
       "totalPoints": 38,
@@ -26414,7 +26414,7 @@
     "price": 4.2,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 2.4,
+    "percentSelected": 2.3,
     "roundsSelected": {
       "1": 7.7,
       "2": 8.4,
@@ -26423,7 +26423,7 @@
       "5": 2.5,
       "6": 3,
       "7": 2.4,
-      "8": 2.4
+      "8": 2.3
     },
     "stats": {
       "totalPoints": 14,
@@ -33951,7 +33951,7 @@
     "price": 5.5,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 11.5,
+    "percentSelected": 11.6,
     "roundsSelected": {
       "1": 6.4,
       "2": 5.2,
@@ -33960,7 +33960,7 @@
       "5": 4.6,
       "6": 10.5,
       "7": 11,
-      "8": 11.5
+      "8": 11.6
     },
     "stats": {
       "totalPoints": 48,
@@ -34242,7 +34242,7 @@
     "price": 8.1,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 17.2,
+    "percentSelected": 17.3,
     "roundsSelected": {
       "1": 20.9,
       "2": 19.4,
@@ -34251,7 +34251,7 @@
       "5": 12.3,
       "6": 14.4,
       "7": 16.5,
-      "8": 17.2
+      "8": 17.3
     },
     "stats": {
       "totalPoints": 44,
@@ -34392,7 +34392,7 @@
     "price": 5,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 18.5,
+    "percentSelected": 18.6,
     "roundsSelected": {
       "1": 6.1,
       "2": 6.9,
@@ -34401,7 +34401,7 @@
       "5": 10.8,
       "6": 19.3,
       "7": 18.1,
-      "8": 18.5
+      "8": 18.6
     },
     "stats": {
       "totalPoints": 45,
@@ -43166,7 +43166,7 @@
     "price": 8,
     "status": "playing",
     "matchStatus": "start",
-    "percentSelected": 6.7,
+    "percentSelected": 6.6,
     "roundsSelected": {
       "1": 1.1,
       "2": 1.4,
@@ -43175,7 +43175,7 @@
       "5": 3.8,
       "6": 5.6,
       "7": 6.8,
-      "8": 6.7
+      "8": 6.6
     },
     "stats": {
       "totalPoints": 31,
@@ -45872,7 +45872,7 @@
     "price": 6.6,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 2.9,
+    "percentSelected": 2.8,
     "roundsSelected": {
       "1": 2.4,
       "2": 2,
@@ -45881,7 +45881,7 @@
       "5": 6.1,
       "6": 9.7,
       "7": 2.9,
-      "8": 2.9
+      "8": 2.8
     },
     "stats": {
       "totalPoints": 36,
