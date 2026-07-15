@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-15T03:32:23.849Z",
+  "fetchedAt": "2026-07-15T06:27:38.467Z",
   "source": "Polymarket (gamma-api.polymarket.com) — aggregated prediction-market odds, not an official forecast",
   "teams": {
     "1": {
@@ -17,8 +17,8 @@
       "makeR16": 1,
       "makeQF": 1,
       "makeSF": 1,
-      "makeFinal": 0.4685,
-      "winWC": 0.1905,
+      "makeFinal": 0.4655,
+      "winWC": 0.1995,
       "winGroup": 1,
       "group": "j"
     },
@@ -177,7 +177,7 @@
       "makeQF": 1,
       "makeSF": 1,
       "makeFinal": 0.535,
-      "winWC": 0.2245,
+      "winWC": 0.2275,
       "winGroup": 1,
       "group": "l"
     },
@@ -2671,8 +2671,8 @@
         "p": 0.1925
       },
       {
-        "t": 1784086264,
-        "p": 0.1905
+        "t": 1784096764,
+        "p": 0.1995
       }
     ],
     "3": [
@@ -8773,8 +8773,8 @@
         "p": 0.2285
       },
       {
-        "t": 1784086266,
-        "p": 0.2245
+        "t": 1784096765,
+        "p": 0.2275
       }
     ],
     "41": [
@@ -10263,7 +10263,7 @@
         "p": 0.5815
       },
       {
-        "t": 1784086265,
+        "t": 1784096765,
         "p": 0.5815
       }
     ]
