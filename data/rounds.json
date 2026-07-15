@@ -4274,7 +4274,7 @@
   },
   {
     "id": 7,
-    "status": "playing",
+    "status": "complete",
     "startDate": "2026-07-14T20:00:00+01:00",
     "endDate": "2026-07-15T22:00:00+01:00",
     "tournaments": [
@@ -4317,8 +4317,8 @@
       },
       {
         "id": 102,
-        "period": "first_half",
-        "minutes": 35,
+        "period": "full_time",
+        "minutes": 102,
         "extraMinutes": 0,
         "venueName": "Mercedes-benz Stadium",
         "venueCity": "Atlanta, Georgia",
@@ -4326,7 +4326,7 @@
         "venueCityTranslationKey": null,
         "venueId": 13,
         "date": "2026-07-15T20:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 18,
         "awaySquadId": 2,
@@ -4334,12 +4334,29 @@
         "awaySquadName": "Argentina",
         "homeSquadAbbr": "ENG",
         "awaySquadAbbr": "ARG",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 0,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 474,
+            "assistId": 475,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 2,
         "awayPenaltyScore": null,
-        "awayGoalScorersAssists": null
+        "awayGoalScorersAssists": [
+          {
+            "playerId": 57,
+            "assistId": 38,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1338,
+            "assistId": 38,
+            "isOwnGoal": false
+          }
+        ]
       }
     ],
     "stage": "SF",
