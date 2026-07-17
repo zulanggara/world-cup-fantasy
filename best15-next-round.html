@@ -1146,6 +1146,18 @@ function resolveFSlot(label) {
   return { squadId: winnerSquad.id, name: winnerSquad.name, abbr: winnerSquad.abbr, confirmed: true };
 }
 
+function resolveThirdSlot(label) {
+  const refId = parseRefMatchId(label);
+  const sfMatch = refId ? matchesGames.find((g) => g.type === 'sf' && g.id === refId) : null;
+  if (!sfMatch || sfMatch.finished !== 'TRUE') return { pending: true, text: label || 'TBD' };
+  const homeScore = Number(sfMatch.home_score);
+  const awayScore = Number(sfMatch.away_score);
+  const loserName = homeScore > awayScore ? sfMatch.away_team_name_en : sfMatch.home_team_name_en;
+  const loserSquad = squadByName(loserName);
+  if (!loserSquad) return { pending: true, text: label };
+  return { squadId: loserSquad.id, name: loserSquad.name, abbr: loserSquad.abbr, confirmed: true };
+}
+
 function buildFMatches() {
   function toSlot(squad) {
     return { squadId: squad.id, name: squad.name, abbr: squad.abbr, confirmed: true };
@@ -1160,9 +1172,23 @@ function buildFMatches() {
     }));
 }
 
+function buildThirdMatches() {
+  function toSlot(squad) {
+    return { squadId: squad.id, name: squad.name, abbr: squad.abbr, confirmed: true };
+  }
+  return matchesGames
+    .filter((g) => g.type === 'third')
+    .map((g) => ({
+      id: g.id,
+      date: g.local_date,
+      home: squadByName(g.home_team_name_en) ? toSlot(squadByName(g.home_team_name_en)) : resolveThirdSlot(g.home_team_label),
+      away: squadByName(g.away_team_name_en) ? toSlot(squadByName(g.away_team_name_en)) : resolveThirdSlot(g.away_team_label),
+    }));
+}
+
 function buildFOpponentMap() {
   const map = {};
-  for (const m of buildFMatches()) {
+  for (const m of [...buildFMatches(), ...buildThirdMatches()]) {
     const isoDate = matchesDateToIso(m.date);
     const home = m.home && !m.home.pending ? m.home : null;
     const away = m.away && !m.away.pending ? m.away : null;

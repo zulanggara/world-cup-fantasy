@@ -724,12 +724,25 @@ function resolveFSlotDash(label) {
   return squadByName(winnerName) ?? null;
 }
 
+function resolveThirdSlotDash(label) {
+  const m = label && label.match(/^(?:Winner|Loser) Match (\d+)$/i);
+  const refId = m ? m[1] : null;
+  const sfMatch = refId ? matchesGames.find((g) => g.type === 'sf' && g.id === refId) : null;
+  if (!sfMatch || sfMatch.finished !== 'TRUE') return null;
+  const homeScore = Number(sfMatch.home_score);
+  const awayScore = Number(sfMatch.away_score);
+  const loserName = homeScore > awayScore ? sfMatch.away_team_name_en : sfMatch.home_team_name_en;
+  return squadByName(loserName) ?? null;
+}
+
 function buildFOpponentMapDash() {
   const map = {};
-  for (const g of matchesGames.filter((g) => g.type === 'final')) {
+  const finalMatches = matchesGames.filter((g) => g.type === 'final').map((g) => ({ g, resolver: resolveFSlotDash }));
+  const thirdMatches = matchesGames.filter((g) => g.type === 'third').map((g) => ({ g, resolver: resolveThirdSlotDash }));
+  for (const { g, resolver } of [...finalMatches, ...thirdMatches]) {
     const isoDate = matchesDateToIso(g.local_date);
-    const home = squadByName(g.home_team_name_en) || resolveFSlotDash(g.home_team_label);
-    const away = squadByName(g.away_team_name_en) || resolveFSlotDash(g.away_team_label);
+    const home = squadByName(g.home_team_name_en) || resolver(g.home_team_label);
+    const away = squadByName(g.away_team_name_en) || resolver(g.away_team_label);
     const homeId = home?.squadId ?? home?.id;
     const awayId = away?.squadId ?? away?.id;
     if (homeId) map[homeId] = { oppSquadId: awayId ?? null, oppAbbr: away?.abbr ?? null, isoDate, matchId: g.id };
