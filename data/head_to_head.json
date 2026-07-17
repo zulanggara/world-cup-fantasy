@@ -3544,5 +3544,305 @@
         "awayScore": 1
       }
     ]
+  },
+  "103": {
+    "teamA": {
+      "squadId": 19,
+      "abbr": "FRA",
+      "name": "France",
+      "cleanSheets": 4,
+      "draws": 3,
+      "matchesPlayed": 13,
+      "wins": 3,
+      "losses": 7,
+      "goalsScored": 14,
+      "goalsAgainst": 18,
+      "idTeam": "43946",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "France",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 2,
+      "abbr": "ARG",
+      "name": "Argentina",
+      "cleanSheets": 8,
+      "draws": 3,
+      "matchesPlayed": 13,
+      "wins": 7,
+      "losses": 3,
+      "goalsScored": 18,
+      "goalsAgainst": 14,
+      "idTeam": "43922",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Argentina",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2022-12-18",
+        "competition": "FIFA World Cup™",
+        "home": "Argentina",
+        "homeScore": 3,
+        "away": "France",
+        "awayScore": 3
+      },
+      {
+        "date": "2018-06-30",
+        "competition": "FIFA World Cup™",
+        "home": "France",
+        "homeScore": 4,
+        "away": "Argentina",
+        "awayScore": 3
+      },
+      {
+        "date": "2009-02-11",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 2
+      },
+      {
+        "date": "2007-02-07",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1986-03-26",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 2,
+        "away": "Argentina",
+        "awayScore": 0
+      },
+      {
+        "date": "1978-06-06",
+        "competition": "FIFA World Cup™",
+        "home": "Argentina",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 1
+      },
+      {
+        "date": "1977-06-26",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 0,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1974-05-18",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1972-06-25",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 0
+      },
+      {
+        "date": "1971-01-13",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 2,
+        "away": "France",
+        "awayScore": 0
+      },
+      {
+        "date": "1971-01-08",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 3,
+        "away": "France",
+        "awayScore": 4
+      },
+      {
+        "date": "1965-06-03",
+        "competition": "Friendly",
+        "home": "France",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 0
+      },
+      {
+        "date": "1930-07-15",
+        "competition": "FIFA World Cup™",
+        "home": "Argentina",
+        "homeScore": 1,
+        "away": "France",
+        "awayScore": 0
+      }
+    ]
+  },
+  "104": {
+    "teamA": {
+      "squadId": 41,
+      "abbr": "ESP",
+      "name": "Spain",
+      "cleanSheets": 2,
+      "draws": 2,
+      "matchesPlayed": 14,
+      "wins": 6,
+      "losses": 6,
+      "goalsScored": 19,
+      "goalsAgainst": 18,
+      "idTeam": "43969",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Spain",
+        "locale": ""
+      }
+    },
+    "teamB": {
+      "squadId": 2,
+      "abbr": "ARG",
+      "name": "Argentina",
+      "cleanSheets": 4,
+      "draws": 2,
+      "matchesPlayed": 14,
+      "wins": 6,
+      "losses": 6,
+      "goalsScored": 18,
+      "goalsAgainst": 19,
+      "idTeam": "43922",
+      "pictureUrl": "",
+      "score": 0,
+      "teamName": {
+        "description": "Argentina",
+        "locale": ""
+      }
+    },
+    "matches": [
+      {
+        "date": "2018-03-27",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 6,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "2010-09-07",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 4,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "2009-11-14",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "2006-10-11",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1999-11-17",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 2
+      },
+      {
+        "date": "1995-09-20",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1988-10-12",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Argentina",
+        "awayScore": 1
+      },
+      {
+        "date": "1974-10-12",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1972-10-11",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 1,
+        "away": "Argentina",
+        "awayScore": 0
+      },
+      {
+        "date": "1966-07-13",
+        "competition": "FIFA World Cup™",
+        "home": "Argentina",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 1
+      },
+      {
+        "date": "1961-06-11",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 2,
+        "away": "Argentina",
+        "awayScore": 0
+      },
+      {
+        "date": "1960-07-24",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 2,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1953-07-05",
+        "competition": "Friendly",
+        "home": "Argentina",
+        "homeScore": 1,
+        "away": "Spain",
+        "awayScore": 0
+      },
+      {
+        "date": "1952-12-07",
+        "competition": "Friendly",
+        "home": "Spain",
+        "homeScore": 0,
+        "away": "Argentina",
+        "awayScore": 1
+      }
+    ]
   }
 }
