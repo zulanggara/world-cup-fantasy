@@ -8376,7 +8376,7 @@
     "price": 4.6,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 5.5,
+    "percentSelected": 5.4,
     "roundsSelected": {
       "1": 7.7,
       "2": 10.8,
@@ -8385,7 +8385,7 @@
       "5": 19.4,
       "6": 7.6,
       "7": 5.6,
-      "8": 5.5
+      "8": 5.4
     },
     "stats": {
       "totalPoints": 38,
@@ -15537,7 +15537,7 @@
     "price": 10.5,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 47.4,
+    "percentSelected": 47.3,
     "roundsSelected": {
       "1": 36.3,
       "2": 38.3,
@@ -15546,7 +15546,7 @@
       "5": 42.3,
       "6": 44.6,
       "7": 52.3,
-      "8": 47.4
+      "8": 47.3
     },
     "stats": {
       "totalPoints": 50,
@@ -15788,7 +15788,7 @@
     "price": 4.8,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 21.1,
+    "percentSelected": 21,
     "roundsSelected": {
       "1": 14.8,
       "2": 13.2,
@@ -15797,7 +15797,7 @@
       "5": 15.7,
       "6": 17,
       "7": 22.2,
-      "8": 21.1
+      "8": 21
     },
     "stats": {
       "totalPoints": 25,
@@ -16058,7 +16058,7 @@
     "price": 8.3,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 44.4,
+    "percentSelected": 44.3,
     "roundsSelected": {
       "1": 9.1,
       "2": 9.6,
@@ -16067,7 +16067,7 @@
       "5": 22.9,
       "6": 42.2,
       "7": 48.5,
-      "8": 44.4
+      "8": 44.3
     },
     "stats": {
       "totalPoints": 58,
@@ -16418,7 +16418,7 @@
     "price": 10,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 42.8,
+    "percentSelected": 42.7,
     "roundsSelected": {
       "1": 16.6,
       "2": 15.5,
@@ -16427,7 +16427,7 @@
       "5": 40.2,
       "6": 45,
       "7": 47.8,
-      "8": 42.8
+      "8": 42.7
     },
     "stats": {
       "totalPoints": 56,
@@ -16774,7 +16774,7 @@
     "price": 6.4,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 0,
+    "percentSelected": 0.1,
     "roundsSelected": {
       "1": 0,
       "2": 0,
@@ -16783,7 +16783,7 @@
       "5": 0,
       "6": 0,
       "7": 0,
-      "8": 0
+      "8": 0.1
     },
     "stats": {
       "totalPoints": 1,
@@ -24653,7 +24653,7 @@
     "price": 5.7,
     "status": "eliminated",
     "matchStatus": null,
-    "percentSelected": 8.2,
+    "percentSelected": 8.1,
     "roundsSelected": {
       "1": 15.1,
       "2": 11.9,
@@ -24662,7 +24662,7 @@
       "5": 9.4,
       "6": 8.4,
       "7": 8.2,
-      "8": 8.2
+      "8": 8.1
     },
     "stats": {
       "totalPoints": 16,
@@ -33978,7 +33978,7 @@
     "price": 5.5,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 16.3,
+    "percentSelected": 16.5,
     "roundsSelected": {
       "1": 6.4,
       "2": 5.2,
@@ -33987,7 +33987,7 @@
       "5": 4.6,
       "6": 10.5,
       "7": 11,
-      "8": 16.3
+      "8": 16.5
     },
     "stats": {
       "totalPoints": 48,
@@ -34019,7 +34019,7 @@
     "price": 5.5,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 21.3,
+    "percentSelected": 21.4,
     "roundsSelected": {
       "1": 4.8,
       "2": 4.9,
@@ -34028,7 +34028,7 @@
       "5": 13.9,
       "6": 20.1,
       "7": 19.1,
-      "8": 21.3
+      "8": 21.4
     },
     "stats": {
       "totalPoints": 50,
@@ -34140,7 +34140,7 @@
     "price": 5,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 18.9,
+    "percentSelected": 19,
     "roundsSelected": {
       "1": 5.6,
       "2": 6.2,
@@ -34149,7 +34149,7 @@
       "5": 7.1,
       "6": 15,
       "7": 16.8,
-      "8": 18.9
+      "8": 19
     },
     "stats": {
       "totalPoints": 46,
@@ -34183,7 +34183,7 @@
     "price": 10,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 40.8,
+    "percentSelected": 40.9,
     "roundsSelected": {
       "1": 39.5,
       "2": 35.8,
@@ -34192,7 +34192,7 @@
       "5": 36,
       "6": 38.7,
       "7": 36.6,
-      "8": 40.8
+      "8": 40.9
     },
     "stats": {
       "totalPoints": 25,
@@ -34269,7 +34269,7 @@
     "price": 8.1,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 22.3,
+    "percentSelected": 22.5,
     "roundsSelected": {
       "1": 20.9,
       "2": 19.4,
@@ -34278,7 +34278,7 @@
       "5": 12.3,
       "6": 14.4,
       "7": 16.5,
-      "8": 22.3
+      "8": 22.5
     },
     "stats": {
       "totalPoints": 44,
@@ -34419,7 +34419,7 @@
     "price": 5,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 22.6,
+    "percentSelected": 22.7,
     "roundsSelected": {
       "1": 6.1,
       "2": 6.9,
@@ -34428,7 +34428,7 @@
       "5": 10.8,
       "6": 19.3,
       "7": 18.1,
-      "8": 22.6
+      "8": 22.7
     },
     "stats": {
       "totalPoints": 45,
@@ -34579,7 +34579,7 @@
     "price": 7.7,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 11.1,
+    "percentSelected": 11.2,
     "roundsSelected": {
       "1": 2.9,
       "2": 1.9,
@@ -34588,7 +34588,7 @@
       "5": 1.7,
       "6": 3.3,
       "7": 5.8,
-      "8": 11.1
+      "8": 11.2
     },
     "stats": {
       "totalPoints": 30,
@@ -42226,7 +42226,7 @@
     "price": 8.8,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 5.9,
+    "percentSelected": 6,
     "roundsSelected": {
       "1": 3.7,
       "2": 2.9,
@@ -42235,7 +42235,7 @@
       "5": 2.6,
       "6": 2.7,
       "7": 3.5,
-      "8": 5.9
+      "8": 6
     },
     "stats": {
       "totalPoints": 35,
@@ -43153,7 +43153,7 @@
     "price": 5.4,
     "status": "playing",
     "matchStatus": null,
-    "percentSelected": 13.7,
+    "percentSelected": 13.6,
     "roundsSelected": {
       "1": 7.1,
       "2": 6.5,
@@ -43162,7 +43162,7 @@
       "5": 8.8,
       "6": 11.8,
       "7": 14.7,
-      "8": 13.7
+      "8": 13.6
     },
     "stats": {
       "totalPoints": 33,
