@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-17T00:11:53.730Z",
+  "fetchedAt": "2026-07-17T01:12:35.456Z",
   "source": "eloratings.net (World Football Elo Ratings, 2026 World Cup)",
   "squadIdToEloCode": {
     "1": "DZ",
@@ -250,7 +250,7 @@
     "40": {
       "eloCode": "ZA",
       "rank": 73,
-      "rating": 1560
+      "rating": 1559
     },
     "41": {
       "eloCode": "ES",
@@ -5195,7 +5195,7 @@
       "awayScore": 0,
       "eloChangeHome": 16,
       "homeRatingAfter": 1764,
-      "awayRatingAfter": 1560,
+      "awayRatingAfter": 1559,
       "homeRankAfter": 31,
       "awayRankAfter": 73
     },
@@ -5257,7 +5257,7 @@
       "homeRatingAfter": 1905,
       "awayRatingAfter": 1575,
       "homeRankAfter": 14,
-      "awayRankAfter": 69
+      "awayRankAfter": 68
     },
     {
       "date": "2026-06-27",
@@ -5554,7 +5554,7 @@
       "homeScore": 1,
       "awayScore": 0,
       "eloChangeHome": 48,
-      "homeRatingAfter": 1576,
+      "homeRatingAfter": 1575,
       "awayRatingAfter": 1723,
       "homeRankAfter": 70,
       "awayRankAfter": 40
@@ -5885,7 +5885,7 @@
       "awayScore": 1,
       "eloChangeHome": -16,
       "homeRatingAfter": 1696,
-      "awayRatingAfter": 1528,
+      "awayRatingAfter": 1527,
       "homeRankAfter": 48,
       "awayRankAfter": 79
     },
@@ -6260,7 +6260,7 @@
       "awayScore": 0,
       "eloChangeHome": 6,
       "homeRatingAfter": 1881,
-      "awayRatingAfter": 1512,
+      "awayRatingAfter": 1511,
       "homeRankAfter": 18,
       "awayRankAfter": 80
     },
@@ -6829,7 +6829,7 @@
       "homeScore": 1,
       "awayScore": 2,
       "eloChangeHome": -7,
-      "homeRatingAfter": 1525,
+      "homeRatingAfter": 1524,
       "awayRatingAfter": 1737,
       "homeRankAfter": 79,
       "awayRankAfter": 36
@@ -7054,7 +7054,7 @@
       "homeScore": 1,
       "awayScore": 1,
       "eloChangeHome": 3,
-      "homeRatingAfter": 1532,
+      "homeRatingAfter": 1531,
       "awayRatingAfter": 1730,
       "homeRankAfter": 79,
       "awayRankAfter": 41
