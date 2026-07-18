@@ -4370,8 +4370,8 @@
     "tournaments": [
       {
         "id": 103,
-        "period": "first_half",
-        "minutes": 6,
+        "period": "half_time",
+        "minutes": 50,
         "extraMinutes": 0,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
@@ -4390,12 +4390,27 @@
         "homeScore": 0,
         "homePenaltyScore": null,
         "homeGoalScorersAssists": null,
-        "awayScore": 1,
+        "awayScore": 4,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": [
           {
             "playerId": 488,
             "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 463,
+            "assistId": 488,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 469,
+            "assistId": 471,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 469,
+            "assistId": 1710,
             "isOwnGoal": false
           }
         ]
