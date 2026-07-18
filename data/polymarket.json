@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-18T06:17:45.803Z",
+  "fetchedAt": "2026-07-18T08:11:19.274Z",
   "source": "Polymarket (gamma-api.polymarket.com) — aggregated prediction-market odds, not an official forecast",
   "teams": {
     "1": {
@@ -2683,7 +2683,7 @@
         "p": 0.4055
       },
       {
-        "t": 1784355364,
+        "t": 1784362203,
         "p": 0.4045
       }
     ],
@@ -9663,7 +9663,7 @@
         "p": 0.5915
       },
       {
-        "t": 1784355364,
+        "t": 1784362204,
         "p": 0.5915
       }
     ]
