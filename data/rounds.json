@@ -4370,8 +4370,8 @@
     "tournaments": [
       {
         "id": 103,
-        "period": "half_time",
-        "minutes": 50,
+        "period": "full_time",
+        "minutes": 99,
         "extraMinutes": 0,
         "venueName": "Hard Rock Stadium",
         "venueCity": "Miami Gardens, Florida",
@@ -4379,7 +4379,7 @@
         "venueCityTranslationKey": null,
         "venueId": 15,
         "date": "2026-07-18T22:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 19,
         "awaySquadId": 18,
@@ -4387,10 +4387,31 @@
         "awaySquadName": "England",
         "homeSquadAbbr": "FRA",
         "awaySquadAbbr": "ENG",
-        "homeScore": 0,
+        "homeScore": 4,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
-        "awayScore": 4,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 500,
+            "assistId": 517,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 1431,
+            "assistId": 500,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 500,
+            "assistId": 517,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 501,
+            "assistId": 494,
+            "isOwnGoal": false
+          }
+        ],
+        "awayScore": 6,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": [
           {
@@ -4411,6 +4432,16 @@
           {
             "playerId": 469,
             "assistId": 1710,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 469,
+            "assistId": null,
+            "isOwnGoal": false
+          },
+          {
+            "playerId": 491,
+            "assistId": null,
             "isOwnGoal": false
           }
         ]
