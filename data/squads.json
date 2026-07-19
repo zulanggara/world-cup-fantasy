@@ -11,7 +11,7 @@
     "name": "Argentina",
     "group": "j",
     "abbr": "ARG",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 3,
@@ -130,7 +130,7 @@
     "name": "France",
     "group": "i",
     "abbr": "FRA",
-    "isEliminated": false
+    "isEliminated": true
   },
   {
     "id": 20,

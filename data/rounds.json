@@ -4364,7 +4364,7 @@
   },
   {
     "id": 8,
-    "status": "playing",
+    "status": "complete",
     "startDate": "2026-07-18T22:00:00+01:00",
     "endDate": "2026-07-19T22:00:00+01:00",
     "tournaments": [
@@ -4448,16 +4448,16 @@
       },
       {
         "id": 104,
-        "period": "second_half",
-        "minutes": 89,
-        "extraMinutes": 0,
+        "period": "full_time",
+        "minutes": 125,
+        "extraMinutes": 35,
         "venueName": "Metlife Stadium",
         "venueCity": "East Rutherford, New Jersey",
         "venueNameTranslationKey": null,
         "venueCityTranslationKey": null,
         "venueId": 6,
         "date": "2026-07-19T20:00:00+01:00",
-        "status": "playing",
+        "status": "complete",
         "isSuspended": false,
         "homeSquadId": 41,
         "awaySquadId": 2,
@@ -4465,9 +4465,15 @@
         "awaySquadName": "Argentina",
         "homeSquadAbbr": "ESP",
         "awaySquadAbbr": "ARG",
-        "homeScore": 0,
+        "homeScore": 1,
         "homePenaltyScore": null,
-        "homeGoalScorersAssists": null,
+        "homeGoalScorersAssists": [
+          {
+            "playerId": 1093,
+            "assistId": 2000,
+            "isOwnGoal": false
+          }
+        ],
         "awayScore": 0,
         "awayPenaltyScore": null,
         "awayGoalScorersAssists": null
